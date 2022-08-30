@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>스마트팜 혁신밸리 빅데이터센터 - 영농일지</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    overflow: hidden;
+}
+
+.login-page {
+    -ms-flex-align: center;
+    align-items: center;
+    background: #e9ecef;
+    display: -ms-flexbox;
+    display: flex;
+    height: 100vh;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.login-box {
+    width: 360px;
+}
+
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    box-shadow: 0 0 1px rgb(0 0 0/ 13%), 0 1px 3px rgb(0 0 0/ 20%);
+    margin-bottom: 1rem;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+}
+
+.login-card-body {
+    background: #fff;
+    border-top: 0;
+    color: #666;
+    padding: 20px;
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+input[type="text"], input[type="password"] {
+    display: block;
+    margin: 5px;
+    padding: 10px;
+    font-size: 1.6em;
+    width: calc(100% - 34px);
+}
+
+button {
+    display: block;
+    margin: 5px;
+    padding: 5px;
+    font-size: 1.6em;
+    width: calc(100% - 10px);
+    color: #fff;
+    background: #0062cc;
+    border: 1px solid #005cbf;
+    border-radius: .25rem;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+</style>
+</head>
+<body class="login-page">
+<div class="login-box">
+    <div class="card">
+        <div class="card-body login-card-body">
+            <form id="form-login">
+                <div class="input-group mb-3">
+                    <input type="text" name="userId" class="form-control" placeholder="ID">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" name="userPwd" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember"> <label for="remember"> 자동로그인</label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="/static/plugins/jquery/jquery.min.js"></script>
+<script>
+$(function () {
+    LOGIN.init();
+});
+
+var LOGIN = {
+};
+
+LOGIN.init = function () {
+    var me = this;
+
+    $('input[name="userId"]').focus();
+    $('#form-login').submit(function (event) {
+        event.preventDefault();
+        me.login(this);
+    });
+};
+
+LOGIN.login = function (form) {
+    $.ajax({
+        method: 'POST',
+        url: '/api/v1/login',
+        data: $(form).serialize(),
+        cache: false,
+        dataType: 'json',
+        success: function (data) {
+            form.reset();
+            location.href = '/swagger-ui/index.html';
+        }
+    });
+};
+</script>
+</body>
+</html>

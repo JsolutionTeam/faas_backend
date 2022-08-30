@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.FileInfoMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.web.common.dto.FileInfoDto">
+        <id column="FILE_SEQ" property="fileSeq" jdbcType="DECIMAL" />
+        <result column="REG_DTM" property="regDtm" jdbcType="TIMESTAMP" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="TIMESTAMP" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="SAVED_NM" property="savedNm" jdbcType="VARCHAR" />
+        <result column="FILE_SIZE" property="fileSize" jdbcType="DECIMAL" />
+        <result column="FILE_NM" property="fileNm" jdbcType="VARCHAR" />
+        <result column="CONTENT_TYPE" property="contentType" jdbcType="VARCHAR" />
+    </resultMap>
+</mapper>

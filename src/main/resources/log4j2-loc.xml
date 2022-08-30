@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appenders>
+        <console name="CONSOLE" target="SYSTEM_OUT">
+            <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
+        </console>
+        <console name="CONSOLE_EXCEPT_MSG" target="SYSTEM_OUT">
+            <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c%n" />
+        </console>
+        <console name="CONSOLE_ONLY_MSG" target="SYSTEM_OUT">
+            <patternLayout pattern="%m%n" />
+        </console>
+        <rollingFile name="FILE" fileName="logs/FAAS/FAAS_API.log" filePattern="logs/FAAS/FAAS_API-%d{yyyyMMdd}.log">
+            <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
+            <policies>
+                <TimeBasedTriggeringPolicy />
+            </policies>
+            <defaultRolloverStrategy>
+                <Delete basePath="logs/FAAS/" maxDepth="1">
+                    <IfFileName glob="FAAS_API-????????.log" />
+                    <IfAccumulatedFileCount exceeds="30" />
+                </Delete>
+            </defaultRolloverStrategy>
+        </rollingFile>
+    </appenders>
+    <loggers>
+        <logger name="zinsoft.web.common.controller.ExceptionHandlerControllerAdvice" level="all" additivity="false">
+            <appenderRef ref="CONSOLE" />
+            <appenderRef ref="FILE" />
+        </logger>
+        <logger name="zinsoft.web.common.dao.mapper" level="debug" additivity="false">
+            <appenderRef ref="CONSOLE_EXCEPT_MSG" />
+        </logger>
+        <logger name="zinsoft.faas.dao.mapper" level="debug" additivity="false">
+            <appenderRef ref="CONSOLE_EXCEPT_MSG" />
+        </logger>
+        <logger name="zinsoft.FaasApplication" level="all" additivity="false">
+            <appenderRef ref="CONSOLE" />
+            <appenderRef ref="FILE" />
+         </logger>
+        <logger name="p6spy" level="debug" additivity="false">
+            <appenderRef ref="CONSOLE_ONLY_MSG" />
+        </logger>
+        <logger name="org.springframework.security.web.access.ExceptionTranslationFilter" level="debug" additivity="false">
+            <appenderRef ref="CONSOLE" />
+        </logger>
+        <logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="debug" additivity="false">
+            <appenderRef ref="CONSOLE" />
+        </logger>
+        <logger name="org.springframework.web.servlet.DispatcherServlet" level="trace" additivity="false">
+            <appenderRef ref="CONSOLE" />
+        </logger>
+        <logger name="okhttp3.logging.wire" level="debug" additivity="false">
+            <appenderRef ref="CONSOLE_ONLY_MSG" />
+        </logger>
+        <root level="error">
+            <appenderRef ref="CONSOLE" />
+            <appenderRef ref="FILE" />
+        </root>
+    </loggers>
+</configuration>

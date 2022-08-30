@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zinsoft.faas.dao.mapper.SelfLaborCostMapper" >
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.SelfLaborCostDto" >
+        <id column="SELF_LABOR_SEQ" property="selfLaborSeq" jdbcType="NUMERIC" />
+        <result column="YEAR" property="year" jdbcType="CHAR" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="MAN_AMT" property="manAmt" jdbcType="NUMERIC" />
+        <result column="WOMAN_AMT" property="womanAmt" jdbcType="NUMERIC" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.SelfLaborCostDto">
+        <selectKey resultType="Long" keyProperty="selfLaborSeq" order="BEFORE">
+            SELECT seq_self_labor_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO tf_self_labor_cost
+                    (self_labor_seq, 
+                     year,
+                     reg_dtm,
+                     update_dtm,
+                     status_cd,
+                     man_amt,
+                     woman_amt)
+        VALUES      (#{selfLaborSeq},
+                     #{year},
+                     SYSDATE,
+                     SYSDATE,
+                     'N',
+                     #{manAmt},
+                     #{womanAmt})
+    </insert>
+
+    <select id="get" parameterType="long" resultMap="BaseResultMap">
+        SELECT a.self_labor_seq,
+               a.year,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.man_amt,
+               a.woman_amt
+          FROM tf_self_labor_cost a
+         WHERE status_cd = 'N' 
+               AND a.self_labor_seq = #{selfLaborSeq}
+    </select>
+
+    <select id="getByYear" parameterType="String" resultMap="BaseResultMap">
+        SELECT a.self_labor_seq,
+               a.year,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.man_amt,
+               a.woman_amt
+          FROM tf_self_labor_cost a
+         WHERE status_cd = 'N'
+               <choose>
+                   <when test="year != null and year != ''">
+                       AND a.year = #{year}
+                   </when>
+                   <otherwise>
+                       AND a.year = TO_CHAR (SYSDATE, 'yyyy')
+                   </otherwise>
+               </choose>
+               AND ROWNUM = 1
+    </select>
+
+    <select id="checkValidYear" parameterType="long" resultType="int">
+        SELECT COUNT (*)
+          FROM tf_self_labor_cost
+         WHERE status_cd = 'N' AND year = #{year}
+    </select>
+
+    <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
+        SELECT *
+          FROM (SELECT ROWNUM AS rnum, z.*
+                  FROM (SELECT a.self_labor_seq,
+                               a.year,
+                               a.reg_dtm,
+                               a.update_dtm,
+                               a.status_cd,
+                               a.man_amt,
+                               a.woman_amt
+                          FROM tf_self_labor_cost a
+                         WHERE a.status_cd = 'N'
+                         <if test="cond.keyword != null and cond.keyword !=''">
+                             <if test='cond.field == "year"'>
+                                 AND a.year LIKE '%' || #{cond.keyword} || '%'
+                             </if>
+                         </if>
+                      ORDER BY a.year DESC) z
+        <![CDATA[
+                 WHERE ROWNUM <= (#{start} + #{limit}))
+         WHERE RNUM > #{start}
+        ]]>
+    </select>
+
+    <select id="count" parameterType="PagingParam" resultType="int">
+        SELECT COUNT ( * )
+          FROM tf_self_labor_cost
+         WHERE status_cd = 'N'
+         <if test="cond.keyword != null and cond.keyword != ''">
+             <if test='cond.field == "year"'>
+                 AND year LIKE '%' || #{cond.keyword} || '%'
+             </if>
+         </if>
+    </select>
+
+    <update id="update" parameterType="zinsoft.faas.dto.SelfLaborCostDto">
+        UPDATE tf_self_labor_cost
+           SET update_dtm = SYSDATE,
+               year = #{year},
+               man_amt = #{manAmt, jdbcType=NUMERIC},
+               woman_amt = #{womanAmt, jdbcType=NUMERIC}
+         WHERE self_labor_seq = #{selfLaborSeq}
+    </update>
+
+    <update id="delete" parameterType="zinsoft.faas.dto.SelfLaborCostDto">
+        UPDATE tf_self_labor_cost
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE self_labor_seq = #{selfLaborSeq}
+    </update>
+</mapper>

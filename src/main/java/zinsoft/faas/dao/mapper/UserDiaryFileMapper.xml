@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zinsoft.faas.dao.mapper.UserDiaryFileMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.UserDiaryFileDto">
+        <id column="USER_DIARY_SEQ" property="userDiarySeq" jdbcType="NUMERIC" />
+        <id column="FILE_SEQ" property="fileSeq" jdbcType="NUMERIC" />
+        <result column="FILE_K_CD" property="fileKCd" jdbcType="CHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.UserDiaryFileDto">
+        INSERT INTO tf_user_diary_file
+                    (user_diary_seq,
+                     file_seq,
+                     file_k_cd)
+        VALUES      (#{userDiarySeq},
+                     #{fileSeq},
+                     #{fileKCd})
+    </insert>
+
+    <select id="listFileInfo" resultMap="zinsoft.faas.dao.mapper.FileInfoMapper.BaseResultMap">
+        SELECT c.file_seq,
+               c.file_nm
+          FROM tf_user_diary_file a, tf_user_diary b, tf_file_info c
+         WHERE a.user_diary_seq = b.user_diary_seq
+           AND a.file_seq = c.file_seq
+           AND b.user_id = #{userId}
+           AND c.user_id = #{userId}
+           AND a.user_diary_seq = #{userDiarySeq}
+           AND a.file_k_cd = #{fileKCd}
+        ORDER BY a.user_diary_seq, a.file_seq
+    </select>
+
+    <select id="listFileSeqByUserDiarySeq" resultType="long">
+        SELECT a.file_seq
+          FROM tf_user_diary_file a, tf_user_diary b, tf_file_info c
+         WHERE a.user_diary_seq = b.user_diary_seq
+           AND a.file_seq = c.file_seq
+           AND b.user_id = #{userId}
+           AND c.user_id = #{userId}
+           AND a.user_diary_seq = #{userDiarySeq}
+        ORDER BY a.user_diary_seq, a.file_seq
+    </select>
+
+    <select id="listFileSeqByUserId" resultType="long">
+        SELECT a.file_seq
+          FROM tf_user_diary_file a, tf_user_diary b, tf_file_info c
+         WHERE a.user_diary_seq = b.user_diary_seq
+           AND a.file_seq = c.file_seq
+           AND b.user_id = #{userId}
+           AND c.user_id = #{userId}
+        ORDER BY a.user_diary_seq, a.file_seq
+    </select>
+
+    <update id="delete">
+        DELETE FROM tf_user_diary_file
+              WHERE user_diary_seq = #{userDiarySeq}
+                AND file_seq = (SELECT z.file_seq FROM tf_file_info z WHERE z.file_seq = #{fileSeq} AND z.user_id = #{userId})
+    </update>
+
+    <update id="deleteMultiple">
+        DELETE FROM tf_user_diary_file
+              WHERE user_diary_seq = #{userDiarySeq}
+                AND file_seq IN (SELECT z.file_seq FROM tf_file_info z WHERE z.user_id = #{userId} AND z.file_seq IN
+                    <foreach collection="fileSeqList" item="fileSeq" index="index" separator="," open="(" close=")">
+                        #{fileSeq}
+                    </foreach>
+                    )
+    </update>
+
+    <update id="deleteByUserDiarySeq">
+        DELETE FROM tf_user_diary_file
+              WHERE user_diary_seq = (SELECT z.user_diary_seq FROM tf_user_diary z WHERE z.user_diary_seq = #{userDiarySeq} AND z.user_id = #{userId})
+    </update>
+    
+    <update id="deleteByUserId">
+        DELETE FROM tf_user_diary_file
+              WHERE user_diary_seq IN (SELECT z.user_diary_seq FROM tf_user_diary z WHERE z.user_id = #{userId})
+    </update>
+</mapper>

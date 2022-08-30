@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appenders>
+        <console name="CONSOLE" target="SYSTEM_OUT">
+            <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
+        </console>
+        <rollingFile name="FILE" fileName="/data/apache/tomcat/logs/sfiv/FAAS/FAAS_API.log" filePattern="/data/apache/tomcat/logs/sfiv/FAAS/FAAS_API-%d{yyyyMMdd}.log">
+            <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
+            <policies>
+                <TimeBasedTriggeringPolicy />
+            </policies>
+            <defaultRolloverStrategy>
+                <Delete basePath="/data/apache/tomcat/logs/sfiv/FAAS/" maxDepth="1">
+                    <IfFileName glob="FAAS_API-????????.log" />
+                    <IfAccumulatedFileCount exceeds="30" />
+                </Delete>
+            </defaultRolloverStrategy>
+        </rollingFile>
+    </appenders>
+    <loggers>
+        <logger name="zinsoft" level="all" additivity="false">
+            <appenderRef ref="FILE" />
+        </logger>
+        <logger name="zinsoft.web.common.view" level="error" additivity="false">
+            <appenderRef ref="FILE" />
+        </logger>
+        <logger name="zinsoft.web.common.dao.mapper" level="error" additivity="false">
+            <appenderRef ref="FILE" />
+        </logger>
+        <logger name="zinsoft.faas.view" level="error" additivity="false">
+            <appenderRef ref="FILE" />
+        </logger>
+        <logger name="zinsoft.faas.dao.mapper" level="error" additivity="false">
+            <appenderRef ref="FILE" />
+        </logger>
+        <root level="error">
+            <appenderRef ref="FILE" />
+        </root>
+    </loggers>
+</configuration>

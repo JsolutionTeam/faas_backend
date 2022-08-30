@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.UserEmpCostMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.UserEmpCostDto">
+        <id column="USER_EMP_COST_SEQ" property="userEmpCostSeq" jdbcType="DECIMAL" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="MAN_AMT" property="manAmt" jdbcType="DECIMAL" />
+        <result column="WOMAN_AMT" property="womanAmt" jdbcType="DECIMAL" />
+        <result column="YEAR" property="year" jdbcType="CHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.UserEmpCostDto">
+        MERGE INTO tf_user_emp_cost
+             USING DUAL
+                ON (     user_id = #{userId}
+                     AND status_cd = 'N'
+             <choose>
+                 <when test="year != null and year != ''">
+                     AND year = #{year}
+                 </when>
+                 <otherwise>
+                     AND year = TO_CHAR (SYSDATE, 'yyyy')
+                 </otherwise>
+             </choose>
+                   )
+        WHEN MATCHED
+        THEN
+           UPDATE SET update_dtm = SYSDATE,
+                      man_amt = #{manAmt,jdbcType=DECIMAL},
+                      woman_amt = #{womanAmt,jdbcType=DECIMAL}
+        WHEN NOT MATCHED
+        THEN
+           INSERT     (user_emp_cost_seq,
+                       user_id,
+                       reg_dtm,
+                       update_dtm,
+                       status_cd,
+                       man_amt,
+                       woman_amt,
+                       year)
+               VALUES (seq_user_emp_cost_seq.NEXTVAL,
+                       #{userId},
+                       SYSDATE,
+                       SYSDATE,
+                       'N',
+                       #{manAmt,jdbcType=DECIMAL},
+                       #{womanAmt,jdbcType=DECIMAL},
+               <choose>
+                   <when test="year != null and year != ''">
+                       #{year,jdbcType=CHAR}
+                   </when>
+                   <otherwise>
+                       TO_CHAR (SYSDATE, 'yyyy')
+                  </otherwise>
+              </choose>
+                       )
+    </insert>
+    
+    <select id="get" parameterType="Long" resultMap="BaseResultMap">
+        SELECT a.user_emp_cost_seq,
+               a.year,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.man_amt,
+               a.woman_amt
+          FROM tf_user_emp_cost a
+         WHERE     status_cd = 'N'
+               AND a.user_emp_cost_seq = #{userEmpCostSeq}
+    </select>
+
+    <select id="getByUserId" parameterType="String" resultMap="BaseResultMap">
+        SELECT a.user_emp_cost_seq,
+               a.user_id,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.man_amt,
+               a.woman_amt,
+               a.year
+          FROM tf_user_emp_cost a
+         WHERE     a.user_id = #{userId}
+               AND a.status_cd = 'N'
+               AND ROWNUM = 1
+    </select>
+
+    <select id="getByYear" parameterType="String" resultMap="BaseResultMap">
+        SELECT a.user_emp_cost_seq,
+               a.year,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.man_amt,
+               a.woman_amt
+          FROM tf_user_emp_cost a
+         WHERE     status_cd = 'N'
+               AND a.user_id = #{userId}
+       <choose>
+           <when test="year != null and year != ''">
+               AND a.year = #{year}
+           </when>
+           <otherwise>
+               AND a.year = TO_CHAR (SYSDATE, 'yyyy')
+           </otherwise>
+       </choose>
+               AND ROWNUM = 1
+    </select>
+
+    <select id="checkValidYear" resultType="int">
+        SELECT COUNT (*)
+          FROM tf_user_emp_cost
+         WHERE      status_cd = 'N' 
+                AND year = #{year}
+                AND user_id = #{userId}
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT a.user_emp_cost_seq,
+               a.year,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.man_amt,
+               a.woman_amt
+          FROM tf_user_emp_cost a
+         WHERE      a.status_cd = 'N'
+            <if test="userId != null and userId !=''">
+                AND a.user_id = #{userId}
+            </if>
+        <if test="keyword != null and keyword !=''">
+            <if test='field == "year"'>
+                AND a.year LIKE '%' || #{keyword} || '%'
+            </if>
+        </if>
+      ORDER BY a.year DESC
+    </select>
+
+    <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
+        SELECT *
+          FROM (SELECT ROWNUM AS rnum, z.*
+                  FROM (SELECT a.user_emp_cost_seq,
+                               a.year,
+                               a.reg_dtm,
+                               a.update_dtm,
+                               a.status_cd,
+                               a.man_amt,
+                               a.woman_amt
+                          FROM tf_user_emp_cost a
+                         WHERE      a.status_cd = 'N'
+                            <if test="cond.userId != null and cond.userId !=''">
+                                AND a.user_id = #{cond.userId}
+                            </if>
+                        <if test="cond.keyword != null and cond.keyword !=''">
+                            <if test='cond.field == "year"'>
+                                AND a.year LIKE '%' || #{cond.keyword} || '%'
+                            </if>
+                        </if>
+                      ORDER BY a.year DESC) z
+        <![CDATA[
+                 WHERE ROWNUM <= (#{start} + #{limit}))
+         WHERE RNUM > #{start}
+        ]]>
+    </select>
+
+    <select id="count" parameterType="PagingParam" resultType="int">
+        SELECT COUNT ( * )
+          FROM tf_user_emp_cost a
+         WHERE     a.status_cd = 'N'
+           <if test="cond.userId != null and cond.userId !=''">
+               AND a.user_id = #{cond.userId}
+           </if>
+       <if test="cond.keyword != null and cond.keyword !=''">
+           <if test='cond.field == "year"'>
+               AND a.year LIKE '%' || #{cond.keyword} || '%'
+           </if>
+       </if>
+    </select>
+
+    <update id="update" parameterType="zinsoft.faas.dto.UserEmpCostDto">
+        UPDATE tf_user_emp_cost
+           SET update_dtm = SYSDATE,
+               year = #{year},
+               man_amt = #{manAmt, jdbcType=NUMERIC},
+               woman_amt = #{womanAmt, jdbcType=NUMERIC}
+         WHERE user_emp_cost_seq = #{userEmpCostSeq}
+    </update>
+
+    <update id="delete" parameterType="Long">
+        UPDATE tf_user_emp_cost
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_emp_cost_seq = #{userEmpCostSeq}
+    </update>
+
+    <delete id="deleteByUserId" parameterType="String">
+        UPDATE tf_user_emp_cost
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_id = #{userId}
+    </delete>
+</mapper>

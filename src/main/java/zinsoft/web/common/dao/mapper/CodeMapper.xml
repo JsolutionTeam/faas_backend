@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.web.common.dao.mapper.CodeMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.web.common.dto.CodeDto">
+        <id column="CODE_ID" property="codeId" jdbcType="VARCHAR" />
+        <id column="CODE_VAL" property="codeVal" jdbcType="VARCHAR" />
+        <result column="CODE_NM" property="codeNm" jdbcType="VARCHAR" />
+        <result column="CODE_ENG_NM" property="codeEngNm" jdbcType="VARCHAR" />
+        <result column="UP_CODE_VAL" property="upCodeVal" jdbcType="VARCHAR" />
+        <result column="EXPR_SEQ" property="exprSeq" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.web.common.dto.CodeDto">
+        INSERT INTO tf_code (code_id,
+                             code_val,
+                             code_nm,
+                             code_eng_nm,
+                             up_code_val,
+                             expr_seq)
+             VALUES (#{codeId},
+                    <choose>
+                        <when test="codeVal != null and codeVal != ''">
+                            #{codeVal},
+                        </when>
+                        <otherwise>
+                            (SELECT CAST(IFNULL(MAX(CAST(z.code_val AS INT)), 0) + 1 AS CHAR)
+                               FROM tf_code z
+                              WHERE z.code_id = #{codeId}),
+                        </otherwise>
+                    </choose>
+                     #{codeNm},
+                     #{codeEngNm},
+                     #{upCodeVal},
+                    <choose>
+                        <when test="exprSeq != null">
+                            #{exprSeq}
+                        </when>
+                        <otherwise>
+                            (SELECT IFNULL(MAX(z.expr_seq), 0) + 1
+                               FROM tf_code z
+                              WHERE z.code_id = #{codeId})
+                        </otherwise>
+                    </choose>)
+    </insert>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zinsoft.faas.dao.mapper.RoleUserMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.vo.RoleUser">
+        <id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+        <id column="MANAGER_ID" property="managerId" jdbcType="VARCHAR" />
+        <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="UserInfoResultMap" type="zinsoft.web.common.dto.UserInfoDto">
+        <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="USER_PWD" property="userPwd" jdbcType="CHAR" />
+        <result column="LAST_LOGIN_DTM" property="lastLoginDtm" jdbcType="DATE" />
+        <result column="USER_PWD_DTM" property="userPwdDtm" jdbcType="DATE" />
+        <result column="USER_PWD_NOTI_DTM" property="userPwdNotiDtm" jdbcType="DATE" />
+        <result column="USER_NM" property="userNm" jdbcType="VARCHAR" />
+        <result column="COMPANY_NM" property="companyNm" jdbcType="VARCHAR" />
+        <result column="ZIPCODE" property="zipcode" jdbcType="VARCHAR" />
+        <result column="ADDR1" property="addr1" jdbcType="VARCHAR" />
+        <result column="ADDR2" property="addr2" jdbcType="VARCHAR" />
+        <result column="EMAIL_ADDR" property="emailAddr" jdbcType="VARCHAR" />
+        <result column="MOBILE_NUM" property="mobileNum" jdbcType="VARCHAR" />
+        <result column="ACCOUNT_YEAR" property="accountYear" jdbcType="NUMERIC" />
+        <result column="CROP_SEQ" property="cropSeq" jdbcType="NUMERIC" />
+        <result column="ADM_CD" property="admCd" jdbcType="CHAR" />
+
+        <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+        <result column="ROLE_NM" property="roleNm" jdbcType="VARCHAR" />
+        <result column="CROPS" property="crops" jdbcType="VARCHAR" />
+        <result column="CROP_CNT" property="cropCnt" jdbcType="NUMERIC" />
+        <result column="USER_ACTIVITY_ACT_DT" property="userActivityActDt" jdbcType="CHAR" />
+        <result column="SLIP_TRD_DT" property="slipTrdDt" jdbcType="CHAR" />
+
+        <result column="CROP_NM" property="cropNm" jdbcType="VARCHAR" />
+        <result column="CROP_NM1" property="cropNm1" jdbcType="VARCHAR" />
+        <result column="CROP_NM2" property="cropNm2" jdbcType="VARCHAR" />
+
+        <result column="ST_ZIPCODE" property="stZipcode" jdbcType="VARCHAR" />
+        <result column="ED_ZIPCODE" property="edZipcode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.vo.RoleUser">
+        INSERT INTO tf_role_user
+                    (role_id,
+                     manager_id,
+                     user_id)
+        VALUES      (#{roleId},
+                     #{managerId},
+                     #{userId})
+    </insert>
+
+    <select id="listByManagerId" resultMap="UserInfoResultMap">
+          SELECT a.user_id,
+                 xdb_dec('normal', a.user_nm) user_nm,
+                 xdb_dec('normal', a.company_nm) company_nm,
+                 get_crops_by_user (a.user_id) crops
+            FROM tf_user_info a, tf_role_user b
+           WHERE     a.user_id = b.user_id
+                 AND a.status_cd = 'N'
+                 AND b.role_id = #{roleId}
+                 AND b.manager_id = #{managerId}
+        ORDER BY xdb_dec('normal', a.user_nm)
+    </select>
+
+    <delete id="deleteByRoleId">
+        DELETE FROM tf_role_user
+         WHERE role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteByManagerId">
+        DELETE FROM tf_role_user
+         WHERE     role_id = #{roleId}
+               AND manager_id = #{managerId}
+    </delete>
+</mapper>

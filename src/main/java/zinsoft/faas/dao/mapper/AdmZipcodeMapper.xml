@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.AdmZipcodeMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.vo.AdmZipcode">
+        <id column="ADM_CD" jdbcType="CHAR" property="admCd" />
+        <result column="ADM_NM" jdbcType="VARCHAR" property="admNm" />
+        <result column="ST_ZIPCODE" jdbcType="CHAR" property="stZipcode" />
+        <result column="ED_ZIPCODE" jdbcType="CHAR" property="edZipcode" />
+    </resultMap>
+
+    <select id="list" parameterType="String" resultMap="BaseResultMap">
+          SELECT a.adm_cd,
+                 a.adm_nm,
+                 a.st_zipcode,
+                 a.ed_zipcode
+            FROM tf_adm_zipcode a
+            <where>
+                <choose>
+                    <when test="upAdmCd != null and upAdmCd != ''">
+                            a.adm_cd LIKE #{upAdmCd} || '%'
+                        AND a.adm_cd > #{upAdmCd} || '00000000'
+                    </when>
+                    <otherwise>
+                        a.adm_cd LIKE '__00000000'
+                    </otherwise>
+                </choose>
+            </where>
+        ORDER BY a.adm_cd
+    </select>
+</mapper>

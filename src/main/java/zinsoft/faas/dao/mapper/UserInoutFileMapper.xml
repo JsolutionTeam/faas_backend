@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zinsoft.faas.dao.mapper.UserInoutFileMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.UserInoutFileDto">
+        <id column="USER_INOUT_SEQ" property="userInoutSeq" jdbcType="NUMERIC" />
+        <id column="FILE_SEQ" property="fileSeq" jdbcType="NUMERIC" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.UserInoutFileDto">
+        INSERT INTO tf_user_inout_file
+                    (user_inout_seq,
+                     file_seq)
+        VALUES      (#{userInoutSeq},
+                     #{fileSeq})
+    </insert>
+
+    <select id="listFileInfo" resultMap="zinsoft.faas.dao.mapper.FileInfoMapper.BaseResultMap">
+        SELECT c.file_seq,
+               c.file_nm
+          FROM tf_user_inout_file a, tf_user_inout b, tf_file_info c
+         WHERE a.user_inout_seq = b.user_inout_seq
+           AND a.file_seq = c.file_seq
+           AND b.user_id = #{userId}
+           AND c.user_id = #{userId}
+           AND a.user_inout_seq = #{userInoutSeq}
+        ORDER BY a.user_inout_seq, a.file_seq
+    </select>
+
+    <select id="listFileSeqByUserInoutSeq" resultType="long">
+        SELECT a.file_seq
+          FROM tf_user_inout_file a, tf_user_inout b, tf_file_info c
+         WHERE a.user_inout_seq = b.user_inout_seq
+           AND a.file_seq = c.file_seq
+           AND b.user_id = #{userId}
+           AND c.user_id = #{userId}
+           AND a.user_inout_seq = #{userInoutSeq}
+        ORDER BY a.user_inout_seq, a.file_seq
+    </select>
+
+    <select id="listFileSeqByUserId" resultType="long">
+        SELECT a.file_seq
+          FROM tf_user_inout_file a, tf_user_inout b, tf_file_info c
+         WHERE a.user_inout_seq = b.user_inout_seq
+           AND a.file_seq = c.file_seq
+           AND b.user_id = #{userId}
+           AND c.user_id = #{userId}
+        ORDER BY a.user_inout_seq, a.file_seq
+    </select>
+
+    <update id="delete">
+        DELETE FROM tf_user_inout_file
+              WHERE user_inout_seq = #{userInoutSeq}
+                AND file_seq = (SELECT z.file_seq FROM tf_file_info z WHERE z.file_seq = #{fileSeq} AND z.user_id = #{userId})
+    </update>
+
+    <update id="deleteMultiple">
+        DELETE FROM tf_user_inout_file
+              WHERE user_inout_seq = #{userInoutSeq}
+                AND file_seq IN (SELECT z.file_seq FROM tf_file_info z WHERE z.user_id = #{userId} AND z.file_seq IN
+                    <foreach collection="fileSeqList" item="fileSeq" index="index" separator="," open="(" close=")">
+                        #{fileSeq}
+                    </foreach>
+                    )
+    </update>
+
+    <update id="deleteByUserInoutSeq">
+        DELETE FROM tf_user_inout_file
+              WHERE user_inout_seq = (SELECT z.user_inout_seq FROM tf_user_inout z WHERE z.user_inout_seq = #{userInoutSeq} AND z.user_id = #{userId})
+    </update>
+    
+    <update id="deleteByUserId">
+        DELETE FROM tf_user_inout_file
+              WHERE user_inout_seq IN (SELECT z.user_inout_seq FROM tf_user_inout z WHERE z.user_id = #{userId})
+    </update>
+</mapper>

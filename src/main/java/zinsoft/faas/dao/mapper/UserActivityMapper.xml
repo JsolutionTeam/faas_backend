@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.UserActivityMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.vo.UserActivity">
+        <id column="USER_ACTIVITY_SEQ" property="userActivitySeq" jdbcType="NUMERIC" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="CROP_SEQ" property="cropSeq" jdbcType="NUMERIC" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="ACTIVITY_SEQ" property="activitySeq" jdbcType="NUMERIC" />
+        <result column="EXPR_SEQ" property="exprSeq" jdbcType="NUMERIC" />
+        <result column="USER_CROP_SEQ" property="userCropSeq" jdbcType="NUMERIC" />
+
+        <result column="CROP_NM" property="cropNm" jdbcType="VARCHAR" />
+        <result column="ACT_NM" property="actNm" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.vo.UserActivity">
+        <selectKey resultType="Long" keyProperty="userActivitySeq" order="BEFORE">
+            SELECT seq_user_activity_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO tf_user_activity
+                    (user_activity_seq,
+                     user_id,
+                     crop_seq,
+                     user_crop_seq,
+                     reg_dtm,
+                     update_dtm,
+                     status_cd,
+                     activity_seq,
+                     expr_seq)
+        VALUES      (#{userActivitySeq},
+                     #{userId},
+                     #{cropSeq},
+                     #{userCropSeq},
+                     SYSDATE,
+                     SYSDATE,
+                     'N',
+                     #{activitySeq,jdbcType=NUMERIC},
+                     <choose>
+                         <when test="exprSeq != null and exprSeq > 0">
+                             #{exprSeq,jdbcType=NUMERIC}
+                         </when>
+                         <otherwise>
+                             (SELECT NVL (MAX (z.expr_seq), 0) + 1
+                                FROM tf_user_activity z
+                               WHERE     z.status_cd = 'N'
+                                     AND z.user_id = #{userId}
+                                     AND z.crop_seq = #{cropSeq}
+                                     AND z.user_crop_seq = #{userCropSeq})
+                         </otherwise>
+                     </choose>
+                     )
+    </insert>
+
+    <select id="get" parameterType="zinsoft.faas.vo.UserActivity" resultMap="BaseResultMap">
+          SELECT a.user_activity_seq,
+                 a.user_id,
+                 a.crop_seq,
+                 (SELECT z.expr_nm FROM tf_crop z WHERE z.crop_seq = a.crop_seq) crop_nm,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.activity_seq,
+                 b.act_nm,
+                 a.expr_seq
+            FROM tf_user_activity a, tf_activity b
+           WHERE     a.activity_seq = b.activity_seq(+)
+                 AND a.status_cd = 'N'
+                 <if test="userActivitySeq != null and userActivitySeq > 0">
+                     AND a.user_activity_seq = #{userActivitySeq}
+                 </if>
+                 <if test="userId != null and userId != ''">
+                     AND a.user_id = #{userId}
+                 </if>
+                 <if test="cropSeq != null and cropSeq > 0">
+                     AND a.crop_seq = #{cropSeq}
+                 </if>
+                 <if test="userCropSeq != null and userCropSeq > 0">
+                     AND a.user_crop_seq = #{userCropSeq}
+                 </if>
+                 <if test="activitySeq != null and activitySeq > 0">
+                     AND a.activity_seq = #{activitySeq}
+                 </if>
+                 AND ROWNUM = 1
+    </select>
+
+    <select id="list" parameterType="Map" resultMap="BaseResultMap">
+          SELECT a.user_activity_seq,
+                 a.user_id,
+                 a.crop_seq,
+                 a.user_crop_seq,
+                 (SELECT z.expr_nm FROM tf_crop z WHERE z.crop_seq = a.crop_seq) crop_nm,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.activity_seq,
+                 b.act_nm,
+                 a.expr_seq
+            FROM tf_user_activity a, tf_activity b
+           WHERE     a.activity_seq = b.activity_seq(+)
+                 AND a.status_cd = 'N'
+                 <if test="userId != null and userId != ''">
+                     AND a.user_id = #{userId}
+                 </if>
+                 <if test="cropSeq != null and cropSeq > 0">
+                     AND a.crop_seq = #{cropSeq}
+                 </if>
+                 <if test="userCropSeq != null and userCropSeq > 0">
+                     AND a.user_crop_seq = #{userCropSeq}
+                 </if>
+                 <if test="actNm != null and actNm != ''">
+                     AND b.act_nm LIKE '%' || #{actNm} || '%'
+                 </if>
+        ORDER BY a.user_id, a.crop_seq, a.expr_seq
+    </select>
+
+    <update id="delete" parameterType="zinsoft.faas.vo.UserActivity">
+        UPDATE tf_user_activity
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_activity_seq = #{userActivitySeq}
+               AND user_id = #{userId}
+    </update>
+
+    <update id="deleteByUserId" parameterType="String">
+        UPDATE tf_user_activity
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_id = #{userId}
+    </update>
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.CropActivityMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.CropActivityDto">
+        <id column="CROP_ACTIVITY_SEQ" property="cropActivitySeq" jdbcType="DECIMAL" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="ACTIVITY_T_CD" property="activityTCd" jdbcType="DECIMAL" />
+        <result column="ACTIVITY_SEQ" property="activitySeq" jdbcType="DECIMAL" />
+        <result column="EXPR_YN" property="exprYn" jdbcType="CHAR" />
+        <result column="EXPR_SEQ" property="exprSeq" jdbcType="DECIMAL" />
+
+        <result column="ACT_NM" property="actNm" jdbcType="VARCHAR" />
+        <result column="CROP_ACT_NM" property="cropActNm" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.CropActivityDto">
+        <selectKey resultType="zinsoft.faas.dto.CropActivityDto" keyProperty="cropActivitySeq,activityTCd" order="BEFORE">
+            SELECT seq_crop_activity_seq.NEXTVAL AS "cropActivitySeq",
+                   <choose>
+                       <when test="activityTCd != null and activityTCd > 0">
+                           #{activityTCd} AS "activityTCd"
+                       </when>
+                       <otherwise>
+                           (SELECT NVL (MAX (z.activity_t_cd), 0) + 1
+                              FROM tf_crop_activity z)
+                              AS "activityTCd"
+                       </otherwise>
+                   </choose>
+              FROM DUAL
+        </selectKey>
+        INSERT INTO tf_crop_activity (crop_activity_seq,
+                                      reg_dtm,
+                                      update_dtm,
+                                      status_cd,
+                                      activity_t_cd,
+                                      activity_seq,
+                                      expr_yn,
+                                      expr_seq,
+                                      crop_act_nm)
+             VALUES (#{cropActivitySeq},
+                     SYSDATE,
+                     SYSDATE,
+                     'N',
+                     #{activityTCd},
+                     #{activitySeq},
+                     'Y',
+                     (SELECT NVL (MAX (z.expr_seq), 0) + 1
+                        FROM tf_crop_activity z
+                       WHERE z.status_cd = 'N' AND z.activity_t_cd = #{activityTCd}),
+                     #{cropActNm, jdbcType=VARCHAR}    )
+    </insert>
+
+    <select id="get" parameterType="String" resultMap="BaseResultMap">
+        SELECT a.crop_activity_seq,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.activity_t_cd,
+               a.activity_seq,
+               a.expr_yn,
+               a.expr_seq,
+               a.crop_act_nm,
+               b.act_nm
+          FROM tf_crop_activity a, tf_activity b
+         WHERE     a.activity_seq = b.activity_seq
+               AND a.status_cd = 'N'
+               AND b.status_cd = 'N'
+               AND a.crop_activity_seq = #{cropActivitySeq}
+    </select>
+
+    <select id="list" parameterType="long" resultMap="BaseResultMap">
+          SELECT a.crop_activity_seq,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.activity_t_cd,
+                 a.activity_seq,
+                 a.expr_yn,
+                 a.expr_seq,
+                 a.crop_act_nm,
+                 b.act_nm
+            FROM tf_crop_activity a, tf_activity b
+           WHERE     a.activity_seq = b.activity_seq
+                 AND a.status_cd = 'N'
+                 AND b.status_cd = 'N'
+                 AND a.activity_t_cd = #{activityTCd}
+        ORDER BY a.activity_t_cd, a.expr_seq
+    </select>
+
+    <select id="listActivityTCd" resultMap="BaseResultMap">
+          SELECT a.activity_t_cd,
+                 MAX(a.crop_act_nm) crop_act_nm
+            FROM tf_crop_activity a
+           WHERE a.status_cd = 'N'
+        GROUP BY a.activity_t_cd
+        ORDER BY a.activity_t_cd
+    </select>
+
+    <select id="pageActivityTCd" parameterType="PagingParam" resultMap="BaseResultMap">
+        SELECT *
+          FROM (SELECT ROWNUM AS RNUM, z.*
+                  FROM (SELECT a.activity_t_cd,
+                               MAX(a.crop_act_nm) crop_act_nm
+                          FROM tf_crop_activity a
+                         WHERE     a.status_cd = 'N'
+                       <if test="cond.keyword != null and cond.keyword != ''">
+                           <if test='cond.field == "cropActNm"'>
+                               AND a.crop_act_nm LIKE '%' || #{cond.keyword} || '%'
+                           </if>
+                      </if>
+                      GROUP BY a.activity_t_cd
+                      ORDER BY a.activity_t_cd DESC) z
+        <![CDATA[
+                 WHERE ROWNUM <= (#{start} + #{limit}))
+         WHERE RNUM > #{start}
+        ]]>
+    </select>
+
+    <select id="list2" parameterType="Map" resultMap="BaseResultMap">
+        SELECT a.activity_t_cd,
+               MAX(a.crop_act_nm) crop_act_nm
+          FROM tf_crop_activity a
+         WHERE     a.status_cd = 'N'
+           <if test="activityTCd != null and activityTCd != ''">
+               AND a.activity_t_cd != #{activityTCd}
+           </if>
+           <if test="cropActNm != null and cropActNm != ''">
+               AND LOWER (TRIM (a.crop_act_nm)) = LOWER (TRIM (#{cropActNm}))
+           </if>
+      GROUP BY a.activity_t_cd
+    </select>
+
+    <select id="countActivityTCd" parameterType="PagingParam" resultType="int">
+        SELECT COUNT (DISTINCT a.activity_t_cd)
+          FROM tf_crop_activity a
+         WHERE     a.status_cd = 'N'
+         <if test="cond.keyword != null and cond.keyword != ''">
+           <if test='cond.field == "cropActNm"'>
+               AND a.crop_act_nm LIKE '%' || #{cond.keyword} || '%'
+           </if>
+      </if>
+    </select>
+
+    <update id="update" parameterType="zinsoft.faas.dto.CropActivityDto">
+        UPDATE tf_crop_activity
+            <set>
+                update_dtm = SYSDATE,
+                <if test="exprYn != null and exprYn != ''">
+                    expr_yn = #{exprYn},
+                </if>
+                <if test="exprSeq != null and exprSeq > 0">
+                    expr_seq = #{exprSeq}
+                </if>
+            </set>
+         WHERE crop_activity_seq = #{cropActivitySeq}
+    </update>
+    
+    <update id="updateCropActNm">
+        UPDATE tf_crop_activity
+           SET update_dtm = SYSDATE,
+               crop_act_nm = #{cropActNm}
+         WHERE activity_t_cd = #{activityTCd}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        UPDATE tf_crop_activity
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE crop_activity_seq = #{cropActivitySeq}
+    </delete>
+    
+    <delete id="deleteActivityTCd" >
+        UPDATE tf_crop_activity
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE activity_t_cd = #{activityTCd}
+    </delete>
+</mapper>

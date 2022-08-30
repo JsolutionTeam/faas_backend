@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.UserInoutDetailMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.vo.UserInoutDetail">
+        <id column="USER_INOUT_DETAIL_SEQ" property="userInoutDetailSeq" jdbcType="NUMERIC" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="CROP_SEQ" property="cropSeq" jdbcType="NUMERIC" />
+        <result column="INOUT_CD" property="inoutCd" jdbcType="CHAR" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="DETAIL" property="detail" jdbcType="VARCHAR" />
+        <result column="USER_CROP_SEQ" property="userCropSeq" jdbcType="NUMERIC" />
+        <result column="EXPR_SEQ" property="exprSeq" jdbcType="NUMERIC" />
+    </resultMap>
+
+    <select id="list" parameterType="Map" resultMap="BaseResultMap">
+          SELECT a.user_inout_detail_seq,
+                 a.user_id,
+                 a.crop_seq,
+                 a.inout_cd,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.detail,
+                 a.user_crop_seq,
+                 a.expr_seq
+            FROM tf_user_inout_detail a
+           WHERE     a.status_cd = 'N'
+                 <if test="userId != null and userId != ''">
+                     AND a.user_id = #{userId}
+                 </if>
+                 <if test="cropSeq != null and cropSeq != ''">
+                     AND a.crop_seq = #{cropSeq}
+                 </if>
+                 <if test="inoutCd != null and inoutCd != ''">
+                     AND a.inout_cd = #{inoutCd}
+                 </if>
+                 <if test="detail != null and detail != ''">
+                     AND a.detail LIKE '%' || #{detail} || '%'
+                 </if>
+        ORDER BY a.user_id, a.crop_seq, a.inout_cd, a.expr_seq
+    </select>
+</mapper>

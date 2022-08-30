@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zinsoft.faas.dao.mapper.CropMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.CropDto">
+        <result column="CROP_SEQ" property="cropSeq" jdbcType="NUMERIC" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="EXPR_NM" property="exprNm" jdbcType="VARCHAR" />
+        <result column="EXPR_YN" property="exprYn" jdbcType="VARCHAR" />
+        <result column="UPDATE_YN" property="updateYn" jdbcType="CHAR" />
+        <result column="DELETE_YN" property="deleteYn" jdbcType="CHAR" />
+        <result column="SER_LIFE" property="serLife" jdbcType="NUMERIC" />
+        <result column="MA_LIFE" property="maLife" jdbcType="NUMERIC" />
+        <result column="ASSET_YN" property="assetYn" jdbcType="CHAR" />
+        <result column="CROPING_YN" property="cropingYn" jdbcType="CHAR" />
+        <result column="ACTIVITY_T_CD" property="activityTCd" jdbcType="NUMERIC" />
+
+        <result column="CROP_A_CD_NM" property="cropACdNm" jdbcType="VARCHAR" />
+        <result column="CROP_B_CD_NM" property="cropBCdNm" jdbcType="VARCHAR" />
+        <result column="CROP_C_CD_NM" property="cropCCdNm" jdbcType="VARCHAR" />
+        <result column="CROP_S_CD_NM" property="cropSCdNm" jdbcType="VARCHAR" />
+        <result column="CROP_T_CD_NM" property="cropTCdNm" jdbcType="VARCHAR" />
+        <result column="CROP_A_CD" property="cropACd" jdbcType="VARCHAR" />
+        <result column="CROP_B_CD" property="cropBCd" jdbcType="VARCHAR" />
+        <result column="CROP_C_CD" property="cropCCd" jdbcType="VARCHAR" />
+        <result column="CROP_S_CD" property="cropSCd" jdbcType="CHAR" />
+        <result column="CROP_T_CD" property="cropTCd" jdbcType="VARCHAR" />
+        <result column="CROP_ACT_NM" property="cropActNm" jdbcType="VARCHAR" />
+        
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.CropDto">
+    <selectKey resultType="Long" keyProperty="cropSeq" order="BEFORE">
+        SELECT seq_crop_seq.NEXTVAL from DUAL
+    </selectKey>
+        INSERT INTO tf_crop (
+                                crop_seq,
+                                reg_dtm,
+                                update_dtm,
+                                status_cd,
+                                expr_nm,
+                                expr_yn,
+                                update_yn,
+                                delete_yn,
+                                ser_life,
+                                ma_life,
+                                asset_yn,
+                                croping_yn,
+                                crop_s_cd,
+                                activity_t_cd,
+                                crop_a_cd
+                   )
+          VALUES   (
+                       #{cropSeq},
+                       SYSDATE,
+                       SYSDATE,
+                       'N',
+                       #{exprNm},
+                       'Y',
+                       'Y',
+                       'N',
+                       #{serLife,jdbcType=NUMERIC},
+                       #{maLife,jdbcType=NUMERIC},
+                       'N',
+                       'N',
+                       #{cropSCd,jdbcType=CHAR},
+                       #{activityTCd,jdbcType=NUMERIC},
+                       #{cropACd,jdbcType=VARCHAR}
+                   )
+    </insert>
+
+    <select id="get" parameterType="Long" resultMap="BaseResultMap">
+        SELECT   a.crop_a_cd,
+                 (SELECT   x.code_val
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'CROP_A_CD'
+                           AND x.code_val = a.crop_a_cd)
+                    crop_a_cd_nm,
+                 a.crop_b_cd,
+                 (SELECT   x.code_val
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'CROP_B_CD'
+                           AND x.code_val = a.crop_b_cd)
+                    crop_b_cd_nm,
+                 SUBSTR (a.crop_seq, 1, 4) crop_c_cd,
+                 (SELECT   x.code_val
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'CROP_C_CD'
+                           AND x.code_val = SUBSTR (a.crop_seq, 1, 4))
+                    crop_c_cd_nm,
+                 a.crop_s_cd,
+                 (SELECT   x.code_val
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'CROP_S_CD'
+                           AND x.code_val = a.crop_s_cd)
+                    crop_s_cd_nm,
+                 a.crop_seq,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.expr_nm,
+                 a.expr_yn,
+                 a.update_yn,
+                 a.delete_yn,
+                 a.ser_life,
+                 a.ma_life,
+                 a.asset_yn,
+                 a.croping_yn,
+                 a.activity_t_cd
+          FROM   tf_crop a
+         WHERE   a.crop_seq = #{cropSeq}
+    </select>
+
+    <select id="isExistCropId" parameterType="String" resultMap="BaseResultMap">
+        SELECT crop_seq
+          FROM tf_crop
+         WHERE crop_seq = #{cropSeq}
+    </select>
+
+    <select id="list" parameterType="Map" resultMap="BaseResultMap">
+        SELECT a.crop_a_cd,
+               a.crop_a_cd_nm,
+               a.crop_b_cd,
+               a.crop_b_cd_nm,
+               a.crop_c_cd,
+               a.crop_c_cd_nm,
+               a.crop_s_cd,
+               a.crop_s_cd_nm,
+               a.crop_act_nm,
+               a.expr_yn,
+               a.crop_seq,
+               CASE 
+ <![CDATA[               
+                 WHEN a.crop_cnt > 1 THEN
+]]>                 
+                   CONCAT(a.expr_nm, '(', a.crop_a_cd_nm, ')')
+                 ELSE
+                   a.expr_nm
+               END
+                 expr_nm,
+               a.status_cd,
+               a.update_yn,
+               a.delete_yn,
+               a.ser_life,
+               a.ma_life,
+               a.asset_yn,
+               a.croping_yn,
+               a.activity_t_cd
+          FROM (  SELECT   aa.reg_dtm,
+                           aa.crop_a_cd,
+                           (SELECT   x.code_nm
+                              FROM   tf_code x
+                             WHERE   x.code_id = 'CROP_A_CD' AND x.code_val = aa.crop_a_cd)
+                              crop_a_cd_nm,
+                           aa.crop_b_cd,
+                           (SELECT   x.code_nm
+                              FROM   tf_code x
+                             WHERE   x.code_id = 'CROP_B_CD' AND x.code_val = aa.crop_b_cd)
+                              crop_b_cd_nm,
+                           SUBSTR (aa.crop_seq, 1, 4) crop_c_cd,
+                           (SELECT   x.code_nm
+                              FROM   tf_code x
+                             WHERE   x.code_id = 'CROP_C_CD' AND x.code_val = SUBSTR (aa.crop_seq, 1, 4))
+                              crop_c_cd_nm,
+                           aa.crop_s_cd,
+                           (SELECT   x.code_nm
+                              FROM   tf_code x
+                             WHERE   x.code_id = 'CROP_S_CD' AND x.code_val = aa.crop_s_cd)
+                              crop_s_cd_nm,
+                           (SELECT   x.crop_act_nm
+                              FROM   tf_crop_activity x
+                             WHERE   x.activity_t_cd = aa.activity_t_cd
+                            ORDER BY x.expr_seq
+                            LIMIT 1) crop_act_nm,
+                           aa.expr_yn,
+                           aa.crop_seq,
+                           aa.expr_nm,
+                           aa.status_cd,
+                           aa.update_yn,
+                           aa.delete_yn,
+                           aa.ser_life,
+                           aa.ma_life,
+                           aa.asset_yn,
+                           aa.croping_yn,
+                           aa.activity_t_cd, 
+                           (SELECT COUNT(*) FROM tf_crop x WHERE x.expr_nm = aa.expr_nm AND x.status_cd = 'N' GROUP BY x.expr_nm) crop_cnt
+                    FROM   tf_crop aa ) a
+         WHERE   a.status_cd = 'N'
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="field == 'cropACdNm'">
+                        AND  a.crop_a_cd_nm LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="field == 'cropBCdNm'">
+                        AND  a.crop_b_cd_nm LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="field == 'cropCCdNm'">
+                        AND  a.expr_nm LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+            <if test="cropNm != null and cropNm != ''">
+                AND  a.expr_nm LIKE '%' || #{cropNm} || '%'
+            </if>
+            <if test="cropACd != null and cropACd != ''">
+                AND  a.crop_a_cd = #{cropACd}
+            </if>
+      ORDER BY a.reg_dtm DESC, a.crop_a_cd, a.crop_b_cd, a.crop_seq
+    </select>
+
+    <select id="listSomeCrop" parameterType="String" resultMap="BaseResultMap">
+        SELECT   crop_seq,
+                 reg_dtm,
+                 update_dtm,
+                 status_cd,
+                 expr_nm,
+                 update_yn,
+                 delete_yn,
+                 ser_life,
+                 ma_life,
+                 activity_t_cd
+          FROM   tf_crop
+         WHERE   status_cd = 'N'
+           AND   crop_seq BETWEEN #{stCropSeq} AND #{edCropSeq}
+      ORDER BY   expr_nm ASC
+    </select>
+
+    <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
+        SELECT *
+          FROM (SELECT ROWNUM AS RNUM, z.*
+                  FROM (SELECT   a.reg_dtm,
+                                 a.crop_a_cd,
+                                 (SELECT   x.code_nm
+                                    FROM   tf_code x
+                                   WHERE   x.code_id = 'CROP_A_CD' AND x.code_val = a.crop_a_cd)
+                                    crop_a_cd_nm,
+                                 a.crop_b_cd,
+                                 (SELECT   x.code_nm
+                                    FROM   tf_code x
+                                   WHERE   x.code_id = 'CROP_B_CD' AND x.code_val = a.crop_b_cd)
+                                    crop_b_cd_nm,
+                                 SUBSTR (a.crop_seq, 1, 4) crop_c_cd,
+                                 (SELECT   x.code_nm
+                                    FROM   tf_code x
+                                   WHERE   x.code_id = 'CROP_C_CD' AND x.code_val = SUBSTR (a.crop_seq, 1, 4))
+                                    crop_c_cd_nm,
+                                 a.crop_s_cd,
+                                 (SELECT   x.code_nm
+                                    FROM   tf_code x
+                                   WHERE   x.code_id = 'CROP_S_CD' AND x.code_val = a.crop_s_cd)
+                                    crop_s_cd_nm,
+                                 a.expr_yn,
+                                 a.crop_seq,
+                                 a.expr_nm,
+                                 a.status_cd,
+                                 a.update_yn,
+                                 a.delete_yn,
+                                 a.ser_life,
+                                 a.ma_life,
+                                 a.asset_yn,
+                                 a.croping_yn,
+                                 a.activity_t_cd,
+                                 (SELECT z.crop_act_nm 
+                                    FROM (SELECT zz.crop_act_nm FROM tf_crop_activity zz WHERE a.activity_t_cd = zz.activity_t_cd ORDER BY zz.expr_seq) z 
+                                   WHERE ROWNUM = 1) crop_act_nm
+                          FROM   tf_crop a
+                         WHERE   a.status_cd = 'N'
+                         <if test="cond.keyword != null and cond.keyword != ''">
+                            <if test='cond.field == "cropACdNm"'>
+                                AND  (SELECT   x.code_nm
+                                        FROM   tf_code x
+                                       WHERE   x.code_id = 'CROP_A_CD'
+                                         AND   x.code_val = a.crop_a_cd) LIKE '%' || #{cond.keyword} || '%'
+                            </if>
+                            <if test='cond.field == "cropBCdNm"'>
+                                AND  (SELECT   x.code_nm
+                                        FROM   tf_code x
+                                       WHERE   x.code_id = 'CROP_B_CD'
+                                         AND   x.code_val = a.crop_b_cd) LIKE '%' || #{cond.keyword} || '%'
+                            </if>
+                            <if test='cond.field == "cropCCdNm"'>
+                                AND  a.expr_nm LIKE '%' || #{cond.keyword} || '%'
+                            </if>
+                        </if>
+                            <if test="cond.cropNm != null and cond.cropNm != ''">
+                                AND  a.expr_nm LIKE '%' || #{cond.cropNm} || '%'
+                            </if>
+                            <if test="cond.cropACd != null and cond.cropACd != ''">
+                                AND  a.crop_a_cd = #{cond.cropACd}
+                            </if>
+                      ORDER BY a.reg_dtm DESC, a.crop_a_cd, a.crop_b_cd, a.crop_seq) z
+        <![CDATA[
+                 WHERE ROWNUM <= (#{start} + #{limit}))
+         WHERE RNUM > #{start}
+        ]]>
+    </select>
+
+    <select id="count" parameterType="PagingParam" resultType="int">
+       SELECT  COUNT(*)
+         FROM  tf_crop a
+        WHERE  a.status_cd = 'N'
+        <if test="cond.keyword != null and cond.keyword != ''">
+            <if test='cond.field == "cropACdNm"'>
+                 AND  (SELECT   x.code_nm
+                         FROM   tf_code x
+                        WHERE   x.code_id = 'CROP_A_CD'
+                          AND   x.code_val = a.crop_a_cd) LIKE '%' || #{cond.keyword} || '%'
+             </if>
+             <if test='cond.field == "cropBCdNm"'>
+                 AND  (SELECT   x.code_nm
+                         FROM   tf_code x
+                        WHERE   x.code_id = 'CROP_B_CD'
+                          AND   x.code_val = a.crop_b_cd) LIKE '%' || #{cond.keyword} || '%'
+             </if>
+             <if test='cond.field == "cropCCdNm"'>
+                 AND  a.expr_nm LIKE '%' || #{cond.keyword} || '%'
+             </if>
+         </if>
+             <if test="cond.cropNm != null and cond.cropNm != ''">
+                 AND  a.expr_nm LIKE '%' || #{cond.cropNm} || '%'
+             </if>
+             <if test="cond.cropACd != null and cond.cropACd != ''">
+                 AND  a.crop_a_cd = #{cond.cropACd}
+             </if>
+    </select>
+
+    <update id="update" parameterType="zinsoft.faas.dto.CropDto">
+        UPDATE   tf_crop
+           SET   update_dtm = SYSDATE,
+                 status_cd = 'N',
+                 expr_nm = #{exprNm},
+                 ser_life = #{serLife,jdbcType=NUMERIC},
+                 ma_life = #{maLife,jdbcType=NUMERIC},
+                 crop_a_cd = #{cropACd,jdbcType=VARCHAR},
+                 crop_b_cd = #{cropBCd,jdbcType=VARCHAR},
+                 crop_s_cd = #{cropSCd,jdbcType=CHAR},
+                 asset_yn = #{assetYn,jdbcType=VARCHAR},
+                 activity_t_cd = #{activityTCd,jdbcType=NUMERIC}
+         WHERE   crop_seq = #{cropSeq}
+     </update>
+
+    <delete id="delete">
+        UPDATE tf_crop
+           SET status_cd = 'D',
+               update_dtm = SYSDATE
+         WHERE crop_seq IN
+           <foreach collection="cropSeqs" item="cropSeq" index="index" separator="," open="(" close=")">
+               #{cropSeq}
+           </foreach>
+    </delete>
+</mapper>

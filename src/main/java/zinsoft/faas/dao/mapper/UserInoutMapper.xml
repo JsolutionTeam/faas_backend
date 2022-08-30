@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.UserInoutMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.UserInoutDto">
+        <id column="USER_INOUT_SEQ" property="userInoutSeq" jdbcType="NUMERIC" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="INOUT_CD" property="inoutCd" jdbcType="CHAR" />
+        <result column="TRD_DT" property="trdDt" jdbcType="CHAR" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="CROP_SEQ" property="cropSeq" jdbcType="NUMERIC" />
+        <result column="AC_ID" property="acId" jdbcType="NUMERIC" />
+        <result column="GRADE_T_CD" property="gradeTCd" jdbcType="CHAR" />
+        <result column="UNIT_PACK" property="unitPack" jdbcType="NUMERIC" />
+        <result column="PACK_T_CD" property="packTCd" jdbcType="CHAR" />
+        <result column="QUAN" property="quan" jdbcType="NUMERIC" />
+        <result column="UNIT_AMT" property="unitAmt" jdbcType="NUMERIC" />
+        <result column="AMT" property="amt" jdbcType="NUMERIC" />
+        <result column="USER_CUST_SEQ" property="userCustSeq" jdbcType="NUMERIC" />
+        <result column="INOUT_T_CD" property="inoutTCd" jdbcType="CHAR" />
+        <result column="C_SLIP_SEQ" property="cSlipSeq" jdbcType="NUMERIC" />
+        <result column="D_SLIP_SEQ" property="dSlipSeq" jdbcType="NUMERIC" />
+        <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+        <result column="INOUT_CONTENT" property="inoutContent" jdbcType="VARCHAR" />
+        <result column="USER_INOUT_DETAIL_SEQ" property="userInoutDetailSeq" jdbcType="NUMERIC" />
+        <result column="USER_INOUT_DETAIL" property="userInoutDetail" jdbcType="VARCHAR" />
+        <result column="CUST_NM" property="custNm" jdbcType="VARCHAR" />
+        <result column="R_TRD_DT" property="rTrdDt" jdbcType="CHAR" />
+        <result column="R_INOUT_T_CD" property="rInoutTCd" jdbcType="CHAR" />
+        <result column="R_C_SLIP_SEQ" property="rcSlipSeq" jdbcType="NUMERIC" />
+        <result column="R_D_SLIP_SEQ" property="rdSlipSeq" jdbcType="NUMERIC" />
+        <result column="USER_IN_SEQ" property="userInSeq" jdbcType="NUMERIC" />
+
+        <result column="USER_NM" property="userNm" jdbcType="VARCHAR" />
+        <result column="INOUT_CD_NM" property="inoutCdNm" jdbcType="VARCHAR" />
+        <result column="CROP_NM" property="cropNm" jdbcType="VARCHAR" />
+        <result column="AC_NM" property="acNm" jdbcType="VARCHAR" />
+        <result column="GRADE_T_CD_NM" property="gradeTCdNm" jdbcType="VARCHAR" />
+        <result column="PACK_T_CD_NM" property="packTCdNm" jdbcType="VARCHAR" />
+        <result column="INOUT_T_CD_NM" property="inoutTCdNm" jdbcType="VARCHAR" />
+        <result column="R_INOUT_T_CD_NM" property="rInoutTCdNm" jdbcType="VARCHAR" />
+        <result column="UP_AC_ID" property="upAcId" jdbcType="VARCHAR" />
+        
+        <result column="PART_T_CD" property="partTCd" jdbcType="CHAR" />
+        <result column="PART_T_CD_NM" property="partTCdNm" jdbcType="VARCHAR" />
+        <result column="USER_CROP_SEQ" property="userCropSeq" jdbcType="NUMERIC" />
+        <result column="USER_CROP_ALIAS_NM" property="userCropAliasNm" jdbcType="VARCHAR" />
+        <result column="INOUT_PART_TOTAL_AMT" property="inoutPartTotalAmt" jdbcType="NUMERIC" />
+        <result column="INOUT_PART_BALANCE_AMT" property="inoutPartBalanceAmt" jdbcType="NUMERIC" />
+    </resultMap>
+    
+    <resultMap id="countInoutTCdResultMap" type="java.util.HashMap">
+        <id property="inoutTCd" column="inout_t_cd" jdbcType="CHAR" />
+        <result property="inoutTCdCount" column="inout_t_cd_count" jdbcType="NUMERIC"/>
+        <result property="inoutTCdNm" column="inout_t_cd_nm" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <resultMap id="totalQuanResultMap" type="java.util.HashMap">
+        <id property="packTCd" column="pack_t_cd" jdbcType="CHAR"/>
+        <result property="quanTotal" column="quan_total" jdbcType="NUMERIC"/>
+        <result property="packTCdNm" column="pack_t_cd_nm" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <resultMap id="aggregateResultMap" type="zinsoft.faas.vo.UserInoutAggregate">
+        <id property="inoutCd" column="inout_cd" />
+        <result property="inoutCdNm" column="inout_cd_nm" jdbcType="VARCHAR"/>
+        <result property="inoutTotal" column="inout_total" jdbcType="NUMERIC"/>
+        <result property="inoutCount" column="inout_count" jdbcType="NUMERIC"/>
+        <result property="userCropCount" column="user_crop_count" jdbcType="NUMERIC"/>
+        <result property="userCustCount" column="user_cust_count" jdbcType="NUMERIC"/>
+        
+        <collection property="inoutTCdList" javaType="java.util.ArrayList" resultMap="countInoutTCdResultMap"/>
+        <collection property="totalQuanList" javaType="java.util.ArrayList" resultMap="totalQuanResultMap"/>
+    </resultMap>
+    
+    <resultMap id="aggregateDetailMap" type="zinsoft.faas.vo.UserInoutAggregateDetail">
+        <collection property="inoutCd" javaType="java.util.ArrayList" ofType="java.util.HashMap">
+            <id property="inoutCd" column="inout_cd" jdbcType="CHAR" />
+            <result property="inoutCount" column="inout_count" jdbcType="NUMERIC"/>
+            <result property="inoutAmt" column="inout_amt" jdbcType="NUMERIC"/>
+            <result property="inoutCdNm" column="inout_cd_nm" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="inoutTCd" javaType="java.util.ArrayList" ofType="java.util.HashMap">
+            <id property="inoutTCd" column="inout_t_cd" jdbcType="CHAR" />
+            <result property="inoutTCdCount" column="inout_t_cd_count" jdbcType="NUMERIC"/>
+            <result property="inoutTCdNm" column="inout_t_cd_nm" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="userCrop" javaType="java.util.ArrayList" ofType="java.util.HashMap">
+            <id property="cropSeq" column="crop_seq" jdbcType="NUMERIC"/>
+            <result property="cropCount" column="crop_count" jdbcType="NUMERIC"/>
+            <result property="cropNm" column="crop_nm" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="partTCd" javaType="java.util.ArrayList" ofType="java.util.HashMap">
+            <id property="partTCd" column="part_t_cd" jdbcType="CHAR"/>
+            <result property="partCount" column="part_count" jdbcType="NUMERIC"/>
+            <result property="partTCdNm" column="part_t_cd_nm" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="userCust" javaType="java.util.ArrayList" ofType="java.util.HashMap">
+            <id property="userCustSeq" column="user_cust_seq" jdbcType="NUMERIC"/>
+            <result property="custCount" column="cust_count" jdbcType="NUMERIC"/>
+            <result property="custNm" column="cust_nm" jdbcType="VARCHAR"/>
+        </collection>
+     </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.UserInoutDto">
+        <selectKey resultType="Long" keyProperty="userInoutSeq" order="BEFORE">
+            SELECT seq_user_inout_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO tf_user_inout (user_inout_seq,
+                             user_id,
+                             inout_cd,
+                             trd_dt,
+                             reg_dtm,
+                             update_dtm,
+                             status_cd,
+                             crop_seq,
+                             ac_id,
+                             grade_t_cd,
+                             unit_pack,
+                             pack_t_cd,
+                             quan,
+                             unit_amt,
+                             amt,
+                             user_cust_seq,
+                             inout_t_cd,
+                             c_slip_seq,
+                             d_slip_seq,
+                             remark,
+                             inout_content,
+                             user_inout_detail_seq,
+                             user_inout_detail,
+                             cust_nm,
+                             r_trd_dt,
+                             r_inout_t_cd,
+                             r_c_slip_seq,
+                             r_d_slip_seq,
+                             user_crop_seq,
+                             user_in_seq)
+             VALUES (#{userInoutSeq},
+                     #{userId},
+                     #{inoutCd},
+                     #{trdDt},
+                     SYSDATE,
+                     SYSDATE,
+                     'N',
+                     #{cropSeq},
+                     #{acId,jdbcType=CHAR},
+                     #{gradeTCd,jdbcType=CHAR},
+                     #{unitPack,jdbcType=NUMERIC},
+                     #{packTCd,jdbcType=CHAR},
+                     #{quan,jdbcType=NUMERIC},
+                     #{unitAmt,jdbcType=NUMERIC},
+                     #{amt,jdbcType=NUMERIC},
+                     #{userCustSeq,jdbcType=NUMERIC},
+                     #{inoutTCd,jdbcType=CHAR},
+                     #{cSlipSeq,jdbcType=NUMERIC},
+                     #{dSlipSeq,jdbcType=NUMERIC},
+                     #{remark,jdbcType=VARCHAR},
+                     #{inoutContent,jdbcType=VARCHAR},
+                     #{userInoutDetailSeq,jdbcType=NUMERIC},
+                     #{userInoutDetail,jdbcType=VARCHAR},
+                     #{custNm,jdbcType=VARCHAR},
+                     #{rTrdDt,jdbcType=CHAR},
+                     #{rInoutTCd,jdbcType=CHAR},
+                     #{rcSlipSeq,jdbcType=NUMERIC},
+                     #{rdSlipSeq,jdbcType=NUMERIC},
+                     #{userCropSeq,jdbcType=NUMERIC},
+                     #{userInSeq,jdbcType=NUMERIC})
+    </insert>
+
+    <select id="get" parameterType="zinsoft.faas.dto.UserInoutDto" resultMap="BaseResultMap">
+        SELECT b.*,
+               (b.amt - b.inout_part_total_amt) inout_part_balance_amt
+          FROM ( SELECT a.user_inout_seq,
+                        a.user_id,
+                        a.inout_cd,
+                        (SELECT z.code_nm
+                           FROM tf_code z
+                          WHERE z.code_id = 'INOUT_CD' AND z.code_val = a.inout_cd)
+                           inout_cd_nm,
+                        a.trd_dt,
+                        a.reg_dtm,
+                        a.update_dtm,
+                        a.status_cd,
+                        a.crop_seq,
+                        (SELECT z.expr_nm
+                           FROM tf_crop z
+                          WHERE z.crop_seq = a.crop_seq)
+                           crop_nm,
+                        a.ac_id,
+                        (SELECT z.ac_nm
+                           FROM tf_account z
+                          WHERE z.ac_id = a.ac_id)
+                           ac_nm,
+                        a.grade_t_cd,
+                        (SELECT z.code_nm
+                           FROM tf_code z
+                          WHERE z.code_id = 'GRADE_T_CD' AND z.code_val = a.grade_t_cd)
+                           grade_t_cd_nm,
+                        a.unit_pack,
+                        a.pack_t_cd,
+                        (SELECT z.code_nm
+                           FROM tf_code z
+                          WHERE z.code_id = 'PACK_T_CD' AND z.code_val = a.pack_t_cd)
+                         pack_t_cd_nm,
+                        a.quan,
+                        a.unit_amt,
+                        a.amt,
+                        a.user_cust_seq,
+                        a.inout_t_cd,
+                        (SELECT z.code_nm
+                           FROM tf_code z
+                          WHERE z.code_id = 'INOUT_T_CD' AND z.code_val = a.inout_t_cd)
+                           inout_t_cd_nm,
+                        a.c_slip_seq,
+                        a.d_slip_seq,
+                        a.remark,
+                        a.inout_content,
+                        a.user_inout_detail_seq,
+                        NVL ( (SELECT z.detail
+                                 FROM tf_user_inout_detail z
+                                WHERE z.user_inout_detail_seq = a.user_inout_detail_seq),
+                             a.user_inout_detail),
+                        xdb_dec ('normal',
+                                 NVL ( (SELECT z.cust_nm
+                                          FROM tf_user_cust z
+                                         WHERE z.user_cust_seq = a.user_cust_seq),
+                                      a.cust_nm))
+                           cust_nm,
+                        a.r_trd_dt,
+                        a.r_inout_t_cd,
+                        (SELECT z.code_nm
+                           FROM tf_code z
+                          WHERE z.code_id = 'R_INOUT_T_CD' AND z.code_val = a.r_inout_t_cd)
+                           r_inout_t_cd_nm,
+                        a.r_c_slip_seq,
+                        a.r_d_slip_seq,
+                        a.user_in_seq,
+                        (SELECT z.up_ac_id FROM tf_account z WHERE z.ac_id = a.ac_id) up_ac_id,
+                        a.user_crop_seq,
+                        b.alias_nm user_crop_alias_nm,
+                        b.part_t_cd,
+                        (SELECT z.code_nm
+                           FROM tf_code z
+                          WHERE z.code_id = 'PART_T_CD' AND z.code_val = b.part_t_cd)
+                           part_t_cd_nm,
+                        (SELECT NVL(SUM(z.amt),0)
+                           FROM tf_user_inout_part z
+                          WHERE     z.status_cd = 'N'
+                                AND z.user_inout_seq = a.user_inout_seq) inout_part_total_amt                  
+                   FROM tf_user_inout a, tf_user_crop b
+                  WHERE     a.user_inout_seq = #{userInoutSeq}
+                        AND a.user_id = #{userId}
+                        AND a.user_crop_seq = b.user_crop_seq
+               ) b
+    </select>
+
+    <select id="list" parameterType="Map" resultMap="BaseResultMap">
+          SELECT y.*,
+                 (y.amt - y.inout_part_total_amt) inout_part_balance_amt
+            FROM ( SELECT a.user_inout_seq,
+                          a.user_id,
+                          xdb_dec('normal', c.user_nm) user_nm,
+                          a.inout_cd,
+                          (SELECT z.code_nm
+                             FROM tf_code z
+                            WHERE z.code_id = 'INOUT_CD' AND z.code_val = a.inout_cd)
+                             inout_cd_nm,
+                          a.trd_dt,
+                          a.reg_dtm,
+                          a.update_dtm,
+                          a.status_cd,
+                          a.crop_seq,
+                          d.expr_nm crop_nm,
+                          a.ac_id,
+                          (SELECT z.ac_nm
+                             FROM tf_account z
+                            WHERE z.ac_id = a.ac_id)
+                             ac_nm,
+                          a.grade_t_cd,
+                          (SELECT z.code_nm
+                             FROM tf_code z
+                            WHERE z.code_id = 'GRADE_T_CD' AND z.code_val = a.grade_t_cd)
+                             grade_t_cd_nm,
+                          a.unit_pack,
+                          a.pack_t_cd,
+                          (SELECT z.code_nm
+                             FROM tf_code z
+                            WHERE z.code_id = 'PACK_T_CD' AND z.code_val = a.pack_t_cd)
+                             pack_t_cd_nm,
+                          a.quan,
+                          a.unit_amt,
+                          a.amt,
+                          a.user_cust_seq,
+                          a.inout_t_cd,
+                          (SELECT z.code_nm
+                             FROM tf_code z
+                            WHERE z.code_id = 'INOUT_T_CD' AND z.code_val = a.inout_t_cd)
+                             inout_t_cd_nm,
+                          a.c_slip_seq,
+                          a.d_slip_seq,
+                          a.remark,
+                          a.inout_content,
+                          a.user_inout_detail_seq,
+                          NVL ( (SELECT z.detail
+                                   FROM tf_user_inout_detail z
+                                  WHERE z.user_inout_detail_seq = a.user_inout_detail_seq),
+                               a.user_inout_detail),
+                          xdb_dec ('normal',
+                                   NVL ( (SELECT z.cust_nm
+                                            FROM tf_user_cust z
+                                           WHERE z.user_cust_seq = a.user_cust_seq),
+                                        a.cust_nm))
+                             cust_nm,
+                          a.r_trd_dt,
+                          a.r_inout_t_cd,
+                          (SELECT z.code_nm
+                             FROM tf_code z
+                            WHERE z.code_id = 'R_INOUT_T_CD' AND z.code_val = a.r_inout_t_cd)
+                             r_inout_t_cd_nm,
+                          a.r_c_slip_seq,
+                          a.r_d_slip_seq,
+                          a.user_in_seq,
+                          (SELECT z.up_ac_id FROM tf_account z WHERE z.ac_id = a.ac_id) up_ac_id,
+                          a.user_crop_seq,
+                          e.alias_nm user_crop_alias_nm,
+                          e.part_t_cd,
+                          (SELECT z.code_nm
+                             FROM tf_code z
+                            WHERE z.code_id = 'PART_T_CD' AND z.code_val = e.part_t_cd)
+                             part_t_cd_nm,
+                          (SELECT NVL(SUM(z.amt),0)
+                           FROM tf_user_inout_part z
+                          WHERE     z.status_cd = 'N'
+                                AND z.user_inout_seq = a.user_inout_seq) 
+                            inout_part_total_amt      
+                     FROM tf_user_inout a, vf_user_info c, tf_crop d, tf_user_crop e
+                    WHERE     a.user_id = c.user_id
+                          AND a.crop_seq = d.crop_seq(+)
+                          AND a.status_cd = 'N'
+                          AND a.user_crop_seq = e.user_crop_seq
+                      <if test="userId != null and userId != ''">
+                          AND a.user_id = #{userId}
+                      </if>
+                      <if test="inoutCd != null and inoutCd != ''">
+                          AND a.inout_cd = #{inoutCd}
+                      </if>
+                  <choose>
+                      <when test="trdDt != null and trdDt != ''">
+                          AND a.trd_dt LIKE #{trdDt} || '%'
+                      </when>
+                      <when test="sTrdDt != null and sTrdDt != '' and eTrdDt != null and eTrdDt != ''">
+                          AND a.trd_dt BETWEEN #{sTrdDt} AND #{eTrdDt}
+                      </when>
+                  </choose>
+                      <if test="cropSeq != null and cropSeq != ''">
+                          AND a.crop_seq = #{cropSeq}
+                      </if>
+                      <if test="userCropSeq != null and userCropSeq != ''">
+                          AND a.user_crop_seq = #{userCropSeq}
+                      </if>
+                      <if test="partTCd != null and partTCd != ''">
+                          AND e.part_t_cd = #{partTCd}
+                      </if>
+                      <if test="userCustSeq != null and userCustSeq != ''">
+                          AND a.user_cust_seq = #{userCustSeq}
+                      </if>
+                      <if test="inoutTCd != null and inoutTCd != ''">
+                          AND a.inout_t_cd = #{inoutTCd}
+                      </if>
+              <if test="field != null and field != '' and keyword != null and keyword != ''">
+                  <choose>
+                      <when test="field == 'userId'">
+                          AND a.user_id LIKE '%' || #{keyword} || '%'
+                      </when>
+                      <when test="field == 'userNm'">
+                          AND xdb_dec('normal', c.user_nm) LIKE '%' || #{keyword} || '%'
+                      </when>
+                      <when test="field == 'cropNm'">
+                          AND d.expr_nm LIKE '%' || #{keyword} || '%'
+                      </when>
+                      <otherwise>
+                          AND (a.user_id LIKE '%' || #{keyword} || '%'
+                               OR xdb_dec('normal', c.user_nm) LIKE '%' || #{keyword} || '%'
+                               OR d.expr_nm LIKE '%' || #{keyword} || '%')
+                      </otherwise>
+                  </choose>
+              </if>
+              <if test="userInSeq != null and userInSeq != ''">
+                          AND a.user_in_seq = #{userInSeq}
+              </if>
+                 ORDER BY
+                     <choose>
+                         <when test="orderBy != null and orderBy == 'ASC'">
+                             a.trd_dt, a.user_inout_seq
+                         </when>
+                         <otherwise>
+                             a.trd_dt DESC, a.user_inout_seq DESC
+                         </otherwise>
+                     </choose>
+                 ) y
+    </select>
+
+    <select id="page" parameterType="DataTablesParam" resultMap="BaseResultMap">
+        SELECT * 
+            FROM (SELECT ROWNUM AS RNUM, z.*
+                    FROM ( SELECT y.*,
+                                  (y.amt - y.inout_part_total_amt) inout_part_balance_amt
+                             FROM ( SELECT a.user_inout_seq,
+                                           a.user_id,
+                                           xdb_dec('normal', c.user_nm) user_nm,
+                                           a.inout_cd,
+                                           (SELECT z.code_nm
+                                              FROM tf_code z
+                                             WHERE z.code_id = 'INOUT_CD' AND z.code_val = a.inout_cd)
+                                              inout_cd_nm,
+                                           a.trd_dt,
+                                           a.reg_dtm,
+                                           a.update_dtm,
+                                           a.status_cd,
+                                           a.crop_seq,
+                                           d.expr_nm crop_nm,
+                                           a.ac_id,
+                                           (SELECT z.ac_nm
+                                              FROM tf_account z
+                                             WHERE z.ac_id = a.ac_id)
+                                              ac_nm,
+                                           a.grade_t_cd,
+                                           (SELECT z.code_nm
+                                              FROM tf_code z
+                                             WHERE z.code_id = 'GRADE_T_CD' AND z.code_val = a.grade_t_cd)
+                                              grade_t_cd_nm,
+                                           a.unit_pack,
+                                           a.pack_t_cd,
+                                           (SELECT z.code_nm
+                                              FROM tf_code z
+                                             WHERE z.code_id = 'PACK_T_CD' AND z.code_val = a.pack_t_cd)
+                                              pack_t_cd_nm,
+                                           a.quan,
+                                           a.unit_amt,
+                                           a.amt,
+                                           a.user_cust_seq,
+                                           a.inout_t_cd,
+                                           (SELECT z.code_nm
+                                              FROM tf_code z
+                                             WHERE z.code_id = 'INOUT_T_CD' AND z.code_val = a.inout_t_cd)
+                                              inout_t_cd_nm,
+                                           a.c_slip_seq,
+                                           a.d_slip_seq,
+                                           a.remark,
+                                           a.inout_content,
+                                           a.user_inout_detail_seq,
+                                           NVL ( (SELECT z.detail
+                                                    FROM tf_user_inout_detail z
+                                                   WHERE z.user_inout_detail_seq = a.user_inout_detail_seq),
+                                                a.user_inout_detail),
+                                           xdb_dec ('normal',
+                                                    NVL ( (SELECT z.cust_nm
+                                                             FROM tf_user_cust z
+                                                            WHERE z.user_cust_seq = a.user_cust_seq),
+                                                         a.cust_nm))
+                                              cust_nm,
+                                           a.r_trd_dt,
+                                           a.r_inout_t_cd,
+                                           (SELECT z.code_nm
+                                              FROM tf_code z
+                                             WHERE z.code_id = 'R_INOUT_T_CD' AND z.code_val = a.r_inout_t_cd)
+                                              r_inout_t_cd_nm,
+                                           a.r_c_slip_seq,
+                                           a.r_d_slip_seq,
+                                           a.user_in_seq,
+                                           (SELECT z.up_ac_id FROM tf_account z WHERE z.ac_id = a.ac_id) up_ac_id,
+                                           a.user_crop_seq,
+                                           e.alias_nm user_crop_alias_nm,
+                                           e.part_t_cd,
+                                           (SELECT z.code_nm
+                                              FROM tf_code z
+                                             WHERE z.code_id = 'PART_T_CD' AND z.code_val = e.part_t_cd)
+                                              part_t_cd_nm,
+                                           (SELECT NVL(SUM(z.amt),0)
+                                              FROM tf_user_inout_part z
+                                             WHERE     z.status_cd = 'N'
+                                                   AND z.user_inout_seq = a.user_inout_seq) 
+                                               inout_part_total_amt       
+                                      FROM tf_user_inout a, vf_user_info c, tf_crop d, tf_user_crop e
+                                     WHERE     a.user_id = c.user_id
+                                           AND a.crop_seq = d.crop_seq(+)
+                                           AND a.status_cd = 'N'
+                                           AND a.user_crop_seq = e.user_crop_seq
+                                       <if test="search.userId != null and search.userId != ''">
+                                           AND a.user_id = #{search.userId}
+                                       </if>
+                                       <if test="search.inoutCd != null and search.inoutCd != ''">
+                                           AND a.inout_cd = #{search.inoutCd}
+                                       </if>
+                                   <choose>
+                                       <when test="search.trdDt != null and search.trdDt != ''">
+                                           AND a.trd_dt LIKE #{search.trdDt} || '%'
+                                       </when>
+                                       <when test="search.sTrdDt != null and search.sTrdDt != '' and search.eTrdDt != null and search.eTrdDt != ''">
+                                           AND a.trd_dt BETWEEN #{search.sTrdDt} AND #{search.eTrdDt}
+                                       </when>
+                                       <otherwise>
+                                           AND 1 = 0
+                                       </otherwise>
+                                   </choose>
+                                       <if test="search.inoutTCd != null and search.inoutTCd != ''">
+                                           AND a.inout_t_cd = #{search.inoutTCd}
+                                       </if>
+                                       <if test="search.partTCd != null and search.partTCd != ''">
+                                           AND e.part_t_cd = #{search.partTCd}
+                                       </if>
+                                       <if test="search.cropSeq != null and search.cropSeq != ''">
+                                           AND a.crop_seq = #{search.cropSeq}
+                                       </if>
+                                       <if test="search.userCropSeq != null and search.userCropSeq != ''">
+                                           AND a.user_crop_seq = #{search.userCropSeq}
+                                       </if>
+                                       <if test="search.userCustSeq != null and search.userCustSeq != ''">
+                                           AND a.user_cust_seq = #{search.userCustSeq}
+                                       </if>
+                               <if test="search.field != null and search.field != '' and search.keyword != null and search.keyword != ''">
+                                   <choose>
+                                       <when test="search.field == 'userId'">
+                                           AND a.user_id LIKE '%' || #{search.keyword} || '%'
+                                       </when>
+                                       <when test="search.field == 'userNm'">
+                                           AND xdb_dec('normal', c.user_nm) LIKE '%' || #{search.keyword} || '%'
+                                       </when>
+                                       <when test="search.field == 'cropNm'">
+                                           AND d.expr_nm LIKE '%' || #{search.keyword} || '%'
+                                       </when>
+                                       <otherwise>
+                                           AND (a.user_id LIKE '%' || #{search.keyword} || '%'
+                                                OR xdb_dec('normal', c.user_nm) LIKE '%' || #{search.keyword} || '%'
+                                                OR d.expr_nm LIKE '%' || #{search.keyword} || '%')
+                                       </otherwise>
+                                   </choose>
+                               </if>
+                               <if test="search.userInSeq != null and search.userInSeq != ''">
+                                           AND a.user_in_seq = #{search.userInSeq}
+                               </if>
+                                  ORDER BY
+                                      <choose>
+                                          <when test="search.orderBy != null and search.orderBy == 'ASC'">
+                                              a.trd_dt, a.user_inout_seq
+                                          </when>
+                                          <otherwise>
+                                              a.trd_dt DESC, a.user_inout_seq DESC
+                                          </otherwise>
+                                      </choose>
+                                  ) y
+                          ) z
+                         <![CDATA[
+                         WHERE ROWNUM <= (#{start} + #{length}))
+                             WHERE RNUM > #{start}
+                         ]]>
+    </select>
+
+    <select id="count" parameterType="DataTablesParam" resultType="java.util.HashMap">
+        SELECT (SELECT COUNT (*)
+                  FROM tf_user_inout a, vf_user_info c, tf_crop d, tf_user_crop e
+                 WHERE     a.user_id = c.user_id
+                       AND a.crop_seq = d.crop_seq(+)
+                       AND a.status_cd = 'N'
+                       AND a.user_crop_seq = e.user_crop_seq
+                   <if test="search.userId != null and search.userId != ''">
+                       AND a.user_id = #{search.userId}
+                   </if>
+                   <if test="search.inoutCd != null and search.inoutCd != ''">
+                       AND a.inout_cd = #{search.inoutCd}
+                   </if>
+               <choose>
+                   <when test="search.trdDt != null and search.trdDt != ''">
+                       AND a.trd_dt LIKE #{search.trdDt} || '%'
+                   </when>
+                   <when test="search.sTrdDt != null and search.sTrdDt != '' and search.eTrdDt != null and search.eTrdDt != ''">
+                       AND a.trd_dt BETWEEN #{search.sTrdDt} AND #{search.eTrdDt}
+                   </when>
+                   <otherwise>
+                       AND 1 = 0
+                   </otherwise>
+               </choose>
+                   <if test="search.inoutTCd != null and search.inoutTCd != ''">
+                       AND a.inout_t_cd = #{search.inoutTCd}
+                   </if>
+                   <if test="search.partTCd != null and search.partTCd != ''">
+                       AND e.part_t_cd = #{search.partTCd}
+                   </if>
+                   <if test="search.cropSeq != null and search.cropSeq != ''">
+                       AND a.crop_seq = #{search.cropSeq}
+                   </if>
+                   <if test="search.userCropSeq != null and search.userCropSeq != ''">
+                       AND a.user_crop_seq = #{search.userCropSeq}
+                   </if>
+                   <if test="search.userCustSeq != null and search.userCustSeq != ''">
+                       AND a.user_cust_seq = #{search.userCustSeq}
+                   </if>
+           <if test="search.field != null and search.field != '' and search.keyword != null and search.keyword != ''">
+               <choose>
+                   <when test="search.field == 'userId'">
+                       AND a.user_id LIKE '%' || #{search.keyword} || '%'
+                   </when>
+                   <when test="search.field == 'userNm'">
+                       AND xdb_dec('normal', c.user_nm) LIKE '%' || #{search.keyword} || '%'
+                   </when>
+                   <when test="search.field == 'cropNm'">
+                       AND d.expr_nm LIKE '%' || #{search.keyword} || '%'
+                   </when>
+                   <otherwise>
+                       AND (a.user_id LIKE '%' || #{search.keyword} || '%'
+                            OR xdb_dec('normal', c.user_nm) LIKE '%' || #{search.keyword} || '%'
+                            OR d.expr_nm LIKE '%' || #{search.keyword} || '%')
+                   </otherwise>
+               </choose>
+           </if>
+                   <if test="search.userInSeq != null and search.userInSeq != ''">
+                       AND a.user_in_seq = #{search.userInSeq}
+                   </if>
+                 )
+                  "filtered",
+               (SELECT COUNT (*)
+                  FROM tf_user_inout a
+                 WHERE     a.status_cd = 'N'
+                       <if test="search.userId != null and search.userId != ''">
+                           AND a.user_id = #{search.userId}
+                       </if>
+                       <if test="search.inoutCd != null and search.inoutCd != ''">
+                           AND a.inout_cd = #{search.inoutCd}
+                       </if>
+                       <if test="search.cropSeq != null and search.cropSeq != ''">
+                           AND a.crop_seq = #{search.cropSeq}
+                       </if>
+                       <if test="search.userCropSeq != null and search.userCropSeq != ''">
+                           AND a.user_crop_seq = #{search.userCropSeq}
+                       </if>)
+                  "total"
+          FROM DUAL
+    </select>
+
+    <select id="sum" parameterType="Map" resultType="Map">
+          SELECT SUM (NVL (a.amt, 0)) "sumAmt"
+            FROM tf_user_inout a, tf_user_crop b
+           WHERE     a.status_cd = 'N'
+                 AND a.user_id = #{userId}
+                 AND a.user_crop_seq = b.user_crop_seq
+             <if test="inoutCd != null and inoutCd != ''">
+                 AND a.inout_cd = #{inoutCd}
+             </if>
+         <choose>
+             <when test="trdDt != null and trdDt != ''">
+                 AND a.trd_dt LIKE #{trdDt} || '%'
+             </when>
+             <when test="sTrdDt != null and sTrdDt != '' and eTrdDt != null and eTrdDt != ''">
+                 AND a.trd_dt BETWEEN #{sTrdDt} AND #{eTrdDt}
+             </when>
+             <otherwise>
+                 AND 1 = 0
+             </otherwise>
+         </choose>
+             <if test="cropSeq != null and cropSeq != ''">
+                 AND a.crop_seq = #{cropSeq}
+             </if>
+             <if test="userCustSeq != null and userCustSeq != ''">
+                 AND a.user_cust_seq = #{userCustSeq}
+             </if>
+             <if test="inoutTCd != null and inoutTCd != ''">
+                 AND a.inout_t_cd = #{inoutTCd}
+             </if>
+             <if test="partTCd != null and partTCd != ''">
+                 AND b.part_t_cd = #{partTCd}
+             </if>
+             <if test="userCropSeq != null and userCropSeq != ''">
+                 AND a.user_crop_seq = #{userCropSeq}
+             </if>
+    </select>
+    
+    <select id="getAggregate" parameterType="Map" resultMap="aggregateResultMap">
+        SELECT a.*, b.*, c.*
+          FROM (  SELECT SUM (NVL (x.amt, 0)) inout_total,
+                         COUNT (*) inout_count,
+                         COUNT (DISTINCT (x.user_crop_seq)) user_crop_count,
+                         COUNT (DISTINCT (x.user_cust_seq)) user_cust_count,
+                         x.inout_cd,
+                         (SELECT z.code_nm
+                            FROM tf_code z
+                           WHERE z.code_id = 'INOUT_CD' AND z.code_val = x.inout_cd) inout_cd_nm
+                    FROM tf_user_inout x, tf_user_crop y
+                   WHERE     x.status_cd = 'N'
+                         AND x.user_id = #{userId}
+                         AND x.user_crop_seq = y.user_crop_seq
+                 <choose>
+                     <when test="trdDt != null and trdDt != ''">
+                         AND x.trd_dt LIKE #{trdDt} || '%'
+                     </when>
+                     <when test="sTrdDt != null and sTrdDt != '' and eTrdDt != null and eTrdDt != ''">
+                         AND x.trd_dt BETWEEN #{sTrdDt} AND #{eTrdDt}
+                     </when>
+                     <otherwise>
+                         AND 1 = 0
+                     </otherwise>
+                 </choose>
+                     <if test="cropSeq != null and cropSeq != ''">
+                         AND x.crop_seq = #{cropSeq}
+                     </if>
+                     <if test="userCustSeq != null and userCustSeq != ''">
+                         AND x.user_cust_seq = #{userCustSeq}
+                     </if>
+                     <if test="inoutTCd != null and inoutTCd != ''">
+                         AND x.inout_t_cd = #{inoutTCd}
+                     </if>
+                     <if test="partTCd != null and partTCd != ''">
+                         AND y.part_t_cd = #{partTCd}
+                     </if>
+                     <if test="userCropSeq != null and userCropSeq != ''">
+                         AND x.user_crop_seq = #{userCropSeq}
+                     </if>
+                GROUP BY x.inout_cd) a,
+               (  SELECT x.inout_t_cd,
+                         COUNT (x.inout_t_cd) inout_t_cd_count,
+                         (SELECT z.code_nm
+                            FROM tf_code z
+                           WHERE z.code_id = 'INOUT_T_CD' AND z.code_val = x.inout_t_cd)
+                            inout_t_cd_nm,
+                         x.inout_cd
+                    FROM tf_user_inout x, tf_user_crop y
+                   WHERE     x.status_cd = 'N'
+                         AND x.user_id = #{userId}
+                         AND x.user_crop_seq = y.user_crop_seq
+                 <choose>
+                     <when test="trdDt != null and trdDt != ''">
+                         AND x.trd_dt LIKE #{trdDt} || '%'
+                     </when>
+                     <when test="sTrdDt != null and sTrdDt != '' and eTrdDt != null and eTrdDt != ''">
+                         AND x.trd_dt BETWEEN #{sTrdDt} AND #{eTrdDt}
+                     </when>
+                     <otherwise>
+                         AND 1 = 0
+                     </otherwise>
+                 </choose>
+                     <if test="cropSeq != null and cropSeq != ''">
+                         AND x.crop_seq = #{cropSeq}
+                     </if>
+                     <if test="userCustSeq != null and userCustSeq != ''">
+                         AND x.user_cust_seq = #{userCustSeq}
+                     </if>
+                     <if test="inoutTCd != null and inoutTCd != ''">
+                         AND x.inout_t_cd = #{inoutTCd}
+                     </if>
+                     <if test="partTCd != null and partTCd != ''">
+                         AND y.part_t_cd = #{partTCd}
+                     </if>
+                     <if test="userCropSeq != null and userCropSeq != ''">
+                         AND x.user_crop_seq = #{userCropSeq}
+                     </if>
+                GROUP BY x.inout_cd, x.inout_t_cd) b,
+               (  SELECT NVL (x.pack_t_cd, ' ') pack_t_cd,
+                         SUM (NVL (x.quan, 0)) quan_total,
+                         NVL ((SELECT z.code_nm
+                                 FROM tf_code z
+                                WHERE z.code_id = 'PACK_T_CD' AND z.code_val = x.pack_t_cd), '기타')
+                            pack_t_cd_nm,
+                         x.inout_cd 
+                    FROM tf_user_inout x, tf_user_crop y
+                   WHERE     x.status_cd = 'N'
+                         AND x.user_id = #{userId}
+                         AND x.user_crop_seq = y.user_crop_seq
+                 <choose>
+                     <when test="trdDt != null and trdDt != ''">
+                         AND x.trd_dt LIKE #{trdDt} || '%'
+                     </when>
+                     <when test="sTrdDt != null and sTrdDt != '' and eTrdDt != null and eTrdDt != ''">
+                         AND x.trd_dt BETWEEN #{sTrdDt} AND #{eTrdDt}
+                     </when>
+                     <otherwise>
+                         AND 1 = 0
+                     </otherwise>
+                 </choose>
+                     <if test="cropSeq != null and cropSeq != ''">
+                         AND x.crop_seq = #{cropSeq}
+                     </if>
+                     <if test="userCustSeq != null and userCustSeq != ''">
+                         AND x.user_cust_seq = #{userCustSeq}
+                     </if>
+                     <if test="inoutTCd != null and inoutTCd != ''">
+                         AND x.inout_t_cd = #{inoutTCd}
+                     </if>
+                     <if test="partTCd != null and partTCd != ''">
+                         AND y.part_t_cd = #{partTCd}
+                     </if>
+                     <if test="userCropSeq != null and userCropSeq != ''">
+                         AND x.user_crop_seq = #{userCropSeq}
+                     </if>
+                GROUP BY x.pack_t_cd, x.inout_cd) c
+         WHERE     a.inout_cd = b.inout_cd 
+               AND a.inout_cd = c.inout_cd 
+    </select>
+    
+    <select id="getAggregateDetail" parameterType="Map" resultMap="aggregateDetailMap">
+          SELECT DISTINCT
+                 COUNT(*) OVER (PARTITION BY x.inout_cd) inout_count,
+                 SUM(x.amt) OVER (PARTITION BY x.inout_cd) inout_amt,
+                 x.inout_cd,
+                 ( SELECT z.code_nm
+                     FROM tf_code z
+                    WHERE     z.code_id = 'INOUT_CD'
+                          AND z.code_val = x.inout_cd) inout_cd_nm,
+                 COUNT(*) OVER (PARTITION BY y.part_t_cd) part_count,
+                 y.part_t_cd,
+                 ( SELECT z.code_nm
+                     FROM tf_code z
+                    WHERE     z.code_id = 'PART_T_CD'
+                          AND z.code_val = y.part_t_cd) part_t_cd_nm,
+                 COUNT(*) OVER (PARTITION BY y.crop_seq) crop_count,
+                 y.crop_seq,
+                 ( SELECT z.expr_nm
+                     FROM tf_crop z
+                    WHERE z.crop_seq = y.crop_seq) crop_nm,
+                 COUNT(*) OVER (PARTITION BY x.user_cust_seq) cust_count,    
+                 x.user_cust_seq,
+                 NVL(( SELECT z.cust_nm
+                         FROM tf_user_cust z
+                        WHERE z.user_cust_seq = x.user_cust_seq), '기타') cust_nm,
+                 COUNT(*) OVER (PARTITION BY x.inout_t_cd) inout_t_cd_count,    
+                 x.inout_t_cd,
+                 ( SELECT z.code_nm
+                     FROM tf_code z
+                    WHERE     z.code_id = 'INOUT_T_CD'
+                          AND z.code_val = x.inout_t_cd) inout_t_cd_nm
+            FROM tf_user_inout x, tf_user_crop y
+           WHERE     x.status_cd = 'N'
+                AND x.user_id = #{userId}
+                AND x.user_crop_seq = y.user_crop_seq
+            <if test="inoutCd != null and inoutCd != ''">
+                AND x.inout_cd = #{inoutCd}
+            </if>    
+        <choose>
+            <when test="trdDt != null and trdDt != ''">
+                AND x.trd_dt LIKE #{trdDt} || '%'
+            </when>
+            <when test="sTrdDt != null and sTrdDt != '' and eTrdDt != null and eTrdDt != ''">
+                AND x.trd_dt BETWEEN #{sTrdDt} AND #{eTrdDt}
+            </when>
+            <otherwise>
+                AND 1 = 0
+            </otherwise>
+        </choose>
+            <if test="cropSeq != null and cropSeq != ''">
+                AND x.crop_seq = #{cropSeq}
+            </if>
+            <if test="userCustSeq != null and userCustSeq != ''">
+                AND x.user_cust_seq = #{userCustSeq}
+            </if>
+            <if test="inoutTCd != null and inoutTCd != ''">
+                AND x.inout_t_cd = #{inoutTCd}
+            </if>
+            <if test="partTCd != null and partTCd != ''">
+                AND y.part_t_cd = #{partTCd}
+            </if>
+            <if test="userCropSeq != null and userCropSeq != ''">
+                AND x.user_crop_seq = #{userCropSeq}
+            </if>
+    </select>
+
+    <select id="listIncomeStat" resultMap="BaseResultMap">
+          SELECT a.crop_seq,
+                 b.expr_nm crop_nm,
+                 c.up_ac_id,
+                 (SELECT z.ac_nm
+                    FROM tf_account z
+                   WHERE z.ac_id = c.up_ac_id)
+                    ac_nm,
+                 SUM (a.amt) amt
+            FROM tf_user_inout a, tf_crop b, tf_account c
+           WHERE     a.crop_seq = b.crop_seq
+                 AND a.ac_id = c.ac_id
+                 AND a.user_id IN (SELECT REPLACE (z.reg_id, '#okdab', '')
+                                     FROM mgmt_basic_m z
+                                    WHERE z.mgmt_reg_num = #{mgmtRegNum})
+                 AND a.inout_cd = 'I'
+                 AND a.trd_dt LIKE #{year} || '%'
+                 AND a.status_cd = 'N'
+        GROUP BY a.crop_seq, b.expr_nm, c.up_ac_id
+    </select>
+    
+    <update id="update" parameterType="zinsoft.faas.dto.UserInoutDto">
+        UPDATE tf_user_inout
+           SET trd_dt = #{trdDt},
+               update_dtm = SYSDATE,
+               crop_seq = #{cropSeq},
+               ac_id = #{acId,jdbcType=CHAR},
+               grade_t_cd = #{gradeTCd,jdbcType=CHAR},
+               unit_pack = #{unitPack,jdbcType=NUMERIC},
+               pack_t_cd = #{packTCd,jdbcType=CHAR},
+               quan = #{quan,jdbcType=NUMERIC},
+               unit_amt = #{unitAmt,jdbcType=NUMERIC},
+               amt = #{amt,jdbcType=NUMERIC},
+               user_cust_seq = #{userCustSeq,jdbcType=NUMERIC},
+               inout_t_cd = #{inoutTCd,jdbcType=CHAR},
+               remark = #{remark,jdbcType=VARCHAR},
+               inout_content = #{inoutContent,jdbcType=VARCHAR},
+               user_inout_detail_seq = #{userInoutDetailSeq,jdbcType=NUMERIC},
+               user_inout_detail = #{userInoutDetail,jdbcType=VARCHAR},
+               cust_nm = #{custNm,jdbcType=VARCHAR},
+               r_trd_dt = #{rTrdDt,jdbcType=CHAR},
+               r_inout_t_cd = #{rInoutTCd,jdbcType=CHAR},
+               r_c_slip_seq = #{rcSlipSeq,jdbcType=NUMERIC},
+               r_d_slip_seq = #{rdSlipSeq,jdbcType=NUMERIC},
+               user_crop_seq = #{userCropSeq,jdbcType=NUMERIC}
+         WHERE user_inout_seq = #{userInoutSeq}
+               AND user_id = #{userId}
+    </update>
+
+    <update id="updateReversing" parameterType="zinsoft.faas.dto.UserInoutDto">
+        UPDATE tf_user_inout
+           SET update_dtm = SYSDATE,
+               r_trd_dt = #{rTrdDt,jdbcType=CHAR},
+               r_inout_t_cd = #{rInoutTCd,jdbcType=CHAR},
+               r_c_slip_seq = #{rcSlipSeq,jdbcType=NUMERIC},
+               r_d_slip_seq = #{rdSlipSeq,jdbcType=NUMERIC}
+         WHERE user_inout_seq = #{userInoutSeq}
+               AND user_id = #{userId}
+    </update>
+
+    <update id="delete" parameterType="zinsoft.faas.dto.UserInoutDto">
+        UPDATE tf_user_inout
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_inout_seq = #{userInoutSeq}
+               AND user_id = #{userId}
+    </update>
+
+    <update id="deleteByUserId" parameterType="String">
+        UPDATE tf_user_inout
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_id = #{userId}
+    </update>
+    
+    <update id="deleteExtra" parameterType="zinsoft.faas.dto.UserInoutDto">
+        UPDATE tf_user_inout
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE user_in_seq = #{userInoutSeq}
+               AND user_id = #{userId}
+    </update>
+    
+</mapper>

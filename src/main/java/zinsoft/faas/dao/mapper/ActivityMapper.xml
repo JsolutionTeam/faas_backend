@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.ActivityMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.ActivityDto">
+        <id column="ACTIVITY_SEQ" property="activitySeq" jdbcType="NUMERIC" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="CROP_A_CD" property="cropACd" jdbcType="VARCHAR" />
+        <result column="ACT_NM" property="actNm" jdbcType="VARCHAR" />
+        <result column="EXPR_YN" property="exprYn" jdbcType="CHAR" />
+        <result column="EXPR_SEQ" property="exprSeq" jdbcType="NUMERIC" />
+
+        <result column="MARK_T_CD" property="markTCd" jdbcType="CHAR" />
+        <result column="CROP_A_CD_NM" property="cropACdNm" jdbcType="VARCHAR" />
+        <result column="MARK_T_CD_NM" property="markTCdNm" jdbcType="CHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="zinsoft.faas.dto.ActivityDto">
+        <selectKey resultType="Long" keyProperty="activitySeq" order="BEFORE">
+            SELECT seq_activity_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO tf_activity
+                    (activity_seq,
+                     reg_dtm,
+                     update_dtm,
+                     status_cd,
+                     act_nm,
+                     expr_yn,
+                     expr_seq,
+                     mark_t_cd)
+        VALUES      (#{activitySeq},
+                     SYSDATE,
+                     SYSDATE,
+                     'N',
+                     #{actNm},
+                     #{exprYn},
+                     (SELECT NVL(MAX(expr_seq), 0) + 1
+                        FROM tf_activity),
+                     #{markTCd})
+    </insert>
+
+    <select id="get" parameterType="long" resultMap="BaseResultMap">
+        SELECT a.activity_seq,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.crop_a_cd,
+               a.act_nm,
+               a.expr_yn,
+               a.expr_seq,
+               a.mark_t_cd,
+               (SELECT   x.code_nm
+                  FROM   tf_code x
+                 WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                 mark_t_cd_nm
+          FROM tf_activity a
+         WHERE a.status_cd = 'N'
+               AND a.activity_seq = #{activitySeq}
+    </select>
+
+    <select id="getByCropSeq" resultMap="BaseResultMap">
+        SELECT a.activity_seq,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.crop_a_cd,
+               a.act_nm,
+               a.expr_yn,
+               a.expr_seq,
+               a.mark_t_cd,
+               (SELECT   x.code_nm
+                  FROM   tf_code x
+                 WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                 mark_t_cd_nm
+          FROM tf_activity a, tf_crop_activity b, tf_crop c
+         WHERE     a.activity_seq = b.activity_seq
+               AND b.activity_t_cd = c.activity_t_cd
+               AND a.status_cd = 'N'
+               AND b.status_cd = 'N'
+               AND a.activity_seq = #{activitySeq}
+               AND c.crop_seq = #{cropSeq}
+      ORDER BY a.act_nm
+    </select>
+    
+    <select id="getActivitySeqByActNm"  resultType="Long">
+        SELECT MAX (a.activity_seq) activity_seq
+          FROM tf_activity a
+         WHERE     a.status_cd = 'N'
+               AND LOWER (TRIM (a.act_nm)) = LOWER (TRIM (#{actNm}))
+    </select>
+
+    <select id="list" parameterType="PagingParam" resultMap="BaseResultMap">
+        SELECT
+               a.activity_seq,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.crop_a_cd,
+               a.act_nm,
+               a.expr_yn,
+               a.expr_seq,
+               a.mark_t_cd,
+               (SELECT   x.code_nm
+                  FROM   tf_code x
+                 WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                 mark_t_cd_nm
+          FROM tf_activity a
+         WHERE a.status_cd = 'N'
+               <if test="cond.keyword != null and cond.keyword != ''">
+                    <if test='cond.field == "actNm"'>
+                        and a.act_nm LIKE '%' || #{cond.keyword} || '%'
+                    </if>
+               </if>
+      ORDER BY a.reg_dtm DESC, a.expr_seq DESC
+    </select>
+
+    <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
+        SELECT *
+            FROM (SELECT ROWNUM AS RNUM, z.*
+                   FROM (SELECT 
+                              a.activity_seq,
+                              a.reg_dtm,
+                              a.update_dtm,
+                              a.status_cd,
+                              a.crop_a_cd,
+                              a.act_nm,
+                              a.expr_yn,
+                              a.expr_seq,
+                              a.mark_t_cd,
+                              (SELECT   x.code_nm
+                                 FROM   tf_code x
+                                WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                               mark_t_cd_nm
+                         FROM tf_activity a
+                        WHERE a.status_cd = 'N'
+                              <if test="cond.keyword != null and cond.keyword != ''">
+                                   <if test='cond.field == "actNm"'>
+                                       and a.act_nm LIKE '%' || #{cond.keyword} || '%'
+                                   </if>
+                              </if>
+                     ORDER BY a.reg_dtm DESC, a.expr_seq DESC)z 
+         <![CDATA[
+                 WHERE ROWNUM <= (#{start} + #{limit}))
+         WHERE RNUM > #{start}
+         ]]>
+    </select>
+
+    <select id="count" parameterType="PagingParam" resultType="int">
+        SELECT COUNT(*)
+          FROM tf_activity a
+         WHERE a.status_cd = 'N'
+          <if test="cond.keyword != null and cond.keyword != ''">
+               <if test='cond.field == "actNm"'>
+                   and a.act_nm LIKE '%' || #{cond.keyword} || '%'
+               </if>
+          </if>
+    </select>
+
+    <select id="listByCropSeq" resultMap="BaseResultMap">
+          SELECT a.activity_seq,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.crop_a_cd,
+                 a.act_nm,
+                 a.expr_yn,
+                 a.expr_seq,
+                 a.mark_t_cd,
+                 (SELECT   x.code_nm
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                  mark_t_cd_nm
+        <choose>
+            <when test="cropSeq != null and cropSeq != ''">
+                  FROM tf_activity a, tf_crop_activity b, tf_crop c
+                 WHERE     a.activity_seq = b.activity_seq
+                       AND b.activity_t_cd = c.activity_t_cd
+                       AND a.status_cd = 'N'
+                       AND b.status_cd = 'N'
+                       AND c.crop_seq = #{cropSeq}
+            </when>
+            <otherwise>
+                  FROM tf_activity a
+                 WHERE     a.status_cd = 'N'
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="orderBy != null and orderBy == 'seq'">
+                ORDER BY a.activity_seq
+            </when>
+            <otherwise>
+                ORDER BY a.act_nm
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="listByUserIdCropSeq" resultMap="BaseResultMap">
+        SELECT a.activity_seq,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.crop_a_cd,
+               a.act_nm,
+               a.expr_yn,
+               a.expr_seq,
+               a.mark_t_cd,
+                 (SELECT   x.code_nm
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                  mark_t_cd_nm
+          FROM tf_activity a, tf_user_activity b
+         WHERE     a.activity_seq = b.activity_seq
+               AND a.status_cd = 'N'
+               AND b.status_cd = 'N'
+               AND b.user_id = #{userId}
+               AND b.crop_seq = #{cropSeq}
+               AND b.user_crop_seq = #{userCropSeq}
+      ORDER BY a.act_nm
+    </select>
+
+    <select id="listByCropACd" resultMap="BaseResultMap">
+        SELECT a.activity_seq,
+               a.reg_dtm,
+               a.update_dtm,
+               a.status_cd,
+               a.crop_a_cd,
+               a.act_nm,
+               a.expr_yn,
+               a.expr_seq,
+               b.code_nm crop_a_cd_nm,
+               a.mark_t_cd,
+                 (SELECT   x.code_nm
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                  mark_t_cd_nm
+          FROM tf_activity a, tf_code b
+         WHERE a.crop_a_cd = b.code_val
+               AND a.status_cd = 'N'
+               AND b.code_id = 'CROP_A_CD'
+               <if test="cropACd != null and cropACd != ''">
+                   AND a.crop_a_cd = #{cropACd}
+               </if>
+               <if test="userCropSeq != null and userCropSeq > 0">
+                   AND a.crop_a_cd = (SELECT y.crop_a_cd FROM tf_user_crop z, tf_crop y WHERE z.crop_seq = y.crop_seq AND z.user_crop_seq = #{userCropSeq})
+               </if>
+      ORDER BY a.crop_a_cd, a.expr_seq
+    </select>
+    
+    <select id="listByPartTCd" resultMap="BaseResultMap">
+          SELECT a.activity_seq,
+                 a.reg_dtm,
+                 a.update_dtm,
+                 a.status_cd,
+                 a.crop_a_cd,
+                 a.act_nm,
+                 a.expr_yn,
+                 b.expr_seq,
+                 a.mark_t_cd,
+                 (SELECT   x.code_nm
+                    FROM   tf_code x
+                   WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
+                  mark_t_cd_nm
+            FROM tf_activity a, tf_crop_activity b
+           WHERE     a.status_cd = 'N'
+                 AND b.status_cd = 'N'     
+                 AND a.activity_seq = b.activity_seq
+         <choose> <!-- hard coding -->
+             <when test="partTCd != null and partTCd != '2'"> <!-- 유통 --> 
+                 AND b.activity_t_cd = 1
+             </when>
+             <when test="partTCd != null and partTCd != '3'"> <!-- 판매 --> 
+                 AND b.activity_t_cd = 2
+             </when>
+              <when test="partTCd != null and partTCd != '4'"> <!-- 가공 --> 
+                 AND b.activity_t_cd = 3
+             </when>
+              <when test="partTCd != null and partTCd != '5'"> <!-- 체험 --> 
+                 AND b.activity_t_cd = 4
+             </when>
+              <when test="partTCd != null and partTCd != '6'"> <!-- 시설관리 --> 
+                 AND b.activity_t_cd = 5
+             </when>
+              <when test="partTCd != null and partTCd != '7'"> <!-- 기타 --> 
+                 AND b.activity_t_cd = 6
+             </when>
+             <otherwise>
+                 AND b.activity_t_cd = 0
+             </otherwise>           
+         </choose>
+        ORDER BY a.act_nm
+    </select>
+
+    <update id="update" parameterType="zinsoft.faas.dto.ActivityDto">
+        UPDATE tf_activity
+            <set>
+                update_dtm = SYSDATE,
+                <if test="actNm != null and actNm != ''">
+                    act_nm = #{actNm},
+                </if>
+                <if test="exprYn != null and exprYn != ''">
+                    expr_yn = #{exprYn},
+                </if>
+                <if test="exprSeq != null and exprSeq > 0">
+                    expr_seq = #{exprSeq}
+                </if>
+                <if test="markTCd != null and markTCd != ''">
+                    mark_t_cd = #{markTCd}
+                </if>
+                
+            </set>
+         WHERE activity_seq = #{activitySeq}
+    </update>
+
+    <update id="delete" parameterType="zinsoft.faas.dto.ActivityDto">
+        UPDATE tf_activity
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE activity_seq = #{activitySeq}
+    </update>
+</mapper>

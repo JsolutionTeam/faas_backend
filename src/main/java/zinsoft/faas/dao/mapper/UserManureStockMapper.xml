@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zinsoft.faas.dao.mapper.UserManureStockMapper">
+    <resultMap id="BaseResultMap" type="zinsoft.faas.dto.UserManureStockDto">
+        <result column="USER_MANURE_STOCK_SEQ" jdbcType="NUMERIC" property="userManureStockSeq" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="USER_NM" property="userNm" jdbcType="VARCHAR" />
+        <result column="STATUS_CD" property="statusCd" jdbcType="CHAR" />
+        <result column="REG_DTM" property="regDtm" jdbcType="DATE" />
+        <result column="UPDATE_DTM" property="updateDtm" jdbcType="DATE" />
+        
+        <result column="CROP_SEQ " jdbcType="NUMERIC" property="cropSeq" />
+        <result column="USER_CROP_SEQ  " jdbcType="NUMERIC" property="userCropSeq" />
+        <result column="USER_DIARY_SEQ" jdbcType="NUMERIC" property="userDiarySeq" />
+        <result column="USER_INOUT_SEQ" jdbcType="NUMERIC" property="userInoutSeq" />
+        <result column="USER_MANURE_SEQ" jdbcType="NUMERIC" property="userManureSeq" />
+        
+        <result column="MANURE_NM" jdbcType="VARCHAR" property="manureNm" />
+        <result column="MAKER_NM" jdbcType="VARCHAR" property="makerNm" />
+        <result column="PACK_T_CD" jdbcType="CHAR" property="packTCd" />
+        <result column="PACK_T_CD_NM" jdbcType="VARCHAR" property="packTCdNm" />
+        <result column="MANURE_T_CD" jdbcType="CHAR" property="manureTCd" />
+        <result column="MANURE_T_CD_NM" jdbcType="VARCHAR" property="manureTCdNm" />
+        <result column="MANURE_T_CD2" jdbcType="CHAR" property="manureTCd2" />
+        <result column="MANURE_T_CD_NM2" jdbcType="VARCHAR" property="manureTCdNm2" />
+        
+        <result column="cpFerN" jdbcType="NUMERIC" property="cpFerN" />
+        <result column="cpFerP" jdbcType="NUMERIC" property="cpFerP" />
+        <result column="cpFerK" jdbcType="NUMERIC" property="cpFerK" />
+        
+        <result column="QUAN" jdbcType="NUMERIC" property="quan" />
+        <result column="AMT" jdbcType="NUMERIC" property="amt" />
+        <result column="INOUT_DT" jdbcType="CHAR" property="inoutDt" />
+        <result column="SUP_INOUT_CD" jdbcType="CHAR" property="supInoutCd" />
+        <result column="SUP_INOUT_CD_NM" jdbcType="VARCHAR" property="supInoutCdNm" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        
+        <result column="REMAINING_QUAN" jdbcType="NUMERIC" property="remainingQuan" />
+        <result column="UPDATE_YN" jdbcType="CHAR" property="updateYn" />
+        <result column="DELETE_YN" jdbcType="CHAR" property="deleteYn" />
+    </resultMap>
+    
+    
+    <insert id="insert" parameterType="zinsoft.faas.dto.UserManureStockDto">
+        <selectKey resultType="Long" keyProperty="userManureStockSeq" order="BEFORE">
+            SELECT seq_user_manure_stock_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO tf_user_manure_stock
+                    (user_manure_stock_seq,
+                     user_diary_seq,
+                     user_manure_seq,
+                     pack_t_cd,
+                     quan,
+                     user_id,
+                     status_cd,
+                     reg_dtm,
+                     update_dtm,
+                     crop_seq,
+                     user_crop_seq,
+                     user_inout_seq,
+                     amt,
+                     inout_dt,
+                     sup_inout_cd,
+                     remark)
+        VALUES      (#{userManureStockSeq},
+                     #{userDiarySeq},
+                     #{userManureSeq},
+                     #{packTCd, jdbcType=CHAR},
+                     #{quan, jdbcType=NUMERIC},
+                     #{userId, jdbcType=VARCHAR},
+                     'N',
+                     SYSDATE,
+                     SYSDATE,
+                     #{cropSeq, jdbcType=NUMERIC},
+                     #{userCropSeq, jdbcType=NUMERIC},
+                     #{userInoutSeq, jdbcType=NUMERIC},
+                     #{amt, jdbcType=NUMERIC},
+                     #{inoutDt, jdbcType=CHAR},
+                     #{supInoutCd, jdbcType=CHAR},
+                     #{remark, jdbcType=VARCHAR})
+    </insert>
+
+    <sql id="selectManureStock">
+        SELECT a.user_manure_stock_seq,
+               a.user_manure_seq,
+               a.user_diary_seq,
+               a.user_inout_seq,
+               a.crop_seq,
+               a.user_crop_seq,
+               b.manure_nm,
+               b.maker_nm,
+               IFNULL(b.pack_t_cd, a.pack_t_cd) pack_t_cd,
+               (SELECT z.code_nm
+                  FROM tf_code z
+                 WHERE z.code_id = 'PACK_T_CD' AND z.code_val = IFNULL(b.pack_t_cd, a.pack_t_cd)) 
+                   pack_t_cd_nm,
+               a.quan,
+               b.manure_t_cd,
+               (SELECT z.code_nm
+                  FROM tf_code z
+                 WHERE z.code_id = 'MANURE_T_CD' AND z.code_val = b.manure_t_cd) 
+                   manure_t_cd_nm,
+               b.manure_t_cd2,
+               (SELECT z.code_nm
+                  FROM tf_code z
+                 WHERE z.code_id = 'MANURE_T_CD2' AND z.code_val = b.manure_t_cd2) 
+                   manure_t_cd_nm2,
+               b.cp_fer_n,
+               b.cp_fer_p,
+               b.cp_fer_k,    
+               a.amt,
+               a.inout_dt,
+               a.sup_inout_cd,
+               (SELECT z.code_nm
+                  FROM tf_code z
+                 WHERE z.code_id = 'SUP_INOUT_CD' AND z.code_val = a.sup_inout_cd) 
+                   sup_inout_cd_nm,
+               a.remark,
+       <choose>
+           <when test="(search.stDt == null and search.edDt == null) or (search.stDt == '' and search.edDt == '')">
+               SUM (CASE WHEN a.sup_inout_cd ='I' THEN a.quan ELSE (a.quan * -1) END ) 
+               OVER (PARTITION BY a.user_manure_seq ORDER BY a.inout_dt, a.sup_inout_cd, a.user_manure_stock_seq)
+           </when>
+           <otherwise>
+               0
+           </otherwise>
+       </choose>
+               remaining_quan,
+               a.update_yn,
+               a.delete_yn,
+               a.user_id,
+               c.user_nm 
+          FROM tf_user_manure_stock a
+               JOIN tf_user_manure b ON (b.user_manure_seq = a.user_manure_seq)
+               JOIN vf_user_info c ON (c.user_id = a.user_id)
+         WHERE     a.status_cd = 'N'
+           <if test="search.userId != null and search.userId != ''">
+               AND a.user_id = #{search.userId}
+           </if>
+           <if test="search.keyword != null and search.keyword != ''">
+               AND CONCAT(b.manure_nm, a.remark) LIKE CONCAT('%', #{search.keyword}, '%')
+           </if>
+    </sql>
+    
+     <select id="get" resultMap="BaseResultMap">
+        <include refid="selectManureStock"></include>
+               AND a.user_manure_stock_seq = #{userManureStockSeq}
+    </select>
+    
+    <select id="list" resultMap="BaseResultMap">
+        <include refid="selectManureStock"></include>
+           <if test="search.stDt != null and search.edDt != null and search.stDt != '' and search.edDt != ''">
+               AND (a.inout_dt BETWEEN #{search.stDt} AND #{search.edDt})
+           </if>
+      ORDER BY a.inout_dt DESC, a.user_manure_seq, a.sup_inout_cd DESC, a.user_manure_stock_seq DESC
+    </select>
+    
+    <select id="listByUserDiarySeq" resultMap="BaseResultMap">
+        <include refid="selectManureStock"></include>
+                 AND a.user_diary_seq = #{userDiarySeq}
+        ORDER BY a.user_manure_stock_seq DESC
+    </select>
+    
+     <select id="listByUserInoutSeq" resultMap="BaseResultMap">
+        <include refid="selectManureStock"></include>
+               AND a.user_inout_seq = #{userInoutSeq}
+      ORDER BY a.user_manure_stock_seq DESC        
+    </select>
+    
+    <select id="page" resultMap="BaseResultMap">
+         <include refid="selectManureStock"></include>
+         <if test="search.stDt != null and search.edDt != null and search.stDt != '' and search.edDt != ''">
+             AND (a.inout_dt BETWEEN #{search.stDt} AND #{search.edDt})
+         </if> 
+    ORDER BY a.inout_dt DESC, a.user_manure_seq, a.sup_inout_cd DESC, a.user_manure_stock_seq DESC  
+       LIMIT #{pageable.pageSize} OFFSET #{pageable.offset}
+    </select>
+    
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+          FROM tf_user_manure_stock a
+               JOIN tf_user_manure b ON (b.user_manure_seq = a.user_manure_seq)
+               JOIN vf_user_info c ON (c.user_id = a.user_id)
+         WHERE     a.status_cd = 'N'
+           <if test="search.userId != null and search.userId != ''">
+               AND a.user_id = #{search.userId}
+           </if>
+           <if test="search.stDt != null and search.edDt != null and search.stDt != '' and search.edDt != ''">
+               AND (a.inout_dt BETWEEN #{search.stDt} AND #{search.edDt})
+           </if>  
+    </select>
+    
+    <select id="countUsed" resultType="long">
+        SELECT COUNT(*)
+          FROM tf_user_manure_stock a
+         WHERE a.user_manure_seq = #{userManureSeq}
+           AND status_cd = 'N'
+    </select>
+    
+    <update id="update" parameterType="zinsoft.faas.dto.UserManureStockDto">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               user_diary_seq = #{userDiarySeq, jdbcType=NUMERIC},
+               user_inout_seq = #{userInoutSeq, jdbcType=NUMERIC},
+               user_manure_seq = #{userManureSeq},
+               crop_seq = #{cropSeq, jdbcType=NUMERIC},
+               user_crop_seq = #{userCropSeq, jdbcType=NUMERIC},
+               quan = #{quan, jdbcType=NUMERIC},
+               amt = #{amt, jdbcType=NUMERIC},
+               inout_dt = #{inoutDt, jdbcType=CHAR},
+               sup_inout_cd = #{supInoutCd, jdbcType=CHAR},
+               remark = #{remark, jdbcType=VARCHAR}
+         WHERE user_id = #{userId}
+           AND user_manure_stock_seq = #{userManureStockSeq}         
+    </update>
+    
+    <update id="updateBy" parameterType="zinsoft.faas.dto.UserManureStockDto">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               crop_seq = #{cropSeq},
+               user_crop_seq = #{userCropSeq, jdbcType=NUMERIC},
+               user_manure_seq = #{userManureSeq},
+               inout_dt = #{inoutDt, jdbcType=CHAR},
+               quan = #{quan},
+               amt = #{amt, jdbcType=NUMERIC}
+         WHERE user_id = #{userId}
+           AND user_manure_stock_seq = #{userManureStockSeq}
+    </update>
+    
+    <delete id="delete">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE     user_id = #{userId}
+               AND user_manure_stock_seq = #{userManureStockSeq}
+               AND status_cd = 'N'
+    </delete>
+
+    <delete id="deleteByUserDiarySeq">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE     user_id = #{userId}
+               AND status_cd = 'N'
+              AND user_diary_seq = #{userDiarySeq}
+    </delete>
+    
+    <delete id="deleteByUserInoutSeq">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE     user_id = #{userId}
+               AND user_inout_seq = #{userInoutSeq}
+               AND status_cd = 'N'
+    </delete>
+    
+
+    <delete id="deleteByUserManureSeq">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE     user_id = #{userId}
+               AND status_cd = 'N'
+               AND user_manure_seq = #{userManureSeq}
+    </delete>
+    
+    <delete id="deleteByUserId">
+        UPDATE tf_user_manure_stock
+           SET update_dtm = SYSDATE,
+               status_cd = 'D'
+         WHERE     user_id = #{userId}
+               AND status_cd = 'N'
+    </delete>
+</mapper>
