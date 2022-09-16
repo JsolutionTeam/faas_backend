@@ -22,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.MenuDto;
 import zinsoft.web.common.dto.MenuRoleDto;
-import zinsoft.web.common.entity.QMenu;
-import zinsoft.web.common.entity.QMenuRole;
 import zinsoft.web.common.repository.MenuQueryRepository;
+import zinsoft.web.entity.QMenu;
+import zinsoft.web.entity.QMenuRole;
 
 @RequiredArgsConstructor
 public class MenuQueryRepositoryImpl implements MenuQueryRepository {

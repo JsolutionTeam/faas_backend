@@ -19,9 +19,9 @@ import lombok.ToString;
 @Table(name = "tf_cal")
 @IdClass(CalId.class)
 public class Cal implements Serializable {
+    // 계산?? calculator?
 
     private static final long serialVersionUID = 7251997391820800197L;
-
     public static final String CAL_T_CD_LUNAR_DAY = "0";
     public static final String CAL_T_CD_SOLAR_TERM = "1";
 

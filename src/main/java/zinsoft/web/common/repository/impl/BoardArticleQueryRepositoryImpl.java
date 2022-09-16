@@ -28,10 +28,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.BoardArticleDto;
-import zinsoft.web.common.entity.QBoardArticle;
-import zinsoft.web.common.entity.QBoardCategory;
-import zinsoft.web.common.entity.QBoardComment;
+
 import zinsoft.web.common.repository.BoardArticleQueryRepository;
+import zinsoft.web.entity.QBoardArticle;
+import zinsoft.web.entity.QBoardCategory;
+import zinsoft.web.entity.QBoardComment;
 
 @RequiredArgsConstructor
 public class BoardArticleQueryRepositoryImpl implements BoardArticleQueryRepository {

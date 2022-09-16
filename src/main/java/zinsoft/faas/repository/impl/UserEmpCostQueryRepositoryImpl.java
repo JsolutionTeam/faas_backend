@@ -30,7 +30,7 @@ import zinsoft.faas.dto.UserEmpCostDto;
 import zinsoft.faas.entity.QUserEmpCost;
 import zinsoft.faas.repository.UserEmpCostQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
 public class UserEmpCostQueryRepositoryImpl implements UserEmpCostQueryRepository {

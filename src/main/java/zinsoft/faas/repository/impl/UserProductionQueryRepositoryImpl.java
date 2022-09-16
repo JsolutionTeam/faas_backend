@@ -37,8 +37,8 @@ import zinsoft.faas.dto.UserProductionDto;
 import zinsoft.faas.entity.QUserProduction;
 import zinsoft.faas.repository.UserProductionQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
-import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
+import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
 public class UserProductionQueryRepositoryImpl implements UserProductionQueryRepository {

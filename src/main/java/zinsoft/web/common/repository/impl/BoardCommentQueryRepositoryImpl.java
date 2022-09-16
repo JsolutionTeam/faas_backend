@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.BoardArticleDto;
 import zinsoft.web.common.dto.BoardCommentDto;
-import zinsoft.web.common.entity.QBoardComment;
 import zinsoft.web.common.repository.BoardCommentQueryRepository;
+import zinsoft.web.entity.QBoardComment;
 
 @RequiredArgsConstructor
 public class BoardCommentQueryRepositoryImpl implements BoardCommentQueryRepository {

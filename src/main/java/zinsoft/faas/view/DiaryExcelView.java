@@ -619,7 +619,7 @@ public class DiaryExcelView extends AbstractExcelView {
         int col = 0;
         String cropNm = "";
 
-        cropNm = vo.getCropNm() != null ? vo.getCropNm()  : "";
+        cropNm = vo.getCropBCdNm() != null ? vo.getCropBCdNm()  : "";
         if (vo.getUserCropAliasNm() != null && vo.getUserCropAliasNm().isEmpty() == false) {
             cropNm += (" (" + vo.getUserCropAliasNm() + ")");
         }

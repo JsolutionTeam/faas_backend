@@ -25,10 +25,10 @@ public class UserInfoDto implements Serializable {
 
     private static final long serialVersionUID = 8853228217855524670L;
 
-    public static final String STATUS_CD_NORMAL = "N";
-    public static final String STATUS_CD_DELETE = "D";
-    public static final String STATUS_CD_BLOCK = "B";
-    public static final String STATUS_CD_WAITING = "W";
+    public static final String STATUS_CD_NORMAL = "N"; // 정상처리됨
+    public static final String STATUS_CD_DELETE = "D"; // 삭제됨
+    public static final String STATUS_CD_BLOCK = "B"; // BLOCK됨
+    public static final String STATUS_CD_WAITING = "W"; // 대기중
 
     @Size(min = 4, max = 255)
     private String userId;

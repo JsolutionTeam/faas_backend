@@ -34,7 +34,7 @@ import zinsoft.faas.dto.AccountDto;
 import zinsoft.faas.entity.QAccount;
 import zinsoft.faas.repository.AccountQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
+import zinsoft.web.entity.QCode;
 
 @RequiredArgsConstructor
 public class AccountQueryRepositoryImpl implements AccountQueryRepository {

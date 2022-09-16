@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>스마트팜 혁신밸리 빅데이터센터 - 영농일지</title>
+<title>스마트팜 혁신밸리 빅데이터센터 - 영농일지apidoc</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -122,9 +122,13 @@ button:hover {
 </div>
 
 <!-- jQuery -->
-<script src="/static/plugins/jquery/jquery.min.js"></script>
+<!--<script src="/static/plugins/jquery/jquery.min.js"></script>-->
+<!--<script src="<%=request.getContextPath()%>/static/plugins/jquery/jquery.min.js"/>-->
+<script src="static/plugins/jquery/jquery.min.js"/>
+
 <script>
 $(function () {
+    alert('init')
     LOGIN.init();
 });
 
@@ -135,13 +139,17 @@ LOGIN.init = function () {
     var me = this;
 
     $('input[name="userId"]').focus();
+    // 로그인 버튼에 submit 기능 추가하기
     $('#form-login').submit(function (event) {
+        alert('init login-submit')
         event.preventDefault();
         me.login(this);
     });
 };
 
 LOGIN.login = function (form) {
+    alert('login 요청')
+    console.log('data : ', $(form).serialize())
     $.ajax({
         method: 'POST',
         url: '/api/v1/login',
@@ -151,6 +159,9 @@ LOGIN.login = function (form) {
         success: function (data) {
             form.reset();
             location.href = '/swagger-ui/index.html';
+        },
+        fail : function (data){
+            alert(data)
         }
     });
 };

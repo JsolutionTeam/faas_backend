@@ -33,8 +33,8 @@ import zinsoft.faas.dto.UserManureDto;
 import zinsoft.faas.entity.QUserManure;
 import zinsoft.faas.repository.UserManureQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
-import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
+import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
 public class UserManureQueryRepositoryImpl implements UserManureQueryRepository {

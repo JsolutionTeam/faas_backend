@@ -20,8 +20,8 @@ import lombok.RequiredArgsConstructor;
 import zinsoft.faas.dto.WeatherDto;
 import zinsoft.faas.entity.QWeather;
 import zinsoft.faas.repository.WeatherQueryRepository;
-import zinsoft.web.common.entity.QCode;
-import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
+import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
 public class WeatherQueryRepositoryImpl implements WeatherQueryRepository  {

@@ -1,12 +1,9 @@
 package zinsoft.faas.entity;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,6 +20,7 @@ import lombok.ToString;
 @DynamicInsert
 @DynamicUpdate
 public class Crop {
+    // 작물? 품종?
 
     @Id
     @GeneratedValue
@@ -31,7 +29,7 @@ public class Crop {
     private Date regDtm;
     private Date updateDtm;
     private String statusCd;
-    private String exprNm;
+    private String exprNm; // 표출명
     private String exprYn;
     private String updateYn;
     private String deleteYn;
@@ -41,17 +39,18 @@ public class Crop {
     private String cropingYn;
 
     @Column(name = "crop_a_cd")
-    private String cropACd;
+    private String cropACd;  // 부류
     @Column(name = "crop_b_cd")
-    private String cropBCd;
-//    @Column(name = "crop_c_cd")
-//    private String cropCCd;
+    private String cropBCd; // 품목
+
     @Column(name = "crop_s_cd")
-    private String cropSCd;
-//    @Column(name = "crop_t_cd")
-//    private String cropTCd;
+    private String cropSCd; // 재배유형
 
     @Column(name = "activity_t_cd")
     private Long activityTCd;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "crop", cascade = {})
+    private List<CropSpecies> cropSpeciesList;
+
 
 }

@@ -12,7 +12,9 @@
     <artifactId>faas</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <packaging>war</packaging>
+    <packaging>
+        war
+    </packaging>
 
     <!--    context-path -->
     <name>sfiv</name>
@@ -28,7 +30,7 @@
     <repositories>
         <repository>
             <id>egovframe</id>
-            <url>http://maven.egovframe.go.kr/maven</url>
+            <url>https://maven.egovframe.go.kr/maven</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -276,6 +278,16 @@
 
     <build>
         <finalName>sfiv</finalName>
+
+        <resources>
+            <resource>
+                <directory>zinsoft/faas/dao/mapper</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

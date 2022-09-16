@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,7 @@ import zinsoft.util.Result;
 import zinsoft.web.exception.CodeMessageException;
 
 @ControllerAdvice
+@Slf4j
 public class ExceptionHandlerControllerAdvice {
 
     private Result handleResult(Result result, HttpServletRequest request, HttpServletResponse response) {
@@ -191,6 +193,7 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public Result handleException(AuthenticationException ex, HttpServletRequest request, HttpServletResponse response) {
+        log.info("로그인되지 않은 사용자가 접근함.");
         return handleResult(new Result(false, Result.UNAUTHORIZED), request, response);
     }
 

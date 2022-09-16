@@ -9,6 +9,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
+import com.querydsl.core.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import zinsoft.faas.entity.UserDiary;
 
 @Getter
 @Setter
@@ -47,16 +50,35 @@ public class UserDiaryDto {
     @ApiModelProperty(notes = "일지(D)/계획(P) 구분코드")
     @Pattern(regexp = "^(P|D)$")
     private String diaryTCd;
-//    @NotNull
+    //    @NotNull
 //    @Min(value = 1)
 //    @ApiModelProperty(notes = "품목일련번호")
     private Long cropSeq;
-//    @NotNull
+    //    @NotNull
 //    @Min(value = 1)
 //    @ApiModelProperty(notes = "사용자품목일련번호")
     private Long userCropSeq;
 
-    // 영농일지 대분류, 중분류, 소분류 데이터 바인딩 추가
+    // 영농일지 품목, 품종, 작형 데이터 바인딩 추가
+    @Schema(name = "품목 번호")
+    @Min(value = 1)
+    private String cropBCd;
+
+    @Schema(name = "품목 명")
+    private String cropBCdNm;
+
+    @Schema(name = "품종 명")
+    @Min(value = 1)
+    private String cropSpeciesNm;
+
+    @Schema(name = "작형 번호")
+    @Min(value = 1)
+    private Long cropPatternSeq; // 작형 번호
+
+    @Schema(name = "작형 명")
+    @Min(value = 1)
+    private String cropPatternNm; // 작형 번호
+
     @ApiModelProperty(notes = "작업단계일련번호")
     @Min(value = 1)
     private Long activitySeq;
@@ -149,8 +171,8 @@ public class UserDiaryDto {
     private String userNm;
     @ApiModelProperty(notes = "일지/계획코드명")
     private String diaryTCdNm;
-    @ApiModelProperty(notes = "품목명")
-    private String cropNm;
+    //    @ApiModelProperty(notes = "품목명")
+//    private String cropNm;
     @ApiModelProperty(notes = "날씨코드명")
     private String skyTCdNm;
     @ApiModelProperty(notes = "포장단위구분코드명")
@@ -193,6 +215,70 @@ public class UserDiaryDto {
     private Long inning;
     @ApiModelProperty(notes = "작업단계카운트")
     private Long actCnt;
+
+    @QueryProjection
+    public UserDiaryDto(UserDiary userDiary
+            , String cropBCdNm
+            , String cropSpeciesNm
+            , String cropPatternNm
+            , String diaryTCdNm
+            , String skyTCdNm
+            , String packTCdNm
+            , String gradeTCdNm
+            , Long actCnt
+            , String userNm
+            , String addr
+            , String emailAddr) {
+        this.userDiarySeq = userDiary.getUserDiarySeq();
+        this.userId = userDiary.getUserId();
+        this.actDt = userDiary.getActDt();
+        this.regDtm = userDiary.getRegDtm();
+        this.updateDtm = userDiary.getUpdateDtm();
+        this.statusCd = userDiary.getStatusCd();
+        this.diaryTCd = userDiary.getDiaryTCd();
+        this.cropSeq = userDiary.getCropSeq();
+        this.userCropSeq = userDiary.getUserCropSeq();
+        this.cropBCd = userDiary.getCropBCd();
+        this.cropPatternSeq = userDiary.getCropPatternSeq();
+        this.activitySeq = userDiary.getActivitySeq();
+        this.manSelf = userDiary.getManSelf();
+        this.manSelfTm = userDiary.getManSelfTm();
+        this.manSelfTmm = userDiary.getManSelfTmm();
+        this.womanSelf = userDiary.getWomanSelf();
+        this.womanSelfTm = userDiary.getWomanSelfTm();
+        this.womanSelfTmm = userDiary.getWomanSelfTmm();
+        this.manHire = userDiary.getManHire();
+        this.manHireTm = userDiary.getManHireTm();
+        this.manHireTmm = userDiary.getManHireTmm();
+        this.womanHire = userDiary.getWomanHire();
+        this.womanHireTm = userDiary.getWomanHireTm();
+        this.womanHireTmm = userDiary.getWomanHireTmm();
+        this.skyTCd = userDiary.getSkyTCd();
+        this.tmn = userDiary.getTmn();
+        this.tmx = userDiary.getTmx();
+        this.rnf = userDiary.getRnf();
+        this.temp = userDiary.getTemp();
+        this.reh = userDiary.getReh();
+        this.remark = userDiary.getRemark();
+        this.actNm = userDiary.getActNm();
+        this.unitPack = userDiary.getUnitPack();
+        this.packTCd = userDiary.getPackTCd();
+        this.quan = userDiary.getQuan();
+        this.gradeTCd = userDiary.getGradeTCd();
+
+        this.cropBCdNm = cropBCdNm;
+        this.cropSpeciesNm = cropSpeciesNm;
+        this.cropPatternNm = cropPatternNm;
+
+        this.diaryTCdNm = diaryTCdNm;
+        this.skyTCdNm = skyTCdNm;
+        this.packTCdNm = packTCdNm;
+        this.gradeTCdNm = gradeTCdNm;
+        this.actCnt = actCnt;
+        this.userNm = userNm;
+        this.addr = addr;
+        this.emailAddr = emailAddr;
+    }
 
     public UserDiaryDto() {
     }

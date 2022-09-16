@@ -39,8 +39,8 @@ import zinsoft.faas.entity.QUserInout;
 import zinsoft.faas.entity.QUserShip;
 import zinsoft.faas.repository.UserShipQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
-import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
+import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
 public class UserShipQueryRepositoryImpl implements UserShipQueryRepository  {

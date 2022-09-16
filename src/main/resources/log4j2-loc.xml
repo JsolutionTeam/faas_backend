@@ -53,7 +53,7 @@
         <logger name="okhttp3.logging.wire" level="debug" additivity="false">
             <appenderRef ref="CONSOLE_ONLY_MSG" />
         </logger>
-        <root level="error">
+        <root level="info">
             <appenderRef ref="CONSOLE" />
             <appenderRef ref="FILE" />
         </root>

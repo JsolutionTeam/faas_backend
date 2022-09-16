@@ -36,8 +36,8 @@ import zinsoft.faas.entity.QAccount;
 import zinsoft.faas.entity.QUserInout;
 import zinsoft.faas.repository.UserInoutQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
 import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
 
 @RequiredArgsConstructor
 public class UserInoutQueryRepositoryImpl implements UserInoutQueryRepository {

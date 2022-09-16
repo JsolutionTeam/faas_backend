@@ -19,9 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import zinsoft.faas.dto.CropActivityDto;
-import zinsoft.faas.entity.QActivity;
-import zinsoft.faas.entity.QCrop;
-import zinsoft.faas.entity.QCropActivity;
+import zinsoft.faas.entity.*;
 import zinsoft.faas.repository.CropActivityQueryRepository;
 import zinsoft.util.Constants;
 
@@ -79,9 +77,14 @@ public class CropActivityQueryRepositoryImpl implements CropActivityQueryReposit
 
     @Override
     public List<CropActivityDto> listByActivityTCd(Long activityTCd) {
+        // condition = 조건 처리
+
+        // cropActivity의 status code가 "N"과 같은지
         BooleanExpression condition = cropActivity.statusCd.eq(Constants.STATUS_CD_NORMAL);
 
+        // 그리고 activity의 status code가 "N"과 같은지
         condition = condition.and(activity.statusCd.eq(Constants.STATUS_CD_NORMAL));
+        // 그리고 cropActivity의 activity_t_cd(작업단계유형)이 입력받은값과 같은지 판단. 기본 값은 9
         condition = condition.and(cropActivity.activityTCd.eq(activityTCd));
 
         // @formatter:off
@@ -116,5 +119,4 @@ public class CropActivityQueryRepositoryImpl implements CropActivityQueryReposit
         List<CropActivityDto> result = jpqQuery.fetch();
         return result;
     }
-
 }

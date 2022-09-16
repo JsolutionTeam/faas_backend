@@ -1,8 +1,8 @@
 package zinsoft.faas.service;
 
-import java.util.List;
-
 import zinsoft.faas.dto.CropActivityDto;
+
+import java.util.List;
 
 public interface CropActivityService {
 
@@ -11,6 +11,4 @@ public interface CropActivityService {
     List<CropActivityDto> listByActivityTCd(Long activityTCd);
 
     List<CropActivityDto> listByCropSeq(Long cropSeq);
-
-
 }

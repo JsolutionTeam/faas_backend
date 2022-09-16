@@ -3,7 +3,7 @@ package zinsoft.web.common.repository.impl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import zinsoft.web.common.entity.QUserRememberMe;
+import zinsoft.web.entity.QUserRememberMe;
 import zinsoft.web.common.repository.UserRememberMeQueryRepository;
 
 @RequiredArgsConstructor

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -53,6 +55,7 @@ import zinsoft.web.common.service.RoleService;
 import zinsoft.web.common.service.UserInfoService;
 
 @Controller
+@Slf4j
 public class BasicInfoController {
 
     @Resource
@@ -133,6 +136,18 @@ public class BasicInfoController {
     public CropDto api004002001get(Long cropSeq, HttpServletRequest request, HttpSession session, Model model) throws Exception {
 
         return cropService.get(cropSeq);
+    }
+
+    @RequestMapping(value = "/api/004002001/get/list", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CropDto> api004002001getList(@RequestParam Map<String, Object> param) throws Exception {
+        log.info("품목 list 조회 param : {}", param);
+        String statusCD = (String)param.get("statusCD");
+        // statusCD가 안들어오면 기본값 N으로 지정함
+        if(StringUtils.isBlank(statusCD)) {
+            param.put("statusCD", "N");
+        }
+        return cropService.list(param);
     }
 
     @RequestMapping(value = "/api/004002001/getCropBCd", method = RequestMethod.GET)

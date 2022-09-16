@@ -1,38 +1,19 @@
 package zinsoft.faas.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
-
 import zinsoft.faas.dto.CropActivityDto;
 import zinsoft.faas.dto.UserDiaryDto;
-import zinsoft.faas.service.CropActivityService;
 import zinsoft.faas.service.UserDiaryService;
 import zinsoft.faas.service.UserInoutService;
+import zinsoft.faas.service.impl.CropActivityServiceImpl;
 import zinsoft.faas.view.DiarySimpleExcelAdminView;
 import zinsoft.faas.view.DiarySimpleExcelView;
 import zinsoft.util.DataTablesResponse;
@@ -41,6 +22,16 @@ import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
 import zinsoft.web.common.service.FileInfoService;
 import zinsoft.web.exception.CodeMessageException;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @apiNote  영농일지 관리 컨트롤러 
@@ -68,8 +59,8 @@ public class DiaryController {
     @Resource
     FileInfoService fileInfoService;
 
-    @Resource
-    CropActivityService cropActivityService;
+    @Autowired
+    CropActivityServiceImpl cropActivityService;
 
     @GetMapping(value = "/excel")
     public ModelAndView excel(@RequestParam Map<String, Object> param, @PageableDefault Pageable pageable) throws Exception {
@@ -79,63 +70,13 @@ public class DiaryController {
             param.put("userId", farmerInfo.getUserId());
         }
         param.put("orderBy", "DESC");
-        DataTablesResponse<UserDiaryDto> dataTablesList = userDiaryService.page(param, pageable);
-        List<UserDiaryDto> list = dataTablesList.getItems();
+        DataTablesResponse<?> dataTablesList = userDiaryService.page(param, pageable);
+        List<UserDiaryDto> list = (List<UserDiaryDto>) dataTablesList.getItems();
 
-        //if (param.get("isSimple").equals("Y")) {
             view = ((!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager())) ? new DiarySimpleExcelView() : new DiarySimpleExcelAdminView();
-//        } else {
-//            view = (!UserInfoUtil.isManager(request)) ? new DiaryExcelView() : new DiaryExcelAdminView();
-//        }
+
 
         ModelAndView mv = new ModelAndView(view);
-
-        //수입, 지출내역 리스트
-//        param.put("sTrdDt", param.get("sActDt"));
-//        param.put("eTrdDt", param.get("eActDt"));
-//        param.put("inoutCd", "I");
-//        DataTablesResponse<UserInoutDto> page = userInoutService.page(param, null);
-//        List<UserInoutDto> inList = page.getItems();
-//
-//        List<UserInoutDto> inListByDate = null;
-//        for (UserDiaryDto vo : list) {
-//            UserInoutDto sumVo = new UserInoutDto();
-//            long sumAmt = 0;
-//            inListByDate = new ArrayList<>();
-//            for (UserInoutDto inVo : inList) {
-//                if (vo.getActDt().equals(inVo.getTrdDt())) {
-//                    inListByDate.add(inVo);
-//                    sumAmt += inVo.getAmt();
-//                }
-//            }
-//            sumVo.setCropNm("합계");
-//            sumVo.setAmt(sumAmt);
-//            inListByDate.add(sumVo);
-//
-//            vo.setUserInList(inListByDate);
-//        }
-//
-//        param.put("inoutCd", "O");
-//        page = userInoutService.page(param, null);
-//        List<UserInoutDto> outList = page.getItems();
-//
-//        List<UserInoutDto> outListByDate = null;
-//        for (UserDiaryDto vo : list) {
-//            UserInoutDto sumVo = new UserInoutDto();
-//            long sumAmt = 0;
-//            outListByDate = new ArrayList<>();
-//            for (UserInoutDto inVo : outList) {
-//                if (vo.getActDt().equals(inVo.getTrdDt())) {
-//                    outListByDate.add(inVo);
-//                    sumAmt += inVo.getAmt();
-//                }
-//            }
-//            sumVo.setCropNm("합계");
-//            sumVo.setAmt(sumAmt);
-//            outListByDate.add(sumVo);
-//
-//            vo.setUserOutList(outListByDate);
-//        }
 
         mv.addObject("sheetName", "영농일지관리");
         mv.addObject("cond", param);
@@ -178,6 +119,7 @@ public class DiaryController {
             throw new CodeMessageException(Result.BAD_REQUEST, "날짜 오류");
         }
 
+        // 일자 기간 설정이 2주 이상 차이나면 안됨
         if ((actEd.getTime() - actSt.getTime()) > 14 * 24 * 60 * 60 * 1000) { // 2주
             throw new CodeMessageException(Result.TOO_LONG_TERM);
         }
@@ -192,6 +134,7 @@ public class DiaryController {
         //            }
         //        }
 
+        // 임플 파일 => UserDiaryServiceImpl
         userDiaryService.insert(actDt, actEdDt, dto);
 
         return new Result(true, Result.OK);
@@ -217,6 +160,14 @@ public class DiaryController {
         return result;
     }
 
+
+    /**
+     *activityTCd=9 해서 뭔갈 가져오는데...
+     * @param search
+     * @param pageable
+     * @return
+     * @throws Exception
+     */
     @GetMapping(value = "")
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
@@ -313,6 +264,7 @@ public class DiaryController {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
+    // 영농일지관리 - 작업 조회
     @GetMapping(value = "/activity")
     @ResponseBody
     public Result activities(@RequestParam(value = "activityTCd", defaultValue = "9") Long activityTCd, HttpServletResponse response) throws Exception {

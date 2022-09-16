@@ -26,7 +26,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.RoleDto;
-import zinsoft.web.common.entity.QRole;
+import zinsoft.web.entity.QRole;
 import zinsoft.web.common.repository.RoleQueryRepository;
 
 @RequiredArgsConstructor

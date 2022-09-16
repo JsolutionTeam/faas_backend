@@ -27,7 +27,7 @@ import zinsoft.faas.entity.QUserInout;
 import zinsoft.faas.entity.QUserInoutFile;
 import zinsoft.faas.repository.UserInoutFileQueryRepository;
 import zinsoft.util.Result;
-import zinsoft.web.common.entity.QFileInfo;
+import zinsoft.web.entity.QFileInfo;
 import zinsoft.web.exception.CodeMessageException;
 
 @RequiredArgsConstructor

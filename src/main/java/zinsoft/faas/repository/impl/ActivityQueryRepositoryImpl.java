@@ -28,7 +28,7 @@ import zinsoft.faas.dto.ActivityDto;
 import zinsoft.faas.entity.QActivity;
 import zinsoft.faas.repository.ActivityQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
+import zinsoft.web.entity.QCode;
 
 @RequiredArgsConstructor
 public class ActivityQueryRepositoryImpl implements ActivityQueryRepository {

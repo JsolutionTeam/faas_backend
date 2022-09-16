@@ -18,9 +18,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.BoardFileDto;
-import zinsoft.web.common.entity.QBoardFile;
-import zinsoft.web.common.entity.QFileInfo;
 import zinsoft.web.common.repository.BoardFileQueryRepository;
+import zinsoft.web.entity.QBoardFile;
+import zinsoft.web.entity.QFileInfo;
 
 @RequiredArgsConstructor
 public class BoardFileQueryRepositoryImpl implements BoardFileQueryRepository {

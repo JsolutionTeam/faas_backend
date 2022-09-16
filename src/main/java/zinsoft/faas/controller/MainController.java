@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ import zinsoft.web.common.view.DownloadView;
 import zinsoft.web.exception.CodeMessageException;
 
 @Controller
+@Slf4j
 public class MainController {
 
     @Resource
@@ -115,8 +117,12 @@ public class MainController {
     @ResponseBody
     public List<UserCropDto> listUserCrop(String sYear, String eYear, String year, String userId, HttpServletRequest request, HttpSession session, Model model) throws Exception {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-
+        log.info("api/*/listUserCrop!!!");
+        log.info("request.isUserInRole(\"ROLE_0000\") : {}", request.isUserInRole("ROLE_0000"));
+        log.info("request.isUserInRole(\"ROLE_0001\") : {}", request.isUserInRole("ROLE_0001"));
+        log.info("request.isUserInRole(\"ROLE_0008\") : {}", request.isUserInRole("ROLE_0008"));
         if (request.isUserInRole("ROLE_0000") || request.isUserInRole("ROLE_0001") || request.isUserInRole("ROLE_0008")) {
+            log.info("userId : {}", userId);
             if (userId != null && !userId.isEmpty()) {
                 return userCropService.list(userId, year, request.getParameter("exprYN"));
             } else {

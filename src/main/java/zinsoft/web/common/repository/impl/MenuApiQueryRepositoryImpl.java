@@ -9,10 +9,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.RestfulApiAccessDto;
-import zinsoft.web.common.entity.QMenu;
-import zinsoft.web.common.entity.QMenuApi;
-import zinsoft.web.common.entity.QMenuRole;
 import zinsoft.web.common.repository.MenuApiQueryRepository;
+import zinsoft.web.entity.QMenu;
+import zinsoft.web.entity.QMenuApi;
+import zinsoft.web.entity.QMenuRole;
 
 @RequiredArgsConstructor
 public class MenuApiQueryRepositoryImpl implements MenuApiQueryRepository {

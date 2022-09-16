@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import zinsoft.faas.dao.mapper.UserChemicalMapper;
+import zinsoft.faas.dao.mapper.UserDiaryMapper;
 import zinsoft.faas.dto.UserChemicalDto;
+import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.entity.UserChemical;
 import zinsoft.faas.repository.UserChemicalRepository;
 import zinsoft.faas.service.UserChemicalService;
@@ -31,6 +33,9 @@ public class UserChemicalServiceImpl extends EgovAbstractServiceImpl implements 
 
     @Resource
     UserChemicalMapper userChemicalMapper;
+
+    @Resource
+    UserDiaryMapper userDiaryMapper;
 
     @Resource
     UserChemicalRepository userChemicalRepository;
@@ -88,6 +93,9 @@ public class UserChemicalServiceImpl extends EgovAbstractServiceImpl implements 
         Page<UserChemicalDto> page = new Page<UserChemicalDto>();
         List<UserChemicalDto> list = userChemicalMapper.page(pagingParam);
         int count = userChemicalMapper.count(pagingParam);
+
+        egovLogger.info("u c s i - page!");
+        userDiaryMapper.list(null);
 
         page.setItems(list);
         page.setTotalPages((int) Math.ceil(count / (double) pagingParam.getLimit()));

@@ -33,8 +33,8 @@ import zinsoft.faas.entity.QCrop;
 import zinsoft.faas.entity.QUserCrop;
 import zinsoft.faas.repository.UserCropQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
 import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
 
 @RequiredArgsConstructor
 public class UserCropQueryRepositoryImpl implements UserCropQueryRepository  {

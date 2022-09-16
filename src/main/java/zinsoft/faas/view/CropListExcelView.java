@@ -2,6 +2,7 @@ package zinsoft.faas.view;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -81,7 +82,7 @@ public class CropListExcelView extends AbstractExcelView {
                 activityTCd = (vo.getActivityTCd() != null ? vo.getActivityTCd() : "").toString() ;
                 activityTCdNm = (vo.getActivityTCdNm() != null ? vo.getActivityTCdNm() : activityTCd);
 
-                setText(row, col++, activityTCdNm != "" ? "작업목록_"+ activityTCdNm : "", dataCStyle);
+                setText(row, col++, !Objects.equals(activityTCdNm, "") ? "작업목록_"+ activityTCdNm : "", dataCStyle);
                 setText(row, col++, vo.getCropSCdNm(), dataCStyle);
                 setNumber(row, col++, vo.getSerLife());
                 setNumber(row, col++, vo.getMaLife());

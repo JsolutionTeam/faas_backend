@@ -32,10 +32,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.UserAccessLogDto;
-import zinsoft.web.common.entity.QCode;
-import zinsoft.web.common.entity.QUserAccessLog;
-import zinsoft.web.common.entity.QUserInfo;
-import zinsoft.web.common.entity.QUserRole;
+import zinsoft.web.entity.QUserInfo;
+import zinsoft.web.entity.QUserRole;
+import zinsoft.web.entity.QCode;
+import zinsoft.web.entity.QUserAccessLog;
 import zinsoft.web.common.repository.UserAccessLogQueryRepository;
 
 @RequiredArgsConstructor

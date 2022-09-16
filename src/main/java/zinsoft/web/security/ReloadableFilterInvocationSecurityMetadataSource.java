@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.ConfigAttribute;
@@ -33,6 +34,7 @@ import zinsoft.web.common.dto.RoleDto;
 import zinsoft.web.common.service.MenuApiService;
 import zinsoft.web.common.service.MenuService;
 
+@Slf4j
 public class ReloadableFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     private final Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = new LinkedHashMap<>();
@@ -84,6 +86,8 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 
     public void reload() {
         requestMap.clear();
+
+        log.info("ReloadableFilterInvocationSecurityMetadataSource - reload()");
 
         // 관리자
         Collection<ConfigAttribute> admin = SecurityConfig.createList(RoleDto.ROLE_ADMIN);
@@ -208,7 +212,7 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
         matcher = new AntPathRequestMatcher("/");
         requestMap.put(matcher, anonymously);
 
-        // swagger login
+        // swagger login은 아무나 가능하도록
         matcher = new AntPathRequestMatcher("/swagger", "GET");
         requestMap.put(matcher, anonymously);
 

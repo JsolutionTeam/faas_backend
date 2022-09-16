@@ -22,9 +22,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.web.common.dto.MenuRoleDto;
-import zinsoft.web.common.entity.QMenu;
-import zinsoft.web.common.entity.QMenuRole;
-import zinsoft.web.common.entity.QRole;
+import zinsoft.web.entity.QMenu;
+import zinsoft.web.entity.QMenuRole;
+import zinsoft.web.entity.QRole;
 import zinsoft.web.common.repository.MenuRoleQueryRepository;
 
 @RequiredArgsConstructor

@@ -139,7 +139,7 @@
                                        and a.act_nm LIKE '%' || #{cond.keyword} || '%'
                                    </if>
                               </if>
-                     ORDER BY a.reg_dtm DESC, a.expr_seq DESC)z 
+                     ORDER BY a.reg_dtm DESC, a.expr_seq DESC)
          <![CDATA[
                  WHERE ROWNUM <= (#{start} + #{limit}))
          WHERE RNUM > #{start}

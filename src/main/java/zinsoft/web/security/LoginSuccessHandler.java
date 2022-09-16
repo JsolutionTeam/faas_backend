@@ -42,7 +42,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             userInfo.setRemoteAddr(request.getRemoteAddr());
         }
 
-        userInfoService.updateLastLoginDtm(userId);
+        // 기능이 주석처리 되어있어서 사용x
+//        userInfoService.updateLastLoginDtm(userId);
         userAccessLogService.login(userId);
 
         response.setStatus(HttpServletResponse.SC_OK);
@@ -50,6 +51,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter writer = response.getWriter();
+        logger.info("로그인 유저 id : " + userInfo);
+
         writer.write(objectWriter.writeValueAsString(new Result(true, Result.OK, userInfo)));
         writer.flush();
     }

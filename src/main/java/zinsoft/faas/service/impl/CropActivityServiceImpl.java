@@ -28,6 +28,8 @@ public class CropActivityServiceImpl extends EgovAbstractServiceImpl implements 
 
     @Override
     public List<CropActivityDto> listByActivityTCd(Long activityTCd) {
+        // CropActivityQueryRepository에서 가져옴.
+        // 검색용 List<CropActivityDto> listByActivityTCd(Long activityTCd)
         return cropActivityRepository.listByActivityTCd(activityTCd);
     }
 
@@ -35,5 +37,6 @@ public class CropActivityServiceImpl extends EgovAbstractServiceImpl implements 
     public List<CropActivityDto> listByCropSeq(Long cropSeq) {
         return cropActivityRepository.listByCropSeq(cropSeq);
     }
+
 
 }

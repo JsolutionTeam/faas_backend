@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import zinsoft.faas.dao.mapper.UserDiaryMapper;
@@ -44,11 +43,12 @@ import zinsoft.web.common.service.CodeService;
 import zinsoft.web.exception.CodeMessageException;
 
 @Service
-@Transactional
 public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements UserDiaryService {
 
-    @Resource
-    UserDiaryMapper userDiaryMapper;
+//    @Resource
+//    UserDiaryMapper userDiaryMapper;
+
+    // 매퍼 테스트용
 
     @Resource
     UserDiaryRepository userDiaryRepository;
@@ -106,12 +106,19 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void insert(UserDiaryDto dto) throws IllegalStateException, IOException {
+        egovLogger.info("insert(UserDiaryDto dto)");
         dto.setActDt(dto.getActDt().replaceAll("\\D", ""));
         dto.setUserDiarySeq(null);
+
         if (StringUtils.isBlank(dto.getActNm()) || dto.getActivitySeq() != 40) {
+            // actNm이 없거나 activitySeq가 40이 아니라면,
             dto.setActNm(null);
         }
+        egovLogger.info("diaryDto.getActivitySeq(1) : {}", dto.getActivitySeq());
+
         UserDiary userDiary = modelMapper.map(dto, UserDiary.class);
+        egovLogger.info("diaryDto.getActivitySeq(2) : {}", dto.getActivitySeq());
+
         userDiary = userDiaryRepository.save(userDiary);
 
         dto.setUserDiarySeq(userDiary.getUserDiarySeq());
@@ -127,6 +134,9 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void insert(String actStDt, String actEdDt, UserDiaryDto dto) throws IllegalStateException, IOException {
+        egovLogger.info("insert(String actStDt, String actEdDt, UserDiaryDto dto)");
+
+
         if (actStDt != null && !actStDt.isEmpty() && actEdDt != null && !actEdDt.isEmpty()) {
             String actDt = actStDt;
             //            String inputSkyTCd = dto.getSkyTCd();
@@ -135,7 +145,9 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
             //            Float inputTmx = dto.getTmx();
             //            Long inputReh = dto.getReh();
 
+            // 날짜마다 데이터 추가 ㄷㄷ;;;
             while (actDt.compareTo(actEdDt) <= 0) {
+
                 dto.setActDt(actDt);
                 insert(dto);
                 dto.setWorking(null);
@@ -152,12 +164,16 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void insert(UserProductionDto dto) {
+        egovLogger.info("insert(UserProductionDto dto)");
         UserDiaryDto diaryDto = new UserDiaryDto();
         diaryDto.setUserDiarySeq(null);
         diaryDto.setActDt(dto.getPrdDt());
         diaryDto.setUserId(dto.getUserId());
+
+        // 실적이면 D 계획이면 P
         String diaryTCd = (dto.getPlanTCd().equals(UserProductionDto.PLAN_T_CD_ACTUAL)) ? "D" : "P";
         diaryDto.setDiaryTCd(diaryTCd);
+
         diaryDto.setActivitySeq(145L);//수확
         diaryDto.setRemark(dto.getRemark());
         diaryDto.setQuan(dto.getQuan());
@@ -171,7 +187,7 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void copy(String userId, String srcYear, String dstYear) {
-        userDiaryMapper.copy(userId, srcYear, dstYear);
+//        userDiaryMapper.copy(userId, srcYear, dstYear);
     }
 
     @Override
@@ -188,8 +204,10 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public DataTablesResponse<UserDiaryDto> page(Map<String, Object> search, Pageable pageable) {
-        //DataTablesResponse<UserDiaryDto> page;
+        // 결과 반환 용 변수
         Page<UserDiaryDto> page = null;
+
+
         SimpleDateFormat fm = new SimpleDateFormat("yyyyMMdd");
 
         if ((search.get("sActDt") == null || search.get("eActDt") == null) && search.get("actDt") == null) {
@@ -227,31 +245,28 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
             search.put("eActDt", eActDt);
         }
 
-      //  Page<UserDiaryDto> dtoPage = userDiaryRepository.page(search, pageable);
+        // Page<UserDiaryDto> dtoPage = userDiaryRepository.page(search, pageable);
+        // page = DataTablesResponse.of(dtoPage);
+        // List<UserDiaryDto> list = dtoPage.getContent();
+        // if (list != null && list.size() > 0) {
+        //     setFiles(dtoPage.getContent());
+        //     setUsedChemicalStock(list);
+        //     setUsedManureStock(list);
+        // }
+        // return page;
 
-//        page = DataTablesResponse.of(dtoPage);
-
-//        List<UserDiaryDto> list = dtoPage.getContent();
-//        if (list != null && list.size() > 0) {
-//            setFiles(dtoPage.getContent());
-//            setUsedChemicalStock(list);
-//            setUsedManureStock(list);
-//        }
-//        return page;
         List<UserDiaryDto> list = null;
-        if (search.get(pageSizeParameter) != null) {
-            list = userDiaryMapper.page(search, pageable);
-        } else {
-            list = userDiaryMapper.list(search);
+        int count = 0;
+        try {
+            //
+            page = userDiaryRepository.page(search, pageable);
+//                list = userDiaryMapper.pageData(search, pageable);
+            if (list != null && list.size() > 0) {
+                setFiles(list);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        if (list != null && list.size() > 0) {
-             setFiles(list);
-        }
-
-        int count = userDiaryMapper.count(search);
-
-        page = new PageImpl<>(list, pageable, count);
         return DataTablesResponse.of(page);
 
     }
@@ -358,8 +373,8 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Override
     public void delete(String userId, Long[] userDiarySeqs) {
         if (UserInfoUtil.isAdmin() == true && StringUtils.isBlank(userId) == true) {
-            if(userDiarySeqs != null && userDiarySeqs.length > 0) {
-                for(Long userDiarySeq : userDiarySeqs) {
+            if (userDiarySeqs != null && userDiarySeqs.length > 0) {
+                for (Long userDiarySeq : userDiarySeqs) {
                     UserDiary userDiary = getEntity(userId, userDiarySeq);
                     userId = userDiary.getUserId();
                     delete(userId, userDiarySeq);

@@ -23,7 +23,7 @@ import lombok.ToString;
 @DynamicInsert
 @DynamicUpdate
 public class CropActivity {
-
+// 작물별 작업
     @Id
     @GeneratedValue
     private Long cropActivitySeq;

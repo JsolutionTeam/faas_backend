@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import zinsoft.util.Constants;
 import zinsoft.util.LocaleUtil;
 import zinsoft.web.common.dto.CodeDto;
-import zinsoft.web.common.entity.QCode;
+import zinsoft.web.entity.QCode;
 import zinsoft.web.common.repository.CodeQueryRepository;
 
 @RequiredArgsConstructor

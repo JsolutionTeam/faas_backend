@@ -36,8 +36,8 @@ import zinsoft.faas.entity.QUserChemicalStock;
 import zinsoft.faas.entity.QUserInout;
 import zinsoft.faas.repository.UserChemicalStockQueryRepository;
 import zinsoft.util.Constants;
-import zinsoft.web.common.entity.QCode;
-import zinsoft.web.common.entity.QUserInfo;
+import zinsoft.web.entity.QCode;
+import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
 public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQueryRepository {
