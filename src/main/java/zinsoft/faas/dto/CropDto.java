@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 import zinsoft.faas.entity.Crop;
-import zinsoft.faas.entity.CropSpecies;
 import zinsoft.faas.entity.QCrop;
 import zinsoft.util.KeyValueable;
 
@@ -51,11 +50,6 @@ public class CropDto implements KeyValueable<String> {
     private String cropTCdNm;
     private Long cropCnt;
 
-
-    // 처음부터 모든 데이터를 가져가면 너무 오래걸림. 셀렉트박스 선택 시 조회하도록 함.
-//     품목에 해당하는 품종 리스트
-//    private List<CropSpeciesDto> cropSpeciesList;
-
     @QueryProjection
     public CropDto(Crop crop, String cropACdNm, String cropBCdNm, String cropSCdNm, Long cropCnt) {
         this.cropSeq = crop.getCropSeq();
@@ -77,13 +71,6 @@ public class CropDto implements KeyValueable<String> {
         this.cropBCdNm = cropBCdNm;
         this.cropSCdNm = cropSCdNm;
         this.cropCnt = cropCnt;
-//        if(crop.getCropSpeciesList() != null && crop.getCropSpeciesList().size() > 0){
-//            List<CropSpecies> cropSpecies = crop.getCropSpeciesList();
-//            this.cropSpeciesList =
-//                    cropSpecies.stream()
-//                            .map(CropSpeciesDto::new)
-//                            .collect(Collectors.toList());
-//        }
     }
 
     @Override

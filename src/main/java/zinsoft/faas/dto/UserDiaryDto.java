@@ -223,8 +223,6 @@ public class UserDiaryDto {
     @QueryProjection
     public UserDiaryDto(UserDiary userDiary
             , String cropBCdNm
-            , String cropSpeciesNm
-            , String cropPatternNm
             , String diaryTCdNm
             , String skyTCdNm
             , String packTCdNm
@@ -243,7 +241,6 @@ public class UserDiaryDto {
         this.cropSeq = userDiary.getCropSeq();
         this.userCropSeq = userDiary.getUserCropSeq();
         this.cropBCd = userDiary.getCropBCd();
-        this.cropPatternSeq = userDiary.getCropPatternSeq();
         this.activitySeq = userDiary.getActivitySeq();
         this.manSelf = userDiary.getManSelf();
         this.manSelfTm = userDiary.getManSelfTm();
@@ -271,8 +268,6 @@ public class UserDiaryDto {
         this.gradeTCd = userDiary.getGradeTCd();
 
         this.cropBCdNm = cropBCdNm;
-        this.cropSpeciesNm = cropSpeciesNm;
-        this.cropPatternNm = cropPatternNm;
 
         this.diaryTCdNm = diaryTCdNm;
         this.skyTCdNm = skyTCdNm;

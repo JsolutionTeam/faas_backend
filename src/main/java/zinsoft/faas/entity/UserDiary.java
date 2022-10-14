@@ -78,25 +78,9 @@ public class UserDiary implements Serializable {
     @Column(name="crop_b_cd")
     private String cropBCd; // 품목 코드
 
-    @JoinColumn(name = "crop_species_seq", foreignKey = @ForeignKey(name = "tf_user_diary_crop_species_seq_fk")
-//            ,referencedColumnName = "crop_species_seq"
-        )
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private CropSpecies cropSpecies; // 품종 번호
-
-    private Long cropPatternSeq; // 작형 번호
-
-    // 추후에 JoinColumn 설정 하기
-//    private Long cropPatternSeq; // 작형 번호
-
-    public void insertSubInfo(CropSpecies cropSpecies) {
-        this.cropSpecies = cropSpecies;
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="herv_info_seq")
+    private EpisFsHervInfo hervInfo;
 
 
 }

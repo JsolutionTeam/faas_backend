@@ -17,16 +17,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.UserDiaryMapper;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.dto.UserDiaryFileDto;
 import zinsoft.faas.dto.UserProductionDto;
-import zinsoft.faas.entity.CropSpecies;
 import zinsoft.faas.entity.UserDiary;
 import zinsoft.faas.repository.UserDiaryRepository;
 import zinsoft.faas.service.ActivityService;
@@ -69,20 +66,10 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Resource
     UserProductionService userProductionService;
 
-    @Resource
-    CodeService codeService;
 
-    @Resource
-    UserCropService userCropService;
-
-    @Resource
-    ActivityService activityService;
 
     @Value("${spring.data.web.pageable.size-parameter:}")
     String pageSizeParameter;
-
-    @Autowired
-    private CropSpeciesService cropSpeciesService;
 
     private UserDiary getEntity(Long userDiarySeq) {
         Optional<UserDiary> data = userDiaryRepository.findById(userDiarySeq);
@@ -123,9 +110,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         UserDiary userDiary = modelMapper.map(dto, UserDiary.class);
         egovLogger.info("diaryDto.getActivitySeq(2) : {}", dto.getActivitySeq());
 
-        Long cropSpeciesSeq = dto.getCropSpeciesSeq();
-        CropSpecies cropSpecies = cropSpeciesService.getEntity(cropSpeciesSeq);
-        userDiary.insertSubInfo(cropSpecies);
         userDiary = userDiaryRepository.save(userDiary);
 
         dto.setUserDiarySeq(userDiary.getUserDiarySeq());

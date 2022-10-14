@@ -3,8 +3,6 @@ package zinsoft.faas.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,68 +17,67 @@ import java.util.Date;
 @ToString
 public class EpisFsHervInfo {
     @Id
-    @Column(name = "herv_seq", insertable = false, updatable = false)
+    @Column(name = "herv_seq", insertable = false, updatable = false, length = 38)
     private Long hervSeq;
 
-
-    @Column(name="HERV_NAME")
+    @Column(name = "HERV_NAME")
     private String hervName;
 
-    @Column(name="FARM_CODE")
+    @Column(name = "FARM_CODE")
     private String farmCode;
 
-    @Column(name="pestikorname")
+    @Column(name = "pestikorname")
     private String pestiKorName;
 
-    @Column(name="KIND_CODE")
+    @Column(name = "KIND_CODE")
     private String kindCode;
 
-    @Column(name="GROW_TYPE")
+    @Column(name = "GROW_TYPE")
     private String growType;
 
-    @Column(name="TRANS_PLANT_DT")
+    @Column(name = "TRANS_PLANT_DT")
     private Date transPlantDt;
 
-    @Column(name="CULT_AREA_PY")
+    @Column(name = "CULT_AREA_PY")
     private String cultAreaPy;
 
-    @Column(name="CULT_AREA_M")
+    @Column(name = "CULT_AREA_M")
     private String cultAreaM;
 
-    @Column(name="CROPS_CNT")
+    @Column(name = "CROPS_CNT")
     private String cropsCnt;
 
-    @Column(name="CROPS_M_CNT")
+    @Column(name = "CROPS_M_CNT")
     private String cropsMCnt;
 
-    @Column(name="TEMP")
+    @Column(name = "TEMP")
     private String temp;
 
-    @Column(name="HEAVY")
+    @Column(name = "HEAVY")
     private String heavy;
 
-    @Column(name="SUNLIGHT")
+    @Column(name = "SUNLIGHT")
     private String sunLight;
 
-    @Column(name="META_RATE")
+    @Column(name = "META_RATE")
     private String metaRate;
 
-    @Column(name="INSP_MODEL")
+    @Column(name = "INSP_MODEL")
     private String inspModel;
 
 
-    @Column(name="REG_ID")
+    @Column(name = "REG_ID")
     private String regId;
 
-    @Column(name="REG_DT")
+    @Column(name = "REG_DT")
     private Date regDt;
 
-    @Column(name="UPD_ID")
+    @Column(name = "UPD_ID")
     private String updId;
 
-    @Column(name="UPD_DT")
+    @Column(name = "UPD_DT")
     private Date updDt;
 
-    @Column(name="END_DT")
+    @Column(name = "END_DT")
     private Date endDt;
 }

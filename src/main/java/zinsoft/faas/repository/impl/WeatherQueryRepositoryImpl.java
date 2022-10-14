@@ -76,5 +76,4 @@ public class WeatherQueryRepositoryImpl implements WeatherQueryRepository  {
                 .orderBy(weather.date.desc())
                 .fetchFirst();
     }
-
 }

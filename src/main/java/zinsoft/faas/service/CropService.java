@@ -19,8 +19,6 @@ public interface CropService {
 
     CropDto get(Long cropSeq);
 
-    List<EpisFsHervInfo> getCropShapeList();
-
     boolean isExistCropId(Long cropSeq);
 
     DataTablesResponse<CropDto> page(Map<String, Object> search, Pageable pageable);

@@ -37,8 +37,6 @@ import zinsoft.faas.repository.CropQueryRepository;
 import zinsoft.util.Constants;
 import zinsoft.web.entity.QCode;
 
-import static zinsoft.faas.entity.QCropSpecies.cropSpecies;
-
 @RequiredArgsConstructor
 public class CropQueryRepositoryImpl implements CropQueryRepository {
 
@@ -138,8 +136,6 @@ public class CropQueryRepositoryImpl implements CropQueryRepository {
                 .leftJoin(a).on(crop.cropACd.eq(a.codeVal).and(a.codeId.eq("CROP_A_CD")))
                 .leftJoin(b).on(crop.cropBCd.eq(b.codeVal).and(b.codeId.eq("CROP_B_CD")))
                 .leftJoin(d).on(crop.cropSCd.eq(d.codeVal).and(d.codeId.eq("CROP_S_CD")))
-                // 처음부터 모든 데이터를 가져가면 너무 오래걸림. 셀렉트박스 선택 시 조회하도록 함.
-//                .leftJoin(cropSpecies).on(crop.cropSeq.eq(cropSpecies.crop.cropSeq)).fetchJoin()
                 .where(pageCondition(search))
                 .groupBy(
                         crop.regDtm,

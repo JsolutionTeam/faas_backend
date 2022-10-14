@@ -48,9 +48,4 @@ public class Crop {
 
     @Column(name = "activity_t_cd")
     private Long activityTCd;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "crop", cascade = {})
-    private List<CropSpecies> cropSpeciesList;
-
-
 }

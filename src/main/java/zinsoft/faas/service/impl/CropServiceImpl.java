@@ -93,21 +93,6 @@ public class CropServiceImpl extends EgovAbstractServiceImpl implements CropServ
         return cropRepository.get(cropSeq);
     }
 
-    public List<EpisFsHervInfo> getCropShapeList(){
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-
-        String farmCode = farmerInfo.getFarmCode();
-        //accountRepository.getFarmCodeByAccountId()
-
-        // farmCode로 epis_fs_herv_info 가져와보기
-
-        List<EpisFsHervInfo> hervs = hervRepository.findAllByFarmCode(farmCode);
-
-
-        return hervs;
-//        return hervs.stream().map(EpisFsHervInfo::getHervName).collect(Collectors.toList());
-    }
-
     @Override
     public boolean isExistCropId(Long cropSeq) {
         return cropRepository.existsByCropSeqAndStatusCd(cropSeq, "N");

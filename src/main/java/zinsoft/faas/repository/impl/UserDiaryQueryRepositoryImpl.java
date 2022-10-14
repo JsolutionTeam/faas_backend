@@ -41,8 +41,6 @@ import zinsoft.util.Constants;
 import zinsoft.web.entity.QCode;
 import zinsoft.web.entity.QUserInfo;
 
-import static zinsoft.faas.entity.QCropSpecies.cropSpecies;
-
 @RequiredArgsConstructor
 @Slf4j
 public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
@@ -116,13 +114,6 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
 
         // 영농일지 고도화 중 추가된 작업
 
-        // entity 내에 있는 cropSpecies를 조회하게 되면 inner join을 하게 됨. 해당 작업은 의도치 않은 작업이므로 제거.
-        fieldList.remove(userDiary.cropSpecies);
-
-        // cropSpecies 데이터를 따로 조회한다.
-        fieldList.add(cropSpecies.cropSpeciesSeq.as("cropSpeciesSeq"));
-        fieldList.add(cropSpecies.name.as("cropSpeciesNm"));
-        fieldList.add(cropSpecies.crop.cropSeq.as("cropSpeciesCropSeq"));
 
         // crop b cd 값으로 조회하기 위해 가져온다.
         fieldList.add(code.codeNm.as("cropBCdNm"));
@@ -183,24 +174,8 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
 
     @Override
     public Page<UserDiaryDto> page(Map<String, Object> search, Pageable pageable) {
-//        List<Expression<?>> fields = allFields.getArgs();
-
-//        fields.add(cropSpecies.cropSpeciesSeq.as("cropSpeciesSeq"));
-//        fields.add(cropSpecies.name.as("cropSpeciesNm"));
-//        fields.add(cropSpecies.crop.cropSeq.as("cropSpeciesCropSeq"));
-
-//        QBean<UserDiaryDto> allFields = Projections.fields(UserDiaryDto.class, fields.toArray(new Expression<?>[0]));
         JPQLQuery<UserDiaryDto> jpqQuery = query.select(allFields)
                 .from(userDiary)
-
-                // user diary - crop의 품목코드 조회하기 위해~
-                .leftJoin(code)
-                .on(userDiary.cropBCd.eq(code.codeVal)) // codeid는 crop_b_cd가 들어가 있음.
-
-                // user diary - crop species(품종) 조회하기 위해
-                .leftJoin(cropSpecies)
-                .on(userDiary.cropSpecies.eq(cropSpecies)).fetchJoin()
-
                 // user diary - activity(작업단계) 조회하기 위해
                 .leftJoin(activity)
                 .on(userDiary.activitySeq.eq(activity.activitySeq)).fetchJoin()
