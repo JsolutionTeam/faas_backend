@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import zinsoft.faas.dto.CropDto;
 import zinsoft.faas.dto.CropSpeciesDto;
+import zinsoft.faas.entity.EpisFsHervInfo;
 import zinsoft.faas.service.CropService;
 import zinsoft.faas.service.impl.CropSpeciesService;
 import zinsoft.util.DataTablesResponse;
@@ -75,6 +76,13 @@ public class CropController {
         return new Result(true, "0000", speciesDTOList);
     }
 
+    @GetMapping(value = "/shape/list")
+    @ResponseBody
+    public Result getTest() throws Exception {
+        List<EpisFsHervInfo> shapes = cropService.getCropShapeList();
+        return new Result(true, "0000", shapes);
+    }
+
     @PutMapping(value = "/{cropSeq}")
     @ResponseBody
     public Result put(@PathVariable("cropSeq") Long cropSeq, @Valid CropDto vo) throws Exception {
@@ -89,5 +97,6 @@ public class CropController {
         cropService.delete(new Long[]{cropSeq});
         return new Result(true, "0000");
     }
+
 
 }

@@ -127,13 +127,6 @@ public class DiaryController {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId(farmerInfo.getUserId());
 
-        //        if (vo.getUserCropSeq() > 0) {
-        //            boolean res = userCropService.isExistUserCropId(vo.getUserId(), vo.getUserCropSeq());
-        //            if (!res) {
-        //                throw new CodeMessageException(Result.NOT_FOUND_USER_CROP);
-        //            }
-        //        }
-
         // 임플 파일 => UserDiaryServiceImpl
         userDiaryService.insert(actDt, actEdDt, dto);
 

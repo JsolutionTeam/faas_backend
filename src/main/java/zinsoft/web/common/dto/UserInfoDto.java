@@ -99,6 +99,9 @@ public class UserInfoDto implements Serializable {
     private String stZipcode;
     private String edZipcode;
 
+    private String farmCode;
+
+
     @JsonIgnore
     public boolean isValid() {
         return (statusCd != null

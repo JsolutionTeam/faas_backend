@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 
 import zinsoft.faas.dto.CropDto;
+import zinsoft.faas.entity.EpisFsHervInfo;
 import zinsoft.util.DataTablesResponse;
 
 public interface CropService {
@@ -17,6 +18,8 @@ public interface CropService {
     List<CropDto> list(Map<String, Object> param);
 
     CropDto get(Long cropSeq);
+
+    List<EpisFsHervInfo> getCropShapeList();
 
     boolean isExistCropId(Long cropSeq);
 

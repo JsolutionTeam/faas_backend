@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.data.jpa.repository.Query;
 import zinsoft.faas.dto.AccountDto;
 
 public interface AccountQueryRepository {
@@ -17,6 +18,5 @@ public interface AccountQueryRepository {
     Page<AccountDto> page(Map<String, Object> search, Pageable pageable);
 
     List<AccountDto> list(Map<String, Object> search);
-
 
 }

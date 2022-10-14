@@ -34,6 +34,24 @@ public interface AccountRepository extends JpaRepository<Account, String>, Accou
     @Query("UPDATE Account a SET a.updateDtm = now(), a.statusCd = 'D' WHERE a.acId = :acId")
     void deleteByAcId(String acId);
 
+/*
+select
+    MEM.EMPLYR_ID as id,
+    FARM.FARM_CODE as farmCode
+from
+    sangju_mgr.COMTNEMPLYRINFO MEM
+        LEFT JOIN sangju_mgr.EPIS_FARM_MANAGE_INFO_MEMBER FARM
+                  ON MEM.EMPLYR_ID = FARM.EMPLYR_ID
+where ;
+ */
 
+    @Query(value = "select\n" +
+            "    FARM.FARM_CODE as farmCode\n" +
+            "from\n" +
+            "    sangju_mgr.COMTNEMPLYRINFO MEM\n" +
+            "        LEFT JOIN sangju_mgr.EPIS_FARM_MANAGE_INFO_MEMBER FARM\n" +
+            "                  ON MEM.EMPLYR_ID = FARM.EMPLYR_ID\n" +
+            "where $1", nativeQuery = true)
+    String getFarmCodeByAccountId(String id);
 
 }

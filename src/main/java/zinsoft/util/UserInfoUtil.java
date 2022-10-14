@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +20,7 @@ import zinsoft.web.common.dto.UserInfoDto;
 import zinsoft.web.common.dto.UserRoleDto;
 import zinsoft.web.security.WebUser;
 
+@Slf4j
 public class UserInfoUtil {
 
     private UserInfoUtil() {
@@ -160,6 +162,8 @@ public class UserInfoUtil {
             UserInfoDto farmerInfoDto = (UserInfoDto) session.getAttribute(Constants.SESSION_FARMER_INFO);
 
             if (farmerInfoDto != null) {
+                String farmCode = farmerInfoDto.getFarmCode();
+                log.debug("getFarmerInfo : {}", farmCode);
                 return farmerInfoDto;
             }
         } catch (Exception e) {

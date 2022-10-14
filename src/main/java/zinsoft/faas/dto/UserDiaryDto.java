@@ -67,6 +67,10 @@ public class UserDiaryDto {
     @Schema(name = "품목 명")
     private String cropBCdNm;
 
+    @Schema(name = "품종 번호(등록 수정 시 사용)")
+    @Min(value = 1)
+    private Long cropSpeciesSeq;
+
     @Schema(name = "품종 명")
     @Min(value = 1)
     private String cropSpeciesNm;

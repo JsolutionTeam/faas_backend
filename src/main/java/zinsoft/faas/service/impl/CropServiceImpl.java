@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -15,10 +16,15 @@ import org.springframework.stereotype.Service;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import zinsoft.faas.dto.CropDto;
 import zinsoft.faas.entity.Crop;
+import zinsoft.faas.entity.EpisFsHervInfo;
+import zinsoft.faas.repository.AccountRepository;
 import zinsoft.faas.repository.CropRepository;
+import zinsoft.faas.repository.EpisFsHervInfoRepository;
 import zinsoft.faas.service.CropService;
 import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
+import zinsoft.util.UserInfoUtil;
+import zinsoft.web.common.dto.UserInfoDto;
 import zinsoft.web.common.service.BasicDataService;
 import zinsoft.web.exception.CodeMessageException;
 
@@ -30,6 +36,13 @@ public class CropServiceImpl extends EgovAbstractServiceImpl implements CropServ
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    //TODO 추후에 작형 테이블 나오면 수정
+    @Autowired
+    private EpisFsHervInfoRepository hervRepository;
 
     @Resource
     BasicDataService basicDataService;
@@ -78,6 +91,21 @@ public class CropServiceImpl extends EgovAbstractServiceImpl implements CropServ
     @Override
     public CropDto get(Long cropSeq) {
         return cropRepository.get(cropSeq);
+    }
+
+    public List<EpisFsHervInfo> getCropShapeList(){
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+
+        String farmCode = farmerInfo.getFarmCode();
+        //accountRepository.getFarmCodeByAccountId()
+
+        // farmCode로 epis_fs_herv_info 가져와보기
+
+        List<EpisFsHervInfo> hervs = hervRepository.findAllByFarmCode(farmCode);
+
+
+        return hervs;
+//        return hervs.stream().map(EpisFsHervInfo::getHervName).collect(Collectors.toList());
     }
 
     @Override

@@ -16,4 +16,5 @@ public interface CropQueryRepository {
 
     Page<CropDto> page(Map<String, Object> search, Pageable pageable);
 
+
 }

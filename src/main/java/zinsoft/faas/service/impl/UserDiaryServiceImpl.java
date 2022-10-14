@@ -26,6 +26,7 @@ import zinsoft.faas.dao.mapper.UserDiaryMapper;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.dto.UserDiaryFileDto;
 import zinsoft.faas.dto.UserProductionDto;
+import zinsoft.faas.entity.CropSpecies;
 import zinsoft.faas.entity.UserDiary;
 import zinsoft.faas.repository.UserDiaryRepository;
 import zinsoft.faas.service.ActivityService;
@@ -80,6 +81,9 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Value("${spring.data.web.pageable.size-parameter:}")
     String pageSizeParameter;
 
+    @Autowired
+    private CropSpeciesService cropSpeciesService;
+
     private UserDiary getEntity(Long userDiarySeq) {
         Optional<UserDiary> data = userDiaryRepository.findById(userDiarySeq);
 
@@ -119,6 +123,9 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         UserDiary userDiary = modelMapper.map(dto, UserDiary.class);
         egovLogger.info("diaryDto.getActivitySeq(2) : {}", dto.getActivitySeq());
 
+        Long cropSpeciesSeq = dto.getCropSpeciesSeq();
+        CropSpecies cropSpecies = cropSpeciesService.getEntity(cropSpeciesSeq);
+        userDiary.insertSubInfo(cropSpecies);
         userDiary = userDiaryRepository.save(userDiary);
 
         dto.setUserDiarySeq(userDiary.getUserDiarySeq());
@@ -255,15 +262,10 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         // }
         // return page;
 
-        List<UserDiaryDto> list = null;
-        int count = 0;
         try {
             //
             page = userDiaryRepository.page(search, pageable);
 //                list = userDiaryMapper.pageData(search, pageable);
-            if (list != null && list.size() > 0) {
-                setFiles(list);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

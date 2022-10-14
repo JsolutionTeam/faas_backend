@@ -79,11 +79,10 @@ public class CommonUtil {
 
     /**
      * @param str
-     * @param algorithm
-     *            MD5, SHA-256...
+     * @param algorithm MD5, SHA-256...
      * @return
      */
-    public static final String hash(String str, String algorithm, byte[] salt, String digestEnc) {
+    public static String hash(String str, String algorithm, byte[] salt, String digestEnc) {
         if (str == null) {
             return null;
         }
@@ -126,7 +125,11 @@ public class CommonUtil {
     }
 
     public static final String sha256(String str, String salt, String digestEnc) {
-        return CommonUtil.hash(str, "SHA-256", salt.getBytes(), digestEnc);
+        return CommonUtil.hash(
+                str,
+                "SHA-256",
+                salt.getBytes(),
+                digestEnc);
     }
 
     public static final String mysqlPassword(String str) throws NoSuchAlgorithmException {
@@ -204,8 +207,7 @@ public class CommonUtil {
     /**
      * 비밀번호 유효성 검사
      *
-     * @param pwd
-     *            검사할 비밀번호
+     * @param pwd 검사할 비밀번호
      * @return
      */
     public static boolean isValidPassword(String pwd) {
@@ -215,10 +217,8 @@ public class CommonUtil {
     /**
      * URL encode
      *
-     * @param text
-     *            문자열
-     * @param enc
-     *            Charset
+     * @param text 문자열
+     * @param enc  Charset
      * @return 변환된 문자열
      */
     public static String urlEncode(String text, String enc) {

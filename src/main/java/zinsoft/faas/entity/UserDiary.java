@@ -39,7 +39,7 @@ public class UserDiary implements Serializable {
     private Long cropSeq; // 품목일련번호
     private Long userCropSeq; // 품목재배일련번호
 
-    private Long activityCropSeq; // 작물 번호
+//    private Long activityCropSeq; // 작물 번호
     private Long activitySeq; // 작업단계일련번호
 
 
@@ -89,7 +89,14 @@ public class UserDiary implements Serializable {
     private CropSpecies cropSpecies; // 품종 번호
 
     private Long cropPatternSeq; // 작형 번호
+
     // 추후에 JoinColumn 설정 하기
 //    private Long cropPatternSeq; // 작형 번호
+
+    public void insertSubInfo(CropSpecies cropSpecies) {
+        this.cropSpecies = cropSpecies;
+    }
+
+
 
 }
