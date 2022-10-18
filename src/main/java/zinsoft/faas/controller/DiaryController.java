@@ -14,6 +14,7 @@ import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.service.UserDiaryService;
 import zinsoft.faas.service.UserInoutService;
 import zinsoft.faas.service.impl.CropActivityServiceImpl;
+import zinsoft.faas.service.impl.UserDiaryServiceImpl;
 import zinsoft.faas.view.DiarySimpleExcelAdminView;
 import zinsoft.faas.view.DiarySimpleExcelView;
 import zinsoft.util.DataTablesResponse;
@@ -47,8 +48,8 @@ public class DiaryController {
     ServletContext servletContext;
 
     // 임플 파일 => UserDiaryServiceImpl
-    @Resource
-    UserDiaryService userDiaryService;
+    @Autowired
+    UserDiaryServiceImpl userDiaryService;
 
     @Resource
     UserInoutService userInoutService;

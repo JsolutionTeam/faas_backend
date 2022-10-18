@@ -302,7 +302,7 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
             if (StringUtils.isNotBlank(strCropSeq) != false) {
                 Long cropSeq = Long.valueOf(strCropSeq);
                 if (cropSeq > 0) {
-                    condition = condition.and(userDiary.cropSeq.eq(cropSeq));
+                    condition = condition.and(userDiary.cropSeq.cropCode.eq(String.valueOf(cropSeq)));
                 }
             }
         }

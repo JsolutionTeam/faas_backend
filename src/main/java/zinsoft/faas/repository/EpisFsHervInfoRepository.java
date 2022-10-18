@@ -9,5 +9,6 @@ import java.util.List;
 public interface EpisFsHervInfoRepository extends JpaRepository<EpisFsHervInfo, Long>{
 
     List<HervInfoDto> findAllByFarmCode(String farmCode);
+    List<String> findPestiKorNameByFarmCode(String farmCode);
 
 }

@@ -150,7 +150,7 @@ public class UserController {
 //        List<Asset> listEtcLiq = assetService.listByUpAcId("168");
 //        model.addAttribute("assetListLia", ListUtils.union(list, listEtcLiq));
 
-        //Crop
+        //SmartfarmCrop
         model.addAttribute("cropList", cropService.list());
         model.addAttribute("cropSCdList", codeService.list("CROP_S_CD"));
 

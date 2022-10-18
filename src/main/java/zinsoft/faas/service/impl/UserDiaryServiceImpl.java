@@ -26,18 +26,17 @@ import zinsoft.faas.dto.UserDiaryFileDto;
 import zinsoft.faas.dto.UserProductionDto;
 import zinsoft.faas.entity.UserDiary;
 import zinsoft.faas.repository.UserDiaryRepository;
-import zinsoft.faas.service.ActivityService;
 import zinsoft.faas.service.UserChemicalStockService;
-import zinsoft.faas.service.UserCropService;
 import zinsoft.faas.service.UserDiaryFileService;
 import zinsoft.faas.service.UserDiaryService;
 import zinsoft.faas.service.UserManureStockService;
 import zinsoft.faas.service.UserProductionService;
+import zinsoft.faas.entity.SmartfarmCrop;
+import zinsoft.faas.repository.SmartfarmCropRepository;
 import zinsoft.util.CommonUtil;
 import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
-import zinsoft.web.common.service.CodeService;
 import zinsoft.web.exception.CodeMessageException;
 
 @Service
@@ -66,6 +65,8 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Resource
     UserProductionService userProductionService;
 
+    @Autowired
+    private SmartfarmCropRepository cropRepository;
 
 
     @Value("${spring.data.web.pageable.size-parameter:}")
@@ -109,6 +110,12 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
         UserDiary userDiary = modelMapper.map(dto, UserDiary.class);
         egovLogger.info("diaryDto.getActivitySeq(2) : {}", dto.getActivitySeq());
+
+        String cropCode = dto.getCropCode();
+        if(cropCode != null){
+            Optional<SmartfarmCrop> crop = cropRepository.findByCropCode(cropCode);
+            if(crop.isPresent())userDiary.updateCrop(crop.get());
+        }
 
         userDiary = userDiaryRepository.save(userDiary);
 

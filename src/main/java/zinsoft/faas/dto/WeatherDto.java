@@ -6,9 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import zinsoft.faas.entity.SmartfarmCrop;
 
 @Getter
 @Setter
@@ -70,5 +69,6 @@ public class WeatherDto {
 //    @ApiModelProperty(notes = "습도")
 //    private Double reh;
 // //   private String skyTCdNm;
+
 
 }

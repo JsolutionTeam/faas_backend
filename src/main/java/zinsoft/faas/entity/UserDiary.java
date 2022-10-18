@@ -11,8 +11,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -36,7 +34,8 @@ public class UserDiary implements Serializable {
     private String statusCd; // 상태코드
     @Column(name = "diary_t_cd")
     private String diaryTCd; // 일지/계획
-    private Long cropSeq; // 품목일련번호
+
+//    private Long cropSeq; // 품목일련번호
     private Long userCropSeq; // 품목재배일련번호
 
 //    private Long activityCropSeq; // 작물 번호
@@ -76,11 +75,23 @@ public class UserDiary implements Serializable {
     private String gradeTCd; // 등급구분
 
     @Column(name="crop_b_cd")
-    private String cropBCd; // 품목 코드
+    private String cropBCd; // 이전 품목코드
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="herv_info_seq")
-    private EpisFsHervInfo hervInfo;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "crop_seq")
+    private SmartfarmCrop cropSeq;
 
+//    @Column(name="CROP_PESTI_CODE")
+//    private String cropPestiCode; // 품목 코드
+//
+//    @Column(name="CROP_KIND_CODE")
+//    private String cropKindCode; // 품목 코드
+//
+//    @Column(name="CROP_PATTERN_SEQ")
+//    private String cropPatternCode; // 품목 코드
+
+    public void updateCrop(SmartfarmCrop smc){
+        this.cropSeq= smc;
+    }
 
 }

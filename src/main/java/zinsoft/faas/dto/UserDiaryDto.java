@@ -60,28 +60,28 @@ public class UserDiaryDto {
     private Long userCropSeq;
 
     // 영농일지 품목, 품종, 작형 데이터 바인딩 추가
-    @Schema(name = "품목 번호")
-    @Min(value = 1)
-    private String cropBCd;
+//    @Schema(name = "품목 번호")
+//    @Min(value = 1)
+//    private String cropPestiSeq;
 
-    @Schema(name = "품목 명")
-    private String cropBCdNm;
+    @Schema(name = "작물 코드")
+    private String cropCode;
 
-    @Schema(name = "품종 번호(등록 수정 시 사용)")
-    @Min(value = 1)
-    private Long cropSpeciesSeq;
+//    @Schema(name = "품종")
+//    @Min(value = 1)
+//    private Long cropKindSeq;
 
-    @Schema(name = "품종 명")
-    @Min(value = 1)
-    private String cropSpeciesNm;
+//    @Schema(name = "품종 명")
+//    @Min(value = 1)
+//    private String cropKindNm;
 
-    @Schema(name = "작형 번호")
-    @Min(value = 1)
-    private Long cropPatternSeq; // 작형 번호
+//    @Schema(name = "작형 번호")
+//    @Min(value = 1)
+//    private Long cropPatternSeq; // 작형 번호
 
     @Schema(name = "작형 명")
     @Min(value = 1)
-    private String cropPatternNm; // 작형 번호
+    private String cropPatternNm; // 작형 명
 
     @ApiModelProperty(notes = "작업단계일련번호")
     @Min(value = 1)
@@ -220,6 +220,9 @@ public class UserDiaryDto {
     @ApiModelProperty(notes = "작업단계카운트")
     private Long actCnt;
 
+    // excel 생성 시 사용 - 변경하지 않을 것이라면 지우지 않을 것.
+    private String cropBCdNm;
+
     @QueryProjection
     public UserDiaryDto(UserDiary userDiary
             , String cropBCdNm
@@ -238,9 +241,14 @@ public class UserDiaryDto {
         this.updateDtm = userDiary.getUpdateDtm();
         this.statusCd = userDiary.getStatusCd();
         this.diaryTCd = userDiary.getDiaryTCd();
-        this.cropSeq = userDiary.getCropSeq();
+        // 변경점 -> 일반 컬럼에서 외래키 매핑컬럼으로 변경
+        try{
+            this.cropSeq = Long.parseLong(userDiary.getCropSeq().getCropCode());
+        }catch(Exception e){
+            this.cropSeq = null;
+        }
+
         this.userCropSeq = userDiary.getUserCropSeq();
-        this.cropBCd = userDiary.getCropBCd();
         this.activitySeq = userDiary.getActivitySeq();
         this.manSelf = userDiary.getManSelf();
         this.manSelfTm = userDiary.getManSelfTm();
@@ -267,8 +275,11 @@ public class UserDiaryDto {
         this.quan = userDiary.getQuan();
         this.gradeTCd = userDiary.getGradeTCd();
 
-        this.cropBCdNm = cropBCdNm;
+        this.cropCode = userDiary.getCropSeq().getCropCode();
+//        this.cropKindNm = userDiary.getSmartfarmCrop().getCode3();
+        this.cropPatternNm = userDiary.getCropSeq().getCode1(); // 임시. 추후에 변경해야 함.
 
+        this.cropBCdNm = cropBCdNm;
         this.diaryTCdNm = diaryTCdNm;
         this.skyTCdNm = skyTCdNm;
         this.packTCdNm = packTCdNm;

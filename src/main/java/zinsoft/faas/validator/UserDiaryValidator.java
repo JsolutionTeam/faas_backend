@@ -21,7 +21,7 @@ public class UserDiaryValidator implements Validator {
     CodeService codeService;
 
     //    @Autowired
-    //    CropService cropService;
+    //    SmartfarmCropService cropService;
 
     @Autowired
     ActivityService activityService;

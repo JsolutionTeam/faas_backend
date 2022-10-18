@@ -23,7 +23,7 @@ public class UserInoutValidator implements Validator {
     CodeService codeService;
 
 //    @Autowired
-//    CropService cropService;
+//    SmartfarmCropService cropService;
 
     @Autowired
     AccountService accountService;

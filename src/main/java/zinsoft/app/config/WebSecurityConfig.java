@@ -110,6 +110,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/").permitAll()
                 */
                 .and()
+                .authorizeRequests()
+                    .antMatchers("/smartfarm/**").permitAll()
+                .and()
                     .formLogin()
                     //.loginPage(Constants.WEB_SECURITY_LOGIN_PAGE) // authenticationEntryPoint에서 처리
                     .loginProcessingUrl(apiPrefix + Constants.WEB_SECURITY_LOGIN_PROCESSING_URL)
