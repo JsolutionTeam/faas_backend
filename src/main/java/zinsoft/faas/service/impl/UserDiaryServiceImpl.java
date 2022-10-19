@@ -239,19 +239,17 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 //        }
 //        return page;
         List<UserDiaryDto> list = null;
-        if (search.get(pageSizeParameter) != null) {
-            list = userDiaryMapper.page(search, pageable);
-        } else {
-            list = userDiaryMapper.list(search);
+        int count = 0;
+        try {
+            //
+            page = userDiaryRepository.page(search, pageable);
+//                list = userDiaryMapper.pageData(search, pageable);
+            if (list != null && list.size() > 0) {
+                setFiles(list);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        if (list != null && list.size() > 0) {
-             setFiles(list);
-        }
-
-        int count = userDiaryMapper.count(search);
-
-        page = new PageImpl<>(list, pageable, count);
         return DataTablesResponse.of(page);
 
     }
