@@ -45,6 +45,8 @@ public class UserInfo {
     private String note;
     private String admCd;
 
+    private String farmCode;
+
     @OneToMany(mappedBy = "userId")
     private List<UserRole> userRoleList;
 
