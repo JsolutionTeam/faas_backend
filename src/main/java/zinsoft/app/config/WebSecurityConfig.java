@@ -110,6 +110,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/").permitAll()
                 */
                 .and()
+                .authorizeRequests()
+                .antMatchers("/test/**").permitAll() //   /test/** 경로는 로그인 확인 x
+
+                .and()
                 .formLogin()
                 //.loginPage(Constants.WEB_SECURITY_LOGIN_PAGE) // authenticationEntryPoint에서 처리
                 .loginProcessingUrl(apiPrefix + Constants.WEB_SECURITY_LOGIN_PROCESSING_URL)
