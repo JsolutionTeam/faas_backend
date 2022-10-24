@@ -1,5 +1,6 @@
 package zinsoft.app.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,13 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import zinsoft.web.interceptor.CommonInterceptor;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${api.prefix:}")
     private String apiPrefix;
 
-    @Autowired
-    CommonInterceptor commonInterceptor;
+    private final CommonInterceptor commonInterceptor;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

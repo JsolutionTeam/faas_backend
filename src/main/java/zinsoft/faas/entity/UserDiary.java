@@ -29,46 +29,77 @@ public class UserDiary implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name="user_diary_seq")
     private Long userDiarySeq;
+    @Column(name="user_id")
     private String userId;
 
+    @Column(name="act_dt")
     private String actDt;
+    @Column(name="reg_dtm")
     private Date regDtm;
+    @Column(name="update_dtm")
     private Date updateDtm;
+    @Column(name="status_cd")
     private String statusCd;
     @Column(name = "diary_t_cd")
     private String diaryTCd;
+    @Column(name="crop_seq")
     private Long cropSeq;
+    @Column(name="user_crop_seq")
     private Long userCropSeq;
+    @Column(name="activity_seq")
     private Long activitySeq;
 
+    @Column(name="man_self")
     private Double manSelf;
+    @Column(name="man_Self_tm")
     private Integer manSelfTm;
+    @Column(name="man_self_tmm")
     private Integer manSelfTmm;
+    @Column(name="woman_self")
     private Double womanSelf;
+    @Column(name="woman_self_tm")
     private Integer womanSelfTm;
+    @Column(name="woman_self_tmm")
     private Integer womanSelfTmm;
+    @Column(name="man_Hire")
     private Double manHire;
+    @Column(name="man_hire_tm")
     private Integer manHireTm;
+    @Column(name="man_hire_tmm")
     private Integer manHireTmm;
+    @Column(name="woman_hire")
     private Double womanHire;
+    @Column(name="woman_hire_tm")
     private Integer womanHireTm;
+    @Column(name="woman_hire_tmm")
     private Integer womanHireTmm;
 
     @Column(name = "sky_t_cd")
     private String skyTCd;
+    @Column(name="temp")
     private Float temp;
+    @Column(name="reh")
     private Float reh;
+    @Column(name="tmn")
     private Float tmn;
+    @Column(name="tmx")
     private Float tmx;
+    @Column(name="rnf")
     private Float rnf;
 
+    @Column(name="memo")
     private String memo;
+    @Column(name="remark")
     private String remark;
+    @Column(name="act_nm")
     private String actNm;
+    @Column(name="unit_pack")
     private Long unitPack;
     @Column(name = "pack_t_cd")
     private String packTCd;
+    @Column(name="quan")
     private Double quan;
 
     @Column(name = "grade_t_cd")

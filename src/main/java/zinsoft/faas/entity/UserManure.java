@@ -26,11 +26,17 @@ public class UserManure {
 
     @Id
     @GeneratedValue
+    @Column(name="user_manure_seq")
     private Long userManureSeq;
+    @Column(name="user_id")
     private String userId;
+    @Column(name="reg_dtm")
     private Date regDtm;
+    @Column(name="update_dtm")
     private Date updateDtm;
+    @Column(name="status_cd")
     private String statusCd;
+    @Column(name="manure_nm")
     private String manureNm;
 
     @Column(name="pack_t_cd")
@@ -41,7 +47,9 @@ public class UserManure {
     @Column(name="manure_t_cd2")
     private String manureTCd2;
 
+    @Column(name="maker_nm")
     private String makerNm;
+    @Column(name="remark")
     private String remark;
 
     @Column(name="cp_fer_n")

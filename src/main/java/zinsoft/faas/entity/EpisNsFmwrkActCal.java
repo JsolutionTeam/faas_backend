@@ -10,7 +10,9 @@ import javax.persistence.Table;
 @Entity
 @Table(
         name="epis_ns_fmwrk_act_cal",
-        catalog = "${catalog.config.bdm}"
+        catalog = "bdm"
+        // MultiSchemaPhysicalNamingStrategy 파일에서 커스텀함.
+        //application-{profiles}.properties 파일 에서 catalog.config.{name} 값 가져옴
 )
 @Getter
 @NoArgsConstructor
@@ -22,37 +24,37 @@ public class EpisNsFmwrkActCal {
     @Column(name="seq", insertable = false, updatable = false, nullable = false, length = 11)
     private Long id;
 
-    @Column(name = "FMWRK_ACT_CODE", updatable = false, insertable = false, length = 30)
+    @Column(name = "fmwrk_act_code", updatable = false, insertable = false, length = 30)
     private String fmwrkActCode;
 
-    @Column(name = "ROW_GBN")
+    @Column(name = "row_gbn")
     private Integer rowGbn;
 
-    @Column(name = "START_MONTH")
+    @Column(name = "start_month")
     private Integer startMonth;
 
-    @Column(name = "START_QUART")
+    @Column(name = "start_quart")
     private Integer startQuart;
 
-    @Column(name = "END_MONTH")
+    @Column(name = "end_month")
     private Integer endMonth;
 
-    @Column(name = "END_QUART")
+    @Column(name = "end_quart")
     private Integer endQuart;
 
-    @Column(name = "GROW_STEP_ELY")
+    @Column(name = "grow_step_ely")
     private String growStepEly;
 
-    @Column(name = "GROW_STEP_MID")
+    @Column(name = "grow_step_mid")
     private String growStepMid;
 
-    @Column(name = "GROW_STEP_LST")
+    @Column(name = "grow_step_lst")
     private String growStepLst;
 
-    @Column(name = "FMWRK_NM")
+    @Column(name = "fmwrk_nm")
     private String fmwrkNm;
 
-    @Column(name = "FMWRK_DESC", length = 65530)
+    @Column(name = "fmwrk_desc", length = 65530)
     private String fmwrkDesc;
 
 

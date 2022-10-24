@@ -23,8 +23,10 @@ import lombok.ToString;
 @DynamicUpdate
 public class UserDiaryFile {
     @Id
+    @Column(name="user_diary_seq")
     private Long userDiarySeq;
     @Id
+    @Column(name="file_seq")
     private Long fileSeq;
     @Column(name = "file_k_cd")
     private String fileKCd;

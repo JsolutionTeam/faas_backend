@@ -26,10 +26,14 @@ public class Cal implements Serializable {
     public static final String CAL_T_CD_SOLAR_TERM = "1";
 
     @Id
+    @Column(name="cal_dt")
     private String calDt;
+    
     @Id
     @Column(name = "cal_t_cd")
     private String calTCd;
+    
+    @Column(name="expr_nm")
     private String exprNm;
 
 }

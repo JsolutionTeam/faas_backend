@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -25,11 +22,22 @@ public class UserRoleHist {
 
     @Id
     @GeneratedValue
+    @Column(name="user_role_hist_seq")
     private Long userRoleHistSeq;
+
+    @Column(name="worker_id")
     private String workerId;
+
+    @Column(name="work_dtm")
     private Date workDtm;
+
+    @Column(name="work_cd")
     private String workCd;
+
+    @Column(name="user_id")
     private String userId;
+
+    @Column(name="role_id")
     private String roleId;
 
 }

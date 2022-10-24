@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,10 +23,15 @@ public class MenuRole implements Serializable {
     private static final long serialVersionUID = -1695530510133033315L;
 
     @Id
+    @Column(name="menu_id")
     private String menuId;
+
     @Id
+    @Column(name="role_id")
     private String roleId;
+
     @Id
+    @Column(name="act_cd")
     private String actCd;
 
 }

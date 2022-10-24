@@ -26,18 +26,41 @@ public class Crop {
 
     @Id
     @GeneratedValue
+
+    @Column(name="crop_seq")
     private Long cropSeq;
 
+    @Column(name="reg_dtm")
     private Date regDtm;
+
+    @Column(name="update_dtm")
     private Date updateDtm;
+
+    @Column(name="status_cd")
     private String statusCd;
+
+    @Column(name="expr_nm")
     private String exprNm;
+
+    @Column(name="expr_yn")
     private String exprYn;
+
+    @Column(name="update_yn")
     private String updateYn;
+
+    @Column(name="delete_yn")
     private String deleteYn;
+
+    @Column(name="ser_life")
     private Long serLife;
+
+    @Column(name="ma_life")
     private Long maLife;
+
+    @Column(name="asset_yn")
     private String assetYn;
+
+    @Column(name="croping_yn")
     private String cropingYn;
 
     @Column(name = "crop_a_cd")

@@ -1,9 +1,6 @@
 package zinsoft.faas.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -25,8 +22,10 @@ import lombok.ToString;
 public class UserInoutFile {
 
     @Id
+    @Column(name="user_inout_seq")
     private Long userInoutSeq;
     @Id
+    @Column(name="file_seq")
     private Long fileSeq;
 
     public UserInoutFile(UserInout userInout) {

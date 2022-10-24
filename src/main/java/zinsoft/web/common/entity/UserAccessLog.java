@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -25,14 +22,30 @@ public class UserAccessLog {
 
     @Id
     @GeneratedValue
+    @Column(name="user_access_log_seq")
     private Long userAccessLogSeq;
+
+    @Column(name="access_dtm")
     private Date accessDtm;
+
+    @Column(name="user_id")
     private String userId;
+
+    @Column(name="in_out")
     private String inOut;
+
+    @Column(name="success_yn")
     private String successYn;
+
+    @Column(name="remote_addr")
     private String remoteAddr;
+
+    @Column(name="user_agent")
     private String userAgent;
+
+    @Column(name="note")
     private String note;
+
 
     //@Transient
     //private String inOutNm;

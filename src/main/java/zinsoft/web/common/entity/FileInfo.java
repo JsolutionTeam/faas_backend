@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -25,14 +22,32 @@ public class FileInfo {
 
     @Id
     @GeneratedValue
+    @Column(name="file_seq")
     private Long fileSeq;
+    
+    @Column(name="reg_dtm")
     private Date regDtm;
+    
+    @Column(name="update_dtm")
     private Date updateDtm;
+    
+    @Column(name="status_cd")
     private String statusCd;
+    
+    @Column(name="user_id")
     private String userId;
+    
+    @Column(name="saved_nm")
     private String savedNm;
+    
+    @Column(name="file_size")
     private Long fileSize;
+    
+    @Column(name="file_nm")
     private String fileNm;
+    
+    @Column(name="content_type")
     private String contentType;
 
+    
 }

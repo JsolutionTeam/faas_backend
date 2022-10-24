@@ -9,14 +9,14 @@ import zinsoft.faas.service.EpisNsFmwrkActCalService;
 import zinsoft.util.Result;
 
 @RestController
-@RequestMapping("/test")
-public class AATestController {
+@RequestMapping("/api/bdm")
+public class BdmController {
 
     @Autowired
     private EpisNsFmwrkActCalService actCalService;
 
-    @GetMapping("/fmwrkcal/{actcd}")
-    public Result getFmwrkcalTest(@PathVariable String actcd){
-        return new Result(true, Result.OK, actCalService.getByActCode(actcd));
+    @GetMapping("/bdm/fmwrk/act/cal/{actCode}")
+    public Result getFmwrkActCalByActCode(@PathVariable String actCode){
+        return new Result(true, Result.OK, actCalService.getByActCode(actCode));
     }
 }

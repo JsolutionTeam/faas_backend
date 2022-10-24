@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
+
 @Getter
 @Setter
 @ToString
@@ -16,7 +18,9 @@ import lombok.ToString;
 public class UserInoutFileId implements Serializable {
 
     private static final long serialVersionUID = 3243831120064416691L;
+    @Column(name="user_inout_seq")
     private Long userInoutSeq;
+    @Column(name="file_seq")
     private Long fileSeq;
 
 }
