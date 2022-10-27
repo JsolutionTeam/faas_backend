@@ -52,8 +52,11 @@ public class MultiSchemaPhysicalNamingStrategy extends PhysicalNamingStrategySta
         @Override
     public Identifier toPhysicalCatalogName(Identifier name, JdbcEnvironment jdbcEnvironment) {
         if (name != null) {
-            Identifier identifier = Identifier.toIdentifier(schemaConfiguration.getConfig()
-                    .get(name.getText()), name.isQuoted());
+            Identifier identifier = Identifier
+                    .toIdentifier(
+                        schemaConfiguration.getConfig().get(name.getText())
+                            , name.isQuoted()
+                    );
             return super.toPhysicalSchemaName(identifier, jdbcEnvironment);
         }
         return null;

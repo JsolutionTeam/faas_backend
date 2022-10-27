@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name="consulting_data", catalog = "sangju_adv")
+@Table(name="consulting_data", catalog = "adv")
 @Getter
 public class Consultant {
 

@@ -20,11 +20,18 @@ public class ApiAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
     @Value("${api.prefix:}")
     private String apiPrefix;
 
-    @Autowired
-    ServletContext servletContext;
+    private ServletContext servletContext;
 
-    @Resource
-    ApiAccessLogRepository apiAccessLogRepository;
+    private ApiAccessLogRepository apiAccessLogRepository;
+
+    @Autowired
+    public ApiAccessLogServiceImpl(
+            @Autowired ServletContext servletContext,
+            @Autowired ApiAccessLogRepository apiAccessLogRepository
+    ){
+        this.servletContext = servletContext;
+        this.apiAccessLogRepository = apiAccessLogRepository;
+    }
 
     @Override
     public void insert(String path, String method, String userId, String remoteAddr, String note) {

@@ -3,6 +3,7 @@ package zinsoft.app.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,14 +40,14 @@ import zinsoft.web.security.Sha256PasswordEncoder;
 import zinsoft.web.security.WebUserDetailsService;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${api.prefix:}")
     private String apiPrefix;
 
-    @Autowired
-    private CorsFilter corsFilter;
+    private final CorsFilter corsFilter;
 
     //@formatter:off
 
@@ -151,8 +152,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager authenticationManager = super.authenticationManagerBean();
-        return authenticationManager;
+        return super.authenticationManagerBean();
     }
 
     @Bean
@@ -170,7 +170,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         RoleVoter roleVoter = new RoleVoter();
         roleVoter.setRolePrefix("");
 
-        List<AccessDecisionVoter<? extends Object>> decisionVoterList = new ArrayList<AccessDecisionVoter<? extends Object>>();
+        List<AccessDecisionVoter<?>> decisionVoterList = new ArrayList<AccessDecisionVoter<? extends Object>>();
         decisionVoterList.add(roleVoter);
         decisionVoterList.add(new AuthenticatedVoter());
 

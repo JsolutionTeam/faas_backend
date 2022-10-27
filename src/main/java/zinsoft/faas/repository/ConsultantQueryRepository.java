@@ -36,16 +36,18 @@ public class ConsultantQueryRepository extends QuerydslRepositorySupport {
     }
 
     public List<ConsultantResDto> findMyConsultant(){
-        UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        String farmCode = userInfo.getFarmCode();
-        List<ConsultantResDto> consults = queryFactory.select(
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        if(farmerInfo == null)return null;
+
+        String farmCode = farmerInfo.getFarmCode();
+
+        return queryFactory.select(
                         new QConsultantResDto(consultant)
                 ).from(consultant)
                 .where(
                         isFarmerNoEq(farmCode),
                         isNowBetweenStartAndEnd()
                 ).fetch();
-        return consults;
     }
 
     private BooleanExpression isFarmerNoEq(String farmCode){

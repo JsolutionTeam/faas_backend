@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -21,28 +22,22 @@ import zinsoft.faas.dto.UserManureStockDto;
 import zinsoft.faas.dto.UserProductionDto;
 import zinsoft.faas.dto.UserShipDto;
 @Component
+@RequiredArgsConstructor
 public class CommonValidator implements Validator {
 
-    @Autowired
-    UserCropValidator userCropValidator;
+    private final UserCropValidator userCropValidator;
 
-    @Autowired
-    UserDiaryValidator userDiaryValidator;
+    private final UserDiaryValidator userDiaryValidator;
 
-    @Autowired
-    UserInoutValidator userInoutValidator;
+    private final UserInoutValidator userInoutValidator;
 
-    @Autowired
-    UserChemicalStockValidator userChemicalStockValidator;
+    private final UserChemicalStockValidator userChemicalStockValidator;
 
-    @Autowired
-    UserManureStockValidator userManureStockValidator;
+    private final UserManureStockValidator userManureStockValidator;
 
-    @Autowired
-    UserShipValidator userShipValidator;
+    private final UserShipValidator userShipValidator;
 
-    @Autowired
-    UserProductionValidator userProductionValidator;
+    private final UserProductionValidator userProductionValidator;
 
     List<Class<?>> list = null;
 
@@ -54,27 +49,28 @@ public class CommonValidator implements Validator {
             URL directoryURL = Thread.currentThread().getContextClassLoader().getResource(packageNmSlash);
             if(directoryURL == null) {
                 System.out.println("Could not retrive URL resource : " + directoryURL);
-            }
-
-            String sDirectory = directoryURL.getFile();
-            if(sDirectory == null) {
-                System.out.println("Could not find directory : " + sDirectory);
-            }
-            File dirFile = new File(sDirectory);
-            if(dirFile.exists()) {
-                String[] files = dirFile.list();
-                list = new ArrayList<>();
-                for(String filename : files) {
-                    filename = filename.substring(0, filename.length()-6);
-                    try {
-                        Class<?> c = Class.forName(packageNm+"."+filename);
-                        list.add(c);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                        e.printStackTrace();
+            }else{
+                String sDirectory = directoryURL.getFile();
+                if(sDirectory == null) {
+                    System.out.println("Could not find directory : " + sDirectory);
+                }else{
+                    File dirFile = new File(sDirectory);
+                    if(dirFile.exists()) {
+                        String[] files = dirFile.list();
+                        list = new ArrayList<>();
+                        for(String filename : files) {
+                            filename = filename.substring(0, filename.length()-6);
+                            try {
+                                Class<?> c = Class.forName(packageNm+"."+filename);
+                                list.add(c);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
+                        }
+                        list.add(File.class);
                     }
                 }
-                list.add(File.class);
             }
         }
     }

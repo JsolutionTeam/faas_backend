@@ -1,6 +1,7 @@
 package zinsoft.util;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -157,6 +158,7 @@ public class UserInfoUtil {
         try {
             ServletRequestAttributes requestAttr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             HttpSession session = requestAttr.getRequest().getSession();
+            Enumeration<String> names = session.getAttributeNames();
             UserInfoDto farmerInfoDto = (UserInfoDto) session.getAttribute(Constants.SESSION_FARMER_INFO);
 
             if (farmerInfoDto != null) {
