@@ -112,7 +112,7 @@ public class UserProductionServiceImpl extends EgovAbstractServiceImpl implement
         dto.setUpdateYn("N");
         dto.setDeleteYn("N");
 
-        if(UserDiaryDto.DIARY_T_CD_DIARY.equals(diaryDto.getDiaryTCd()) == true) {
+        if(UserDiaryDto.DIARY_T_CD_DIARY.equals(diaryDto.getDiaryTCd())) {
             dto.setPlanTCd(UserProductionDto.PLAN_T_CD_ACTUAL);
         } else {
             dto.setPlanTCd(UserProductionDto.PLAN_T_CD_BUDGET);
@@ -183,7 +183,7 @@ public class UserProductionServiceImpl extends EgovAbstractServiceImpl implement
         }
 
         if(dto != null) {
-            if (diaryDto.getQuan() == null || diaryDto.getQuan() <= 0 || StringUtils.isBlank(diaryDto.getPackTCd()) == true) {
+            if (diaryDto.getQuan() == null || diaryDto.getQuan() <= 0 || StringUtils.isBlank(diaryDto.getPackTCd())) {
                 deleteByUserDiarySeq(dto.getUserId(), dto.getUserDiarySeq());
             } else {
                 dto.setUpdateDtm(new Date());
@@ -191,7 +191,7 @@ public class UserProductionServiceImpl extends EgovAbstractServiceImpl implement
                 dto.setPrdDt(diaryDto.getActDt());
                 dto.setQuan(diaryDto.getQuan());
                 dto.setPackTCd(diaryDto.getPackTCd());
-                if(UserDiaryDto.DIARY_T_CD_DIARY.equals(diaryDto.getDiaryTCd()) == true) {
+                if(UserDiaryDto.DIARY_T_CD_DIARY.equals(diaryDto.getDiaryTCd())) {
                     dto.setPlanTCd(UserProductionDto.PLAN_T_CD_ACTUAL);
                 } else {
                     dto.setPlanTCd(UserProductionDto.PLAN_T_CD_BUDGET);

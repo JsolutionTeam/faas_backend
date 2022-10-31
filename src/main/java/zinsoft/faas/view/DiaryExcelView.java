@@ -625,7 +625,7 @@ public class DiaryExcelView extends AbstractExcelView {
         }
         setText(contentRow, col++, cropNm, dataLStyle);
         col += 2;
-        setText(contentRow, col++, vo.getActNm(), dataLStyle);
+        setText(contentRow, col++, vo.getFmwrkCdNm(), dataLStyle);
         col += 2;
         setNumber2(contentRow, col++, vo.getManSelf() != null && vo.getManSelf() != 0 ? vo.getManSelf() : "");
         setNumber2(contentRow, col++, vo.getManSelfTm() != null && vo.getManSelfTm() != 0 ? vo.getManSelfTm() : "");

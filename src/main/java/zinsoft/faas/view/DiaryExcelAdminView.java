@@ -170,7 +170,7 @@ public class DiaryExcelAdminView extends AbstractExcelView {
                 setText(row, col++, getFullDate(vo.getActDt()), dataCStyle);
                 setText(row, col++, vo.getDiaryTCdNm(), dataCStyle);
                 setText(row, col++, vo.getCropNm(), dataLStyle);
-                setText(row, col++, vo.getActNm(), dataLStyle);
+                setText(row, col++, vo.getFmwrkCdNm(), dataLStyle);
                 setText(row, col++, vo.getRemark(), dataLStyle);
                 setText(row, col++, vo.getSkyTCdNm(), dataLStyle);
                 setNumber(row, col++, vo.getTmn());

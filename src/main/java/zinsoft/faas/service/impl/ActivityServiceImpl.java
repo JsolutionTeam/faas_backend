@@ -76,7 +76,7 @@ public class ActivityServiceImpl extends EgovAbstractServiceImpl implements Acti
         if (list == null || list.isEmpty()) {
             UserCropDto userCrop = userCropService.get(userId, cropSeq, userCropSeq);
             if (userCrop != null) {
-                if("1".equals(userCrop.getPartTCd()) == true) { // 사업유형 - 생산
+                if("1".equals(userCrop.getPartTCd())) { // 사업유형 - 생산
                     list = activityMapper.listByCropSeq(cropSeq, "seq");
                 } else {
                     list = activityMapper.listByPartTCd(userCrop.getPartTCd());

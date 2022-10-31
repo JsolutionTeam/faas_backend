@@ -204,7 +204,7 @@ public class UserShipServiceImpl extends EgovAbstractServiceImpl implements User
         }
 
         if(dto != null) {
-            if (("503".equals(inoutDto.getAcId()) == false) || inoutDto.getQuan() == null || inoutDto.getQuan() <= 0 || StringUtils.isBlank(inoutDto.getPackTCd()) == true) {
+            if (("503".equals(inoutDto.getAcId()) == false) || inoutDto.getQuan() == null || inoutDto.getQuan() <= 0 || StringUtils.isBlank(inoutDto.getPackTCd())) {
                 deleteByUserInoutSeq(dto.getUserId(), dto.getUserInoutSeq());
             } else {
                 dto.setUpdateDtm(new Date());

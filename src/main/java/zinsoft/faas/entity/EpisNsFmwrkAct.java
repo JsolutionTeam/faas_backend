@@ -28,7 +28,7 @@ public class EpisNsFmwrkAct {
     private String fmwrkActCode;
 
     @Column(name = "cropcd", length = 50, insertable = false, updatable = false)
-    private String cropCde;
+    private String cropCd;
 
     @Column(name = "reg_id", length = 30, insertable = false, updatable = false)
     private String regId;

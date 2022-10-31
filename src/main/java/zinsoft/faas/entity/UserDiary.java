@@ -44,12 +44,6 @@ public class UserDiary implements Serializable {
     private String statusCd;
     @Column(name = "diary_t_cd")
     private String diaryTCd;
-    @Column(name="crop_seq")
-    private Long cropSeq;
-    @Column(name="user_crop_seq")
-    private Long userCropSeq;
-    @Column(name="activity_seq")
-    private Long activitySeq;
 
     @Column(name="man_self")
     private Double manSelf;
@@ -93,8 +87,8 @@ public class UserDiary implements Serializable {
     private String memo;
     @Column(name="remark")
     private String remark;
-    @Column(name="act_nm")
-    private String actNm;
+    @Column(name = "grade_t_cd")
+    private String gradeTCd;
     @Column(name="unit_pack")
     private Long unitPack;
     @Column(name = "pack_t_cd")
@@ -102,7 +96,14 @@ public class UserDiary implements Serializable {
     @Column(name="quan")
     private Double quan;
 
-    @Column(name = "grade_t_cd")
-    private String gradeTCd;
-
+    @Column(name = " crop_cd")
+    private String cropCd;
+    @Column(name = "grow_step")
+    private String growStep;
+    @Column(name = "fmwrk_cd")
+    private String fmwrkCd;
+    @Column(name = "recommend")
+    private String recommend;
+    @Column(name="comment")
+    private String comment;
 }

@@ -70,19 +70,19 @@ public class InoutExcelView extends AbstractExcelView {
         }
 
         String costTCdNm = cond.get("costTCdNm");
-        if(StringUtils.isNotEmpty(costTCdNm) == true) {
+        if(StringUtils.isNotEmpty(costTCdNm)) {
             setText(row++, 0, "종류 : " + (cond.get("costTCdNm") != null ? cond.get("costTCdNm") : "전체"), summaryStyle);
         }
 
         String inoutTCdNm = cond.get("inoutTCdNm");
-        if(StringUtils.isNotEmpty(inoutTCdNm) == true) {
+        if(StringUtils.isNotEmpty(inoutTCdNm)) {
             setText(row++, 0, "결제 구분 : " + (cond.get("inoutTCdNm") != null ? cond.get("inoutTCdNm") : "전체"), summaryStyle);
         }
 
         if (isAdmin) {
             String f = cond.get("field");
             String k = cond.get("keyword");
-            if(StringUtils.isNoneEmpty(k) == true) {
+            if(StringUtils.isNoneEmpty(k)) {
                 switch (f) {
                     case "userId":
                         setText(row++, 0, "ID : " + (k != null ? k : ""), summaryStyle);
@@ -102,7 +102,7 @@ public class InoutExcelView extends AbstractExcelView {
             }
         } else {
             String k = cond.get("keyword");
-            if(StringUtils.isNoneEmpty(k) == true) {
+            if(StringUtils.isNoneEmpty(k)) {
                 setText(row++, 0, "내용 : " + (k != null ? k : ""), summaryStyle);
             }
         }

@@ -42,17 +42,11 @@ public class EpisNsFmwrkActCal {
     @Column(name = "end_quart")
     private Integer endQuart;
 
-    @Column(name = "grow_step_ely")
-    private String growStepEly;
+    @Column(name = "grow_step")
+    private String growStep;
 
-    @Column(name = "grow_step_mid")
-    private String growStepMid;
-
-    @Column(name = "grow_step_lst")
-    private String growStepLst;
-
-    @Column(name = "fmwrk_nm")
-    private String fmwrkNm;
+    @Column(name = "fmwrk_cd")
+    private String fmwrkCd;
 
     @Column(name = "fmwrk_desc", length = 65530)
     private String fmwrkDesc;

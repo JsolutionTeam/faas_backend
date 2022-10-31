@@ -26,8 +26,6 @@ public interface UserDiaryService {
 
     List<String> listYear(String userId, String diaryTCd, String year);
 
-    int countUsedCrop(String userId, Long userCropSeq);
-
     void update(UserDiaryDto dto) throws IllegalStateException, IOException;
 
     void update(UserProductionDto dto);

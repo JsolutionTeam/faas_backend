@@ -66,7 +66,7 @@ public class UserActivityService extends EgovAbstractServiceImpl {
             UserCropDto userCrop = userCropService.get(userId, cropSeq, userCropSeq);
             if (userCrop != null) {
                 List<ActivityDto> activityList = null;
-                if("1".equals(userCrop.getPartTCd()) == true) { // 사업유형 - 생산
+                if("1".equals(userCrop.getPartTCd())) { // 사업유형 - 생산
                     activityList = activityService.listByCropSeq(cropSeq, "seq");
                 } else {
                     activityList = activityService.listByPartTCd(userCrop.getPartTCd());

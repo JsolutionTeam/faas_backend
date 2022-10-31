@@ -95,7 +95,11 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
                 dto.setUserId(diaryDto.getUserId());
                 dto.setInoutDt(diaryDto.getActDt());
                 dto.setSupInoutCd("O");
-                dto.setCropSeq(diaryDto.getCropSeq());
+                Long cropCd = null;
+                try{
+                    cropCd = Long.parseLong(diaryDto.getCropCd());
+                }catch(Exception ignore){}
+                dto.setCropSeq(cropCd);
                 dto.setUserCropSeq(diaryDto.getUserCropSeq());
                 dto.setRemark("영농일지 입력");
                 dto.setUpdateYn("N");
@@ -167,11 +171,7 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
             search.put("edDt", edDt);
         }
 
-        List<UserManureStockDto> list = userManureStockMapper.page(search, pageable);
-        int count = userManureStockMapper.count(search);
-
-        page = new PageImpl<>(list, pageable, count);
-        return DataTablesResponse.of(page);
+        return DataTablesResponse.of(userManureStockRepository.page(search, pageable));
     }
 
 //    @Override
@@ -240,7 +240,11 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
                 if (dto != null) {
                     dto.setUserId(diaryDto.getUserId());
                     dto.setInoutDt(diaryDto.getActDt());
-                    dto.setCropSeq(diaryDto.getCropSeq());
+                    Long cropCd = null;
+                    try{
+                        cropCd = Long.parseLong(diaryDto.getCropCd());
+                    }catch(Exception ignore){}
+                    dto.setCropSeq(cropCd);
                     dto.setUserCropSeq(diaryDto.getUserCropSeq());
                     dto.setSupInoutCd("O");
                     dto.setDeleteYn("N");

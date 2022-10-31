@@ -222,9 +222,9 @@ public class DiarySimpleExcelAdminView extends AbstractExcelView {
                 setText(row, col++, setDashDate(vo.getActDt()), dataCStyle);
                 setText(row, col++, vo.getDiaryTCdNm(), dataCStyle);
                 if(vo.getActCnt() > 1) {
-                    setText(row, col++, vo.getActNm() + " " + vo.getInning() + "차", dataCStyle);
+                    setText(row, col++, vo.getFmwrkCdNm() + " " + vo.getInning() + "차", dataCStyle);
                 } else {
-                    setText(row, col++, vo.getActNm(), dataCStyle);
+                    setText(row, col++, vo.getFmwrkCdNm(), dataCStyle);
                 }
                 setText(row, col++, remark != null?(remark).replace(System.getProperty("line.separator"), " "): "", dataLStyle);
                 setText(row, col++, vo.getSkyTCdNm(), dataCStyle);

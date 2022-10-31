@@ -1,5 +1,6 @@
 package zinsoft.faas.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import zinsoft.faas.entity.EpisNsFmwrkActCal;
@@ -22,16 +23,13 @@ public class EpisNsFmwrkActCalResDto {
 
     private Integer endQuart;
 
-    private String growStepEly;
+    private String growStep;
 
-    private String growStepMid;
-
-    private String growStepLst;
-
-    private String fmwrkNm;
+    private String fmwrkCd;
 
     private String fmwrkDesc;
 
+    @QueryProjection
     public EpisNsFmwrkActCalResDto(EpisNsFmwrkActCal fac){
         this.id = fac.getId();
         this.fmwrkActCode = fac.getFmwrkActCode();
@@ -40,10 +38,8 @@ public class EpisNsFmwrkActCalResDto {
         this.startQuart = fac.getStartQuart();
         this.endMonth = fac.getEndMonth();
         this.endQuart = fac.getEndQuart();
-        this.growStepEly = fac.getGrowStepEly();
-        this.growStepMid = fac.getGrowStepMid();
-        this.growStepLst = fac.getGrowStepLst();
-        this.fmwrkNm = fac.getFmwrkNm();
+        this.growStep = fac.getGrowStep();
+        this.fmwrkCd = fac.getFmwrkCd();
         this.fmwrkDesc = fac.getFmwrkDesc();
     }
 }

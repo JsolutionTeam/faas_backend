@@ -6,7 +6,7 @@ import zinsoft.faas.entity.EpisNsFmwrkActCal;
 
 import java.util.List;
 
-public interface EpisnsFmwrkActCalRespository extends JpaRepository<EpisNsFmwrkActCal, Long> {
+public interface EpisNsFmwrkActCalRespository extends JpaRepository<EpisNsFmwrkActCal, Long> {
     List<EpisNsFmwrkActCalResDto> findAllByFmwrkActCode(String actCode);
 
 }

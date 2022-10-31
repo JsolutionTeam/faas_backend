@@ -16,7 +16,7 @@ public class EpisNsFmwrkActResDto {
     private String fmwrkActCode;
 
     @Schema(name="작물코드")
-    private String cropCde;
+    private String cropCd;
 
     @Schema(name="등록자")
     private String regId;
@@ -29,7 +29,7 @@ public class EpisNsFmwrkActResDto {
 
     public EpisNsFmwrkActResDto(EpisNsFmwrkAct fa){
         this.fmwrkActCode = fa.getFmwrkActCode();
-        this.cropCde = fa.getCropCde();
+        this.cropCd = fa.getCropCd();
         this.regId = fa.getRegId();
         this.regDt = fa.getRegDt();
         this.updId = fa.getUpdId();

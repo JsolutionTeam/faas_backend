@@ -29,6 +29,10 @@ public class Result {
     public static final String INVALID_ACTIVITY = "4000013";
     public static final String ALREADY_COST = "4000014";
 
+    public static final String INVALID_CROPCD   = "4000100";
+    public static final String INVALID_GROWSTEP = "4000101";
+    public static final String INVALID_FMWRKCD  = "4000102";
+
     public static final String UNAUTHORIZED = "4010000";
     public static final String LOGIN_FAIL = "4010001";
     public static final String PASSWORD_MISMATCH = "4010002";

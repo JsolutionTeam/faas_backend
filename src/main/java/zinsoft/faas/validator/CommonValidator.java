@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -23,6 +24,7 @@ import zinsoft.faas.dto.UserProductionDto;
 import zinsoft.faas.dto.UserShipDto;
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CommonValidator implements Validator {
 
     private final UserCropValidator userCropValidator;
@@ -65,6 +67,7 @@ public class CommonValidator implements Validator {
                                 list.add(c);
                             } catch (Exception e) {
                                 // TODO: handle exception
+
                                 e.printStackTrace();
                             }
                         }

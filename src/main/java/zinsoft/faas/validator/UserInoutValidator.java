@@ -67,7 +67,7 @@ public class UserInoutValidator implements Validator {
         }
 
         Map<String, Object> param = new HashMap<>();
-        if(UserInoutDto.INOUT_CD_INCOME.equals(userInoutDto.getInoutCd()) == true) {
+        if(UserInoutDto.INOUT_CD_INCOME.equals(userInoutDto.getInoutCd())) {
             param.clear();
             param.put("upAcId", "500");//영업수익
             param.put("acId", userInoutDto.getUpAcId());
@@ -75,7 +75,7 @@ public class UserInoutValidator implements Validator {
             if(listAccountDto == null || listAccountDto.size() == 0) {
                 errors.rejectValue("upAcId", Result.INVALID_AC_ID);
             }
-        } else if(UserInoutDto.INOUT_CD_OUTGOING.equals(userInoutDto.getInoutCd()) == true) {
+        } else if(UserInoutDto.INOUT_CD_OUTGOING.equals(userInoutDto.getInoutCd())) {
             param.clear();
             param.put("upAcId", "400");//비용
             param.put("acId", userInoutDto.getUpAcId());
