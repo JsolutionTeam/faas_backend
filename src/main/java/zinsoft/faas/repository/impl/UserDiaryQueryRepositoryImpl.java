@@ -34,6 +34,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.entity.QActivity;
+import zinsoft.faas.entity.QEpisNsFmwrkWrkcd;
+import zinsoft.faas.entity.QMgrCropDetail;
 import zinsoft.faas.entity.QUserDiary;
 import zinsoft.faas.repository.UserDiaryQueryRepository;
 import zinsoft.util.Constants;
@@ -199,7 +201,7 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
     public Page<UserDiaryDto> page(Map<String, Object> search, Pageable pageable) {
         // @formatter:off
         JPQLQuery<UserDiaryDto> jpqQuery = query.select(allFields)
-                .from(userDiary)
+                                            .from(userDiary)
                 .leftJoin(mgrCropDetail).on(userDiary.cropCd.eq(mgrCropDetail.id.code)).fetchJoin()
                 .leftJoin(mgrCropDetail).on(userDiary.growStep.eq(mgrCropDetail.id.code)).fetchJoin()
                 .leftJoin(episNsFmwrkWrkcd).on(userDiary.fmwrkCd.eq(episNsFmwrkWrkcd.fmwrkCd)).fetchJoin()
@@ -376,22 +378,22 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
             condition = condition.and(userDiary.actDt.startsWith(actDt));
         }
 
-        return query.select( episNsFmwrkWrkcd.fmwrkNm,
-                        episNsFmwrkWrkcd.fmwrkCd.count()
-                )
-                .from(userDiary)
-                .join(episNsFmwrkWrkcd)
-                .on(episNsFmwrkWrkcd.fmwrkCd.eq(userDiary.fmwrkCd)).fetchJoin()
+      return query.select( episNsFmwrkWrkcd.fmwrkNm,
+                      episNsFmwrkWrkcd.fmwrkCd.count()
+                          )
+              .from(userDiary)
+              .join(episNsFmwrkWrkcd)
+              .on(episNsFmwrkWrkcd.fmwrkCd.eq(userDiary.fmwrkCd)).fetchJoin()
 //              .join(activity).on(userDiary.activitySeq.eq(activity.activitySeq))
-                .where(condition)
+              .where(condition)
 //              .groupBy(userDiary.activitySeq)
-                .groupBy(userDiary.fmwrkCd)
-                .fetch()
-                .stream()
-                .map(t -> {Map<String, Object> m = new HashMap<>();
-                    m.put("actNm", t.get(activity.actNm));
-                    m.put("cnt", t.get(activity.activitySeq.count()));
-                    return m;})
-                .collect(Collectors.toList());
-    }
+              .groupBy(userDiary.fmwrkCd)
+              .fetch()
+              .stream()
+              .map(t -> {Map<String, Object> m = new HashMap<>();
+                         m.put("actNm", t.get(activity.actNm));
+                         m.put("cnt", t.get(activity.activitySeq.count()));
+                         return m;})
+              .collect(Collectors.toList());
+  }
 }
