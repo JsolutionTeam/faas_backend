@@ -44,43 +44,31 @@ public class UserDiary implements Serializable {
     private String diaryTCd;
 
     @Column(name="man_self")
-    private Double manSelf;
-    @Column(name="man_Self_tm")
-    private Integer manSelfTm;
-    @Column(name="man_self_tmm")
-    private Integer manSelfTmm;
-    @Column(name="woman_self")
-    private Double womanSelf;
-    @Column(name="woman_self_tm")
-    private Integer womanSelfTm;
-    @Column(name="woman_self_tmm")
-    private Integer womanSelfTmm;
-    @Column(name="man_Hire")
-    private Double manHire;
-    @Column(name="man_hire_tm")
-    private Integer manHireTm;
-    @Column(name="man_hire_tmm")
-    private Integer manHireTmm;
-    @Column(name="woman_hire")
-    private Double womanHire;
-    @Column(name="woman_hire_tm")
-    private Integer womanHireTm;
-    @Column(name="woman_hire_tmm")
-    private Integer womanHireTmm;
-
-
     private Double manSelf; // 자가노동인력수(남)
+
+    @Column(name="man_Self_tm")
     private Integer manSelfTm; // 자가노동시간(시간,남)
-    private Integer manSelfTmm; // 자가노동시간(분,남)
-    private Double womanSelf; // 자가노동인력수(여)
-    private Integer womanSelfTm; // 자가노동시간(시간,여)
-    private Integer womanSelfTmm; // 자가노동시간(분,여)
-    private Double manHire; // 고용노동인력수(남)
-    private Integer manHireTm; // 고용노동시간(시간,남)
-    private Integer manHireTmm; // 고용노동시간(분,남)
-    private Double womanHire; // 고용노동인력수(여)
-    private Integer womanHireTm; // 고용노동시간(시간,여)
-    private Integer womanHireTmm; // 고용노동시간(분,여)
+    @Column(name="man_self_tmm")
+        private Integer manSelfTmm; // 자가노동시간(분,남)
+    @Column(name="woman_self")
+        private Double womanSelf; // 자가노동인력수(여)
+    @Column(name="woman_self_tm")
+        private Integer womanSelfTm; // 자가노동시간(시간,여)
+    @Column(name="woman_self_tmm")
+        private Integer womanSelfTmm; // 자가노동시간(분,여)
+    @Column(name="man_Hire")
+        private Double manHire; // 고용노동인력수(남)
+    @Column(name="man_hire_tm")
+        private Integer manHireTm; // 고용노동시간(시간,남)
+    @Column(name="man_hire_tmm")
+        private Integer manHireTmm; // 고용노동시간(분,남)
+    @Column(name="woman_hire")
+        private Double womanHire; // 고용노동인력수(여)
+    @Column(name="woman_hire_tm")
+        private Integer womanHireTm; // 고용노동시간(시간,여)
+    @Column(name="woman_hire_tmm")
+        private Integer womanHireTmm; // 고용노동시간(분,여)
+
 
     @Column(name = "sky_t_cd")
     private String skyTCd;
@@ -108,7 +96,7 @@ public class UserDiary implements Serializable {
     @Column(name="quan")
     private Double quan;
 
-    @Column(name = " crop_cd")
+    @Column(name = "crop_cd")
     private String cropCd;
     @Column(name = "grow_step")
     private String growStep;
