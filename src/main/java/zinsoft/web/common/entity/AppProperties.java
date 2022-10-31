@@ -1,5 +1,6 @@
 package zinsoft.web.common.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -20,7 +21,10 @@ import lombok.ToString;
 public class AppProperties {
 
     @Id
+    @Column(name = "prop_id")
     private String propId;
+
+    @Column(name = "prop_val")
     private String propVal;
 
 }

@@ -12,8 +12,6 @@ public interface UserDiaryRepository extends JpaRepository<UserDiary, Long>, Use
 
     UserDiary findByUserIdAndUserDiarySeq(String userId, Long userDiarySeq);
 
-    int countByUserIdAndUserCropSeq(String userId, Long userCropSeq);
-
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("UPDATE UserDiary a SET a.updateDtm = now(), a.statusCd = 'D' WHERE a.userId = :userId AND a.userDiarySeq = :userDiarySeq")

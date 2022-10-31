@@ -35,13 +35,16 @@ import lombok.RequiredArgsConstructor;
 import zinsoft.faas.dto.QUserDiaryDto;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.entity.QActivity;
+import zinsoft.faas.entity.QEpisNsFmwrkWrkcd;
+import zinsoft.faas.entity.QMgrCropDetail;
 import zinsoft.faas.entity.QUserDiary;
 import zinsoft.faas.repository.UserDiaryQueryRepository;
 import zinsoft.util.Constants;
 import zinsoft.web.entity.QCode;
 import zinsoft.web.entity.QUserInfo;
 
-import static zinsoft.faas.entity.QCropSpecies.cropSpecies;
+import static zinsoft.faas.entity.QEpisNsFmwrkWrkcd.episNsFmwrkWrkcd;
+import static zinsoft.faas.entity.QMgrCropDetail.mgrCropDetail;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -107,11 +110,36 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
                                         code.codeVal.eq(userDiary.gradeTCd)),
                         "gradeTCdNm"));
 
-        fieldList.remove(userDiary.actNm);
-        fieldList.add(userDiary.actNm.coalesce(activity.actNm).as("actNm"));
-        fieldList.add(userInfo.userNm.as("userNm"));
-        fieldList.add(userInfo.addr1.concat(userInfo.addr2).as("addr"));
-        fieldList.add(userInfo.emailAddr.as("emailAddr"));
+        fieldList.add(
+                ExpressionUtils.as(
+                        JPAExpressions.select(mgrCropDetail.codeNm)
+                                .from(mgrCropDetail)
+                                .where(mgrCropDetail.id.code.eq(userDiary.cropCd)),
+                        "cropCdNm"));
+
+        fieldList.add(
+                ExpressionUtils.as(
+                        JPAExpressions.select(mgrCropDetail.codeNm)
+                                .from(mgrCropDetail)
+                                .where(mgrCropDetail.id.code.eq(userDiary.growStep)
+                                        .and(mgrCropDetail.id.codeId.eq("BDM_CROP"))),
+                        "growStepNm"));
+
+        fieldList.add(
+                ExpressionUtils.as(
+                        JPAExpressions.select(episNsFmwrkWrkcd.fmwrkNm)
+                                .from(episNsFmwrkWrkcd)
+                                .where(episNsFmwrkWrkcd.fmwrkCd.eq(userDiary.fmwrkCd)),
+                        "fmwrkCdNm"));
+
+//        fieldList.remove(userDiary.actNm);
+//        fieldList.add(userDiary.actNm.coal esce(activity.actNm).as("actNm"));
+//        fieldList.add(userCrop.aliasNm.as("userCropAliasNm") );
+//        fieldList.add(crop.exprNm.as("cropNm") );
+
+        fieldList.add(userInfo.userNm.as("userNm") );
+        fieldList.add(userInfo.addr1.as("addr1") );
+        fieldList.add(userInfo.emailAddr.as("emailAddr") );
         //fieldList.add( crop.exprNm.as("cropNm") );
         // @formatter:on
 
@@ -136,7 +164,7 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
         return query.select(allFields)
                 .from(userDiary)
                 .leftJoin(activity)
-                .on(userDiary.activitySeq.eq(activity.activitySeq))
+//                .on(userDiary.activitySeq.eq(activity.activitySeq))
 //                .join(userCrop)
 //                .on(userDiary.userCropSeq.eq(userCrop.userCropSeq))
 //                .join(crop)
@@ -172,63 +200,14 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
 
     @Override
     public Page<UserDiaryDto> page(Map<String, Object> search, Pageable pageable) {
-        // @formatter:off
-
-        fieldList.add(
-                );
-        fieldList.add(
-                );
-        fieldList.add(
-                );
-        fieldList.add(
-                );
-
-        fieldList.remove(userDiary.actNm);
-        fieldList.add(userDiary.actNm.coalesce(activity.actNm).as("actNm"));
-        fieldList.add(userInfo.userNm.as("userNm"));
-        fieldList.add(userInfo.addr1.concat(userInfo.addr2).as("addr"));
-        fieldList.add(userInfo.emailAddr.as("emailAddr"));
-
-
-        JPQLQuery<UserDiaryDto> jpqQuery = query.select(
-                        new QUserDiaryDto(
-                                userDiary,
-                                code.codeNm,
-                                cropSpecies.name,
-                                null,
-                                ExpressionUtils.as(
-                                        JPAExpressions.select(code.codeNm)
-                                                .from(code)
-                                                .where(code.codeId.eq("DIARY_T_CD"),
-                                                        code.codeVal.eq(userDiary.diaryTCd)),
-                                        "diaryTCdNm"),
-                                ExpressionUtils.as(
-                                        JPAExpressions.select(code.codeNm)
-                                                .from(code)
-                                                .where(code.codeId.eq("SKY_T_CD"),
-                                                        code.codeVal.eq(userDiary.skyTCd)),
-                                        "skyTCdNm"),
-                                ExpressionUtils.as(
-                                        JPAExpressions.select(code.codeNm)
-                                                .from(code)
-                                                .where(code.codeId.eq("PACK_T_CD"),
-                                                        code.codeVal.eq(userDiary.packTCd)),
-                                        "packTCdNm"),
-                                ExpressionUtils.as(
-                                        JPAExpressions.select(code.codeNm)
-                                                .from(code)
-                                                .where(code.codeId.eq("GRADE_T_CD"),
-                                                        code.codeVal.eq(userDiary.gradeTCd)),
-                                        "gradeTCdNm"),
-                                null,
-                                null,
-                                null,
-                                null
-                        )
-                )
-                .from(userDiary)
-                .leftJoin(activity)
-                .on(userDiary.activitySeq.eq(activity.activitySeq)).fetchJoin()
+     // @formatter:off
+        JPQLQuery<UserDiaryDto> jpqQuery = query.select(allFields)
+                                            .from(userDiary)
+                .leftJoin(mgrCropDetail).on(userDiary.cropCd.eq(mgrCropDetail.id.code)).fetchJoin()
+                .leftJoin(mgrCropDetail).on(userDiary.growStep.eq(mgrCropDetail.id.code)).fetchJoin()
+                .leftJoin(episNsFmwrkWrkcd).on(userDiary.fmwrkCd.eq(episNsFmwrkWrkcd.fmwrkCd)).fetchJoin()
+//                                            .leftJoin(activity)
+//                                            .on(userDiary.activitySeq.eq(activity.activitySeq))
 //                                            .join(userCrop)
 //                                            .on(userDiary.userCropSeq.eq(userCrop.userCropSeq))
 //                                            .leftJoin(crop)
@@ -256,7 +235,9 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
                     .fetchResults();
         }
 
-        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+        List<UserDiaryDto> results = result.getResults();
+
+        return new PageImpl<>(results, pageable, result.getTotal());
     }
 
     private BooleanExpression pageCondition(Map<String, Object> search) {
@@ -281,33 +262,54 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
             condition = condition.and(userDiary.diaryTCd.eq(diaryTCd));
         }
 
-        if (search.get("cropSeq") != null) {
-            String strCropSeq = (String) search.get("cropSeq");
-            if (StringUtils.isNotBlank(strCropSeq) != false) {
-                Long cropSeq = Long.valueOf(strCropSeq);
-                if (cropSeq > 0) {
-                    condition = condition.and(userDiary.cropSeq.eq(cropSeq));
-                }
+//        if (search.get("cropSeq") != null) {
+//            String strCropSeq = (String)search.get("cropSeq");
+//            if(StringUtils.isNotBlank(strCropSeq)) {
+//                Long cropSeq = Long.valueOf(strCropSeq);
+//                if (cropSeq > 0) {
+//                    condition = condition.and(userDiary.cropSeq.eq(cropSeq));
+//                }
+//            }
+//        }
+
+//        if (search.get("userCropSeq") != null) {
+//            String strUserCropSeq = (String)search.get("userCropSeq");
+//            if(StringUtils.isNotBlank(strUserCropSeq)) {
+//                Long userCropSeq = Long.valueOf(strUserCropSeq);
+//                if (userCropSeq > 0) {
+//                    condition = condition.and(userDiary.userCropSeq.eq(userCropSeq));
+//                }
+//            }
+//        }
+
+//        if (search.get("activitySeq") != null) {
+//            String strActivitySeq = (String)search.get("activitySeq");
+//            if(StringUtils.isNotBlank(strActivitySeq)) {
+//                Long activitySeq = Long.valueOf(strActivitySeq);
+//                if (activitySeq > 0) {
+//                    condition = condition.and(userDiary.activitySeq.eq(activitySeq));
+//                }
+//            }
+//        }
+
+        if (search.get("cropCd") != null) {
+            String cropCd = (String) search.get("cropCd");
+            if (StringUtils.isNotBlank(cropCd)) {
+                condition = condition.and(userDiary.cropCd.eq(cropCd));
             }
         }
 
-        if (search.get("userCropSeq") != null) {
-            String strUserCropSeq = (String) search.get("userCropSeq");
-            if (StringUtils.isNotBlank(strUserCropSeq) != false) {
-                Long userCropSeq = Long.valueOf(strUserCropSeq);
-                if (userCropSeq > 0) {
-                    condition = condition.and(userDiary.userCropSeq.eq(userCropSeq));
-                }
+        if (search.get("growStep") != null) {
+            String growStep = (String) search.get("growStep");
+            if (StringUtils.isNotBlank(growStep)) {
+                condition = condition.and(userDiary.growStep.eq(growStep));
             }
         }
 
-        if (search.get("activitySeq") != null) {
-            String strActivitySeq = (String) search.get("activitySeq");
-            if (StringUtils.isNotBlank(strActivitySeq) != false) {
-                Long activitySeq = Long.valueOf(strActivitySeq);
-                if (activitySeq > 0) {
-                    condition = condition.and(userDiary.activitySeq.eq(activitySeq));
-                }
+        if (search.get("fmwrkCd") != null) {
+            String fmwrkCd = (String) search.get("fmwrkCd");
+            if (StringUtils.isNotBlank(fmwrkCd)) {
+                condition = condition.and(userDiary.fmwrkCd.eq(fmwrkCd));
             }
         }
 
@@ -382,21 +384,22 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
             condition = condition.and(userDiary.actDt.startsWith(actDt));
         }
 
-        return query.select(activity.actNm,
-                        activity.activitySeq.count()
-                )
-                .from(userDiary)
-                .join(activity).on(userDiary.activitySeq.eq(activity.activitySeq))
-                .where(condition)
-                .groupBy(userDiary.activitySeq)
-                .fetch()
-                .stream()
-                .map(t -> {
-                    Map<String, Object> m = new HashMap<>();
-                    m.put("actNm", t.get(activity.actNm));
-                    m.put("cnt", t.get(activity.activitySeq.count()));
-                    return m;
-                })
-                .collect(Collectors.toList());
-    }
+      return query.select( episNsFmwrkWrkcd.fmwrkNm,
+                      episNsFmwrkWrkcd.fmwrkCd.count()
+                          )
+              .from(userDiary)
+              .join(episNsFmwrkWrkcd)
+              .on(episNsFmwrkWrkcd.fmwrkCd.eq(userDiary.fmwrkCd)).fetchJoin()
+//              .join(activity).on(userDiary.activitySeq.eq(activity.activitySeq))
+              .where(condition)
+//              .groupBy(userDiary.activitySeq)
+              .groupBy(userDiary.fmwrkCd)
+              .fetch()
+              .stream()
+              .map(t -> {Map<String, Object> m = new HashMap<>();
+                         m.put("actNm", t.get(activity.actNm));
+                         m.put("cnt", t.get(activity.activitySeq.count()));
+                         return m;})
+              .collect(Collectors.toList());
+  }
 }

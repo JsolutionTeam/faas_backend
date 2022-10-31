@@ -56,7 +56,7 @@ public class UserStockExcelView extends AbstractExcelView {
        // sheet.setColumnWidth(col++, (20 * 256)); // 비료상세
         sheet.setColumnWidth(col++, (10 * 256)); //수량
         sheet.setColumnWidth(col++, (15 * 256)); //구입금액
-        if(isAllTerm == true) {
+        if(isAllTerm) {
             sheet.setColumnWidth(col++, (10 * 256)); //잔여량
         }
         sheet.setColumnWidth(col++, (30 * 256)); //증감이유
@@ -97,7 +97,7 @@ public class UserStockExcelView extends AbstractExcelView {
         col += 2;
         setText(row, col++, "수량", headerStyle);
         setText(row, col++, "구입금액", headerStyle);
-        if(isAllTerm == true) {
+        if(isAllTerm) {
             setText(row, col++, "잔여량", headerStyle);
         }
         setText(row, col++, "증감이유", headerStyle);
@@ -120,7 +120,7 @@ public class UserStockExcelView extends AbstractExcelView {
                 col += 2;
                 setText(row, col++, comma(dto.getQuan())+dto.getPackTCdNm(), dataCStyle);
                 setNumber(row, col++, amt);
-                if(isAllTerm == true) {
+                if(isAllTerm) {
                     setText(row, col++, (dto.getRemainingQuan() != null) ? comma(dto.getRemainingQuan())+dto.getPackTCdNm(): "", dataCStyle);
                 }
                 setText(row, col++, dto.getRemark(), dataCStyle);
@@ -153,7 +153,7 @@ public class UserStockExcelView extends AbstractExcelView {
         setText(row, col++, "비료상세", headerStyle);
         setText(row, col++, "수량", headerStyle);
         setText(row, col++, "구입금액", headerStyle);
-        if(isAllTerm == true) {
+        if(isAllTerm) {
             setText(row, col++, "잔여량", headerStyle);
         }
         setText(row, col++, "증감이유", headerStyle);
@@ -174,7 +174,7 @@ public class UserStockExcelView extends AbstractExcelView {
                 setText(row, col++, dto.getManureTCdNm2(), dataCStyle);
                 setText(row, col++, comma(dto.getQuan())+dto.getPackTCdNm(), dataCStyle);
                 setNumber(row, col++, amt);
-                if(isAllTerm == true) {
+                if(isAllTerm) {
                     setText(row, col++, (dto.getRemainingQuan() != null) ? comma(dto.getRemainingQuan())+dto.getPackTCdNm(): "", dataCStyle);
                 }
                 setText(row, col++, dto.getRemark(), dataCStyle);

@@ -144,7 +144,7 @@ public class UserInoutServiceImpl extends EgovAbstractServiceImpl implements Use
         inout.setInoutCd("O");
         inout.setTrdDt(dto.getInoutDt());
         inout.setCropSeq(dto.getCropSeq());
-        if ("1".equals(dto.getManureTCd()) == true) {
+        if ("1".equals(dto.getManureTCd())) {
             inout.setAcId("419");
         } else {
             inout.setAcId("405");
@@ -297,7 +297,7 @@ public class UserInoutServiceImpl extends EgovAbstractServiceImpl implements Use
         userInout.setAmt(dto.getAmt());
         userInout.setInoutTCd(dto.getInoutTCd());
 
-        if ("1".equals(dto.getManureTCd()) == true) {
+        if ("1".equals(dto.getManureTCd())) {
             userInout.setAcId("419");
         } else {
             userInout.setAcId("405");
@@ -336,7 +336,7 @@ public class UserInoutServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void delete(String userId, Long userInoutSeq) {
-        if (UserInfoUtil.isAdmin() == true && StringUtils.isBlank(userId) == true) {
+        if (UserInfoUtil.isAdmin() && StringUtils.isBlank(userId)) {
             UserInout userInout = getEntity(userId, userInoutSeq);
             userId = userInout.getUserId();
         }
@@ -359,7 +359,7 @@ public class UserInoutServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void delete(String userId, Long[] userInoutSeqs) {
-        if (UserInfoUtil.isAdmin() == true && StringUtils.isBlank(userId) == true) {
+        if (UserInfoUtil.isAdmin() && StringUtils.isBlank(userId)) {
             if(userInoutSeqs != null && userInoutSeqs.length > 0) {
                 for(Long userInoutSeq : userInoutSeqs) {
                     UserInout userInout = getEntity(userId, userInoutSeq);

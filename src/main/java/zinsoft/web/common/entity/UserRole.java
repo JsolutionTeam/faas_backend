@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +18,13 @@ public class UserRole implements Serializable {
 
     private static final long serialVersionUID = -1134958215495121633L;
 
+
     @Id
+    @Column(name="user_id")
     private String userId;
+
     @Id
+    @Column(name="role_id")
     private String roleId;
 
 }

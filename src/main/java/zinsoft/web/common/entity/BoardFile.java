@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,10 +21,15 @@ public class BoardFile implements Serializable {
     private static final long serialVersionUID = -8993694256247778052L;
 
     @Id
+    @Column(name="board_id")
     private String boardId;
+
     @Id
+    @Column(name="article_seq")
     private Long articleSeq;
+
     @Id
+    @Column(name="file_seq")
     private Long fileSeq;
 
     //@OneToOne()

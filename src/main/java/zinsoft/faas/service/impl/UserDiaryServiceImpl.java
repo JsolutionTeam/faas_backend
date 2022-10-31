@@ -17,12 +17,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.UserDiaryMapper;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.dto.UserDiaryFileDto;
 import zinsoft.faas.dto.UserProductionDto;
@@ -44,11 +42,6 @@ import zinsoft.web.exception.CodeMessageException;
 
 @Service
 public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements UserDiaryService {
-
-//    @Resource
-//    UserDiaryMapper userDiaryMapper;
-
-    // 매퍼 테스트용
 
     @Resource
     UserDiaryRepository userDiaryRepository;
@@ -110,12 +103,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         dto.setActDt(dto.getActDt().replaceAll("\\D", ""));
         dto.setUserDiarySeq(null);
 
-        if (StringUtils.isBlank(dto.getActNm()) || dto.getActivitySeq() != 40) {
-            // actNm이 없거나 activitySeq가 40이 아니라면,
-            dto.setActNm(null);
-        }
-        egovLogger.info("diaryDto.getActivitySeq(1) : {}", dto.getActivitySeq());
-
         UserDiary userDiary = modelMapper.map(dto, UserDiary.class);
         egovLogger.info("diaryDto.getActivitySeq(2) : {}", dto.getActivitySeq());
 
@@ -173,8 +160,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         // 실적이면 D 계획이면 P
         String diaryTCd = (dto.getPlanTCd().equals(UserProductionDto.PLAN_T_CD_ACTUAL)) ? "D" : "P";
         diaryDto.setDiaryTCd(diaryTCd);
-
-        diaryDto.setActivitySeq(145L);//수확
         diaryDto.setRemark(dto.getRemark());
         diaryDto.setQuan(dto.getQuan());
         diaryDto.setPackTCd(dto.getPackTCd());
@@ -187,7 +172,7 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void copy(String userId, String srcYear, String dstYear) {
-//        userDiaryMapper.copy(userId, srcYear, dstYear);
+
     }
 
     @Override
@@ -218,9 +203,8 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
             String actDt = (String) search.get("actDt");
             actDt = actDt.replaceAll("[^0-9]", "");
 
-            Date actDate = null;
             try {
-                actDate = fm.parse(actDt);
+                fm.parse(actDt);
             } catch (ParseException e) {
                 new CodeMessageException(Result.BAD_REQUEST, "조회날짜 오류");
             }
@@ -256,7 +240,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         // return page;
 
         List<UserDiaryDto> list = null;
-        int count = 0;
         try {
             //
             page = userDiaryRepository.page(search, pageable);
@@ -277,16 +260,8 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     }
 
     @Override
-    public int countUsedCrop(String userId, Long userCropSeq) {
-        return userDiaryRepository.countByUserIdAndUserCropSeq(userId, userCropSeq);
-    }
-
-    @Override
     public void update(UserDiaryDto dto) throws IllegalStateException, IOException {
         dto.setActDt(dto.getActDt().replaceAll("\\D", ""));
-        if (StringUtils.isBlank(dto.getActNm()) || dto.getActivitySeq() != 40) {
-            dto.setActNm(null);
-        }
         UserDiary userDiary = getEntity(dto.getUserId(), dto.getUserDiarySeq());
         dto.setUpdateDtm(new Date());
 
@@ -333,7 +308,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         userDiary.setActDt(dto.getPrdDt());
         String diaryTCd = (dto.getPlanTCd().equals(UserProductionDto.PLAN_T_CD_ACTUAL)) ? "D" : "P";
         userDiary.setDiaryTCd(diaryTCd);
-        userDiary.setActivitySeq(145L);//수확
         // 값이 null인 경우 map이 복사가 안됨. 수동 복사
         userDiary.setRemark(dto.getRemark());
         userDiary.setQuan(dto.getQuan());
@@ -346,7 +320,7 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void delete(String userId, Long userDiarySeq) {
-        if (UserInfoUtil.isAdmin() == true && StringUtils.isBlank(userId) == true) {
+        if (UserInfoUtil.isAdmin() && StringUtils.isBlank(userId)) {
             UserDiary userDiary = getEntity(userId, userDiarySeq);
             userId = userDiary.getUserId();
         }
@@ -372,9 +346,9 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void delete(String userId, Long[] userDiarySeqs) {
-        if (UserInfoUtil.isAdmin() == true && StringUtils.isBlank(userId) == true) {
-            if (userDiarySeqs != null && userDiarySeqs.length > 0) {
-                for (Long userDiarySeq : userDiarySeqs) {
+        if (UserInfoUtil.isAdmin() && StringUtils.isBlank(userId)) {
+            if(userDiarySeqs != null && userDiarySeqs.length > 0) {
+                for(Long userDiarySeq : userDiarySeqs) {
                     UserDiary userDiary = getEntity(userId, userDiarySeq);
                     userId = userDiary.getUserId();
                     delete(userId, userDiarySeq);

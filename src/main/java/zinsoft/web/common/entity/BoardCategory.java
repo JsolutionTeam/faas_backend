@@ -2,10 +2,7 @@ package zinsoft.web.common.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -25,12 +22,25 @@ public class BoardCategory {
 
     @Id
     @GeneratedValue
+    @Column(name = "cat_seq")
     private Long catSeq;
+
+    @Column(name = "reg_dtm")
     private Date regDtm;
+
+    @Column(name = "update_dtm")
     private Date updateDtm;
+
+    @Column(name = "status_cd")
     private String statusCd;
+
+    @Column(name = "board_id")
     private String boardId;
+
+    @Column(name = "cat_nm")
     private String catNm;
+
+    @Column(name = "expr_seq")
     private Short exprSeq;
 
 }

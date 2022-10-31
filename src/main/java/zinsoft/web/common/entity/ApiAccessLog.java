@@ -2,11 +2,9 @@ package zinsoft.web.common.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.Getter;
@@ -19,16 +17,30 @@ import lombok.ToString;
 @Entity
 @Table(name = "tf_api_access_log")
 @DynamicInsert
+@NoArgsConstructor
 public class ApiAccessLog {
 
     @Id
     @GeneratedValue
+    @Column(name = "api_access_log_seq")
     private Long apiAccessLogSeq;
+
+    @Column(name = "access_dtm")
     private Date accessDtm;
+
+    @Column(name = "path")
     private String path;
+
+    @Column(name = "method")
     private String method;
+
+    @Column(name = "user_id")
     private String userId;
+
+    @Column(name = "remote_addr")
     private String remoteAddr;
+
+    @Column(name = "note")
     private String note;
 
     public ApiAccessLog(String path, String method, String userId, String remoteAddr, String note) {

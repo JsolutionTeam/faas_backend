@@ -2,6 +2,7 @@ package zinsoft.faas.validator;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,11 +11,14 @@ import org.springframework.validation.Validator;
 
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.service.ActivityService;
+import zinsoft.faas.service.EpisNsFmwrkWrkcdService;
+import zinsoft.faas.service.MgrCropDetailService;
 import zinsoft.util.Result;
 import zinsoft.web.common.dto.CodeDto;
 import zinsoft.web.common.service.CodeService;
 
 @Component
+@RequiredArgsConstructor
 public class UserDiaryValidator implements Validator {
 
     @Autowired
@@ -25,6 +29,11 @@ public class UserDiaryValidator implements Validator {
 
     @Autowired
     ActivityService activityService;
+
+    @Autowired
+    private MgrCropDetailService mgrCropDetailService;
+
+    private final EpisNsFmwrkWrkcdService wrkcdService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -53,16 +62,31 @@ public class UserDiaryValidator implements Validator {
         //            }
         //        }
 
-        if (userDiaryDto.getActivitySeq() != null && userDiaryDto.getActivitySeq() > 0) {
-            boolean res = activityService.isExistActivityId(userDiaryDto.getActivitySeq());
-            if (!res) {
-                errors.rejectValue("activitySeq", Result.INVALID_ACTIVITY);
-            }
-        } else {
-            if (StringUtils.isBlank(userDiaryDto.getActNm()) == true) {
-                errors.rejectValue("activitySeq", Result.INVALID_ACTIVITY);
-            }
+        String cropCd = userDiaryDto.getCropCd();
+        if(cropCd == null || cropCd.length() == 0 || !mgrCropDetailService.isExistByCode(cropCd)){
+            errors.rejectValue("cropCd", Result.INVALID_CROPCD);
         }
+
+        String growStep = userDiaryDto.getGrowStep();
+        if(growStep == null || growStep.length() == 0 || !mgrCropDetailService.isExistByCode(growStep)){
+            errors.rejectValue("growStep", Result.INVALID_CROPCD);
+        }
+
+        String fmwrkCd = userDiaryDto.getFmwrkCd();
+        if(fmwrkCd == null || fmwrkCd.length() == 0 || !wrkcdService.isExistByCode(fmwrkCd)){
+            errors.rejectValue("fmwrkCd", Result.INVALID_FMWRKCD);
+        }
+
+//        if (userDiaryDto.getActivitySeq() != null && userDiaryDto.getActivitySeq() > 0) {
+//            boolean res = activityService.isExistActivityId(userDiaryDto.getActivitySeq());
+//            if (!res) {
+//                errors.rejectValue("activitySeq", Result.INVALID_ACTIVITY);
+//            }
+//        } else {
+//            if (StringUtils.isBlank(userDiaryDto.getActNm())) {
+//                errors.rejectValue("activitySeq", Result.INVALID_ACTIVITY);
+//            }
+//        }
 
         if (userDiaryDto.getPackTCd() != null && userDiaryDto.getPackTCd().isEmpty() == false) {
             List<CodeDto> codeDto = codeService.listStartsWithCodeVal("PACK_T_CD", userDiaryDto.getPackTCd());

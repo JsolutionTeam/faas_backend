@@ -80,7 +80,7 @@ public class BoardController {
             dto.setEmailAddr(userInfo.getUserId());
         }
 
-        if (dto.getUserNm() == null || dto.getUserNm().isEmpty() == true) {
+        if (dto.getUserNm() == null || dto.getUserNm().isEmpty()) {
             throw new CodeMessageException(Result.BAD_REQUEST);
         }
 
@@ -161,7 +161,7 @@ public class BoardController {
             dto.setEmailAddr(userInfo.getUserId());
         }
 
-        if (dto.getUserNm() == null || dto.getUserNm().isEmpty() == true) {
+        if (dto.getUserNm() == null || dto.getUserNm().isEmpty()) {
             throw new CodeMessageException(Result.BAD_REQUEST);
         }
 

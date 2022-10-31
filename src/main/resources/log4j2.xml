@@ -4,13 +4,18 @@
         <console name="CONSOLE" target="SYSTEM_OUT">
             <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
         </console>
-        <rollingFile name="FILE" fileName="/data/apache/tomcat/logs/sfiv/FAAS/FAAS_API.log" filePattern="/data/apache/tomcat/logs/sfiv/FAAS/FAAS_API-%d{yyyyMMdd}.log">
-            <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
+<!--        <rollingFile name="FILE" fileName="/data/apache/tomcat/logs/sfiv/FAAS/FAAS_API.log" filePattern="/data/apache/tomcat/logs/sfiv/FAAS/FAAS_API-%d{yyyyMMdd}.log">-->
+        <rollingFile name="FILE" fileName="logs/FAAS/FAAS_API.log" filePattern="logs/FAAS/FAAS_API-%d{yyyyMMdd}.log">
+        <patternLayout pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n" />
             <policies>
                 <TimeBasedTriggeringPolicy />
             </policies>
             <defaultRolloverStrategy>
-                <Delete basePath="/data/apache/tomcat/logs/sfiv/FAAS/" maxDepth="1">
+<!--                <Delete basePath="/data/apache/tomcat/logs/sfiv/FAAS/" maxDepth="1">-->
+<!--                    <IfFileName glob="FAAS_API-????????.log" />-->
+<!--                    <IfAccumulatedFileCount exceeds="30" />-->
+<!--                </Delete>-->
+                <Delete basePath="logs/FAAS/" maxDepth="1">
                     <IfFileName glob="FAAS_API-????????.log" />
                     <IfAccumulatedFileCount exceeds="30" />
                 </Delete>

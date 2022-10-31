@@ -1,9 +1,6 @@
 package zinsoft.faas.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +15,17 @@ public class AccountDetail {
 
     @Id
     @GeneratedValue
+    @Column(name="ac_detail_seq")
     private Long acDetailSeq;
+
+    @Column(name="ac_detail_nm")
     private String acDetailNm;
+
+    @Column(name="ac_id")
     private String acId;
+
+    @Column(name="expr_seq")
     private Long exprSeq;
+
 
 }

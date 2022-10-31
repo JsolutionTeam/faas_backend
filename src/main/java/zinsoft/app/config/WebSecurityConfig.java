@@ -3,6 +3,7 @@ package zinsoft.app.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,14 +40,14 @@ import zinsoft.web.security.Sha256PasswordEncoder;
 import zinsoft.web.security.WebUserDetailsService;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${api.prefix:}")
     private String apiPrefix;
 
-    @Autowired
-    private CorsFilter corsFilter;
+    private final CorsFilter corsFilter;
 
     //@formatter:off
 
@@ -91,17 +92,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestCache()
                 .requestCache(new NullRequestCache()) // 동일 URL로 POST 요청하고 인증 실패 후 GET 요청하는 경우 인증 실패로 인식하는 문제 방지
                 .and()
-                    .cors()
-                    .disable() // cors 사용 x
-                    .addFilter(corsFilter)// cors 허용
+                .cors()
+                .disable() // cors 사용 x
+                .addFilter(corsFilter)// cors 허용
 
 
                 //.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
                 //.addFilterBefore(filterSecurityInterceptor(), FilterSecurityInterceptor.class)
                 //.anonymous().disable()
-                    .exceptionHandling()
-                    .accessDeniedHandler(accessDeniedHandler())//.accessDeniedPage("/page/error.jsp?code=0101")
-                    .authenticationEntryPoint(authenticationEntryPoint())
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())//.accessDeniedPage("/page/error.jsp?code=0101")
+                .authenticationEntryPoint(authenticationEntryPoint())
                 /*
                 .and()
                     .authorizeRequests()
@@ -110,27 +111,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/").permitAll()
                 */
                 .and()
-                    .formLogin()
-                    //.loginPage(Constants.WEB_SECURITY_LOGIN_PAGE) // authenticationEntryPoint에서 처리
-                    .loginProcessingUrl(apiPrefix + Constants.WEB_SECURITY_LOGIN_PROCESSING_URL)
-                    .usernameParameter(Constants.WEB_SECURITY_USERNAME_PARAMETER)
-                    .passwordParameter(Constants.WEB_SECURITY_PASSWORD_PARAMETER)
-                    .successHandler(loginSuccessHandler())
-                    .failureHandler(loginFailureHandler())
-                    //.permitAll()
+                .authorizeRequests()
+                .antMatchers("/test/**").permitAll() //   /test/** 경로는 로그인 확인 x
+
                 .and()
-                    .logout()
-                    .logoutUrl(apiPrefix + Constants.WEB_SECURITY_LOGOUT_URL)
-                    .logoutSuccessHandler(logoutSuccessHandler())
-                    .deleteCookies("JSESSIONID")
+                .formLogin()
+                //.loginPage(Constants.WEB_SECURITY_LOGIN_PAGE) // authenticationEntryPoint에서 처리
+                .loginProcessingUrl(apiPrefix + Constants.WEB_SECURITY_LOGIN_PROCESSING_URL)
+                .usernameParameter(Constants.WEB_SECURITY_USERNAME_PARAMETER)
+                .passwordParameter(Constants.WEB_SECURITY_PASSWORD_PARAMETER)
+                .successHandler(loginSuccessHandler())
+                .failureHandler(loginFailureHandler())
+                //.permitAll()
                 .and()
-                    .rememberMe()
-                    .key("q2F5yMWEg")
-                    .tokenValiditySeconds(1209600) // 2 weeks
-                    .rememberMeParameter("rememberMe")
-                    .tokenRepository(rememberMeTokenRepository())
+                .logout()
+                .logoutUrl(apiPrefix + Constants.WEB_SECURITY_LOGOUT_URL)
+                .logoutSuccessHandler(logoutSuccessHandler())
+                .deleteCookies("JSESSIONID")
                 .and()
-                  .csrf().disable();
+                .rememberMe()
+                .key("q2F5yMWEg")
+                .tokenValiditySeconds(1209600) // 2 weeks
+                .rememberMeParameter("rememberMe")
+                .tokenRepository(rememberMeTokenRepository())
+                .and()
+                .csrf().disable();
     }
 
     @Override
@@ -147,8 +152,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager authenticationManager = super.authenticationManagerBean();
-        return authenticationManager;
+        return super.authenticationManagerBean();
     }
 
     @Bean
@@ -166,7 +170,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         RoleVoter roleVoter = new RoleVoter();
         roleVoter.setRolePrefix("");
 
-        List<AccessDecisionVoter<? extends Object>> decisionVoterList = new ArrayList<AccessDecisionVoter<? extends Object>>();
+        List<AccessDecisionVoter<?>> decisionVoterList = new ArrayList<AccessDecisionVoter<? extends Object>>();
         decisionVoterList.add(roleVoter);
         decisionVoterList.add(new AuthenticatedVoter());
 

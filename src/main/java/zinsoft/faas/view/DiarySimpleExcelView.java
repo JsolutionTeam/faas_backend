@@ -84,12 +84,12 @@ public class DiarySimpleExcelView extends AbstractExcelView {
         }
 
         String actNm = cond.get("actNm");
-        if(StringUtils.isNotEmpty(actNm) == true) {
+        if(StringUtils.isNotEmpty(actNm)) {
             setText(row++, 0, "작업단계 : " + (cond.get("actNm") != null ? cond.get("actNm") : "전체"), summaryStyle);
         }
 
         String searchRemark = cond.get("remark");
-        if(StringUtils.isNotEmpty(searchRemark) == true) {
+        if(StringUtils.isNotEmpty(searchRemark)) {
             setText(row++, 0, "작업내용 : " + cond.get("remark"), summaryStyle);
         }
 
@@ -196,9 +196,9 @@ public class DiarySimpleExcelView extends AbstractExcelView {
                 setText(row, col++, setDashDate(vo.getActDt()), dataCStyle);
                 setText(row, col++, vo.getDiaryTCdNm(), dataCStyle);
                 if(vo.getActCnt() > 1) {
-                    setText(row, col++, vo.getActNm() + " " + vo.getInning() + "차", dataCStyle);
+                    setText(row, col++, vo.getFmwrkCdNm() + " " + vo.getInning() + "차", dataCStyle);
                 } else {
-                    setText(row, col++, vo.getActNm(), dataCStyle);
+                    setText(row, col++, vo.getFmwrkCdNm(), dataCStyle);
                 }
 
 

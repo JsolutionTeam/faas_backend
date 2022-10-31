@@ -27,20 +27,46 @@ public class UserDiary implements Serializable {
 
     @Id
     @GeneratedValue
-    private Long userDiarySeq; // '영농일지일련번호'
-    private String userId; // '사용자ID'
+    @Column(name="user_diary_seq")
+    private Long userDiarySeq;
+    @Column(name="user_id")
+    private String userId;
 
-    private String actDt; // 영농일자
-    private Date regDtm; // 등록일시
-    private Date updateDtm; // 수정일시
-    private String statusCd; // 상태코드
+    @Column(name="act_dt")
+    private String actDt;
+    @Column(name="reg_dtm")
+    private Date regDtm;
+    @Column(name="update_dtm")
+    private Date updateDtm;
+    @Column(name="status_cd")
+    private String statusCd;
     @Column(name = "diary_t_cd")
-    private String diaryTCd; // 일지/계획
-    private Long cropSeq; // 품목일련번호
-    private Long userCropSeq; // 품목재배일련번호
+    private String diaryTCd;
 
-    private Long activityCropSeq; // 작물 번호
-    private Long activitySeq; // 작업단계일련번호
+    @Column(name="man_self")
+    private Double manSelf;
+    @Column(name="man_Self_tm")
+    private Integer manSelfTm;
+    @Column(name="man_self_tmm")
+    private Integer manSelfTmm;
+    @Column(name="woman_self")
+    private Double womanSelf;
+    @Column(name="woman_self_tm")
+    private Integer womanSelfTm;
+    @Column(name="woman_self_tmm")
+    private Integer womanSelfTmm;
+    @Column(name="man_Hire")
+    private Double manHire;
+    @Column(name="man_hire_tm")
+    private Integer manHireTm;
+    @Column(name="man_hire_tmm")
+    private Integer manHireTmm;
+    @Column(name="woman_hire")
+    private Double womanHire;
+    @Column(name="woman_hire_tm")
+    private Integer womanHireTm;
+    @Column(name="woman_hire_tmm")
+    private Integer womanHireTmm;
 
 
     private Double manSelf; // 자가노동인력수(남)
@@ -57,39 +83,39 @@ public class UserDiary implements Serializable {
     private Integer womanHireTmm; // 고용노동시간(분,여)
 
     @Column(name = "sky_t_cd")
-    private String skyTCd; // 날씨일련번호
-    private Float temp; // 기온
-    private Float reh; // 습도
-    private Float tmn; // 최저기온
-    private Float tmx; // 최고기온
-    private Float rnf; // 강수량
+    private String skyTCd;
+    @Column(name="temp")
+    private Float temp;
+    @Column(name="reh")
+    private Float reh;
+    @Column(name="tmn")
+    private Float tmn;
+    @Column(name="tmx")
+    private Float tmx;
+    @Column(name="rnf")
+    private Float rnf;
 
-    private String memo; // 메모
-    private String remark; // 비고
-    private String actNm; // 활동명
-    private Long unitPack; // 포장단위금액
-    @Column(name = "pack_t_cd")
-    private String packTCd; // 포장단위구분
-    private Double quan; // 수량
-
+    @Column(name="memo")
+    private String memo;
+    @Column(name="remark")
+    private String remark;
     @Column(name = "grade_t_cd")
-    private String gradeTCd; // 등급구분
+    private String gradeTCd;
+    @Column(name="unit_pack")
+    private Long unitPack;
+    @Column(name = "pack_t_cd")
+    private String packTCd;
+    @Column(name="quan")
+    private Double quan;
 
-    @Column(name="crop_b_cd")
-    private String cropBCd; // 품목 코드
-
-    @JoinColumn(name = "crop_species_seq", foreignKey = @ForeignKey(name = "tf_user_diary_crop_species_seq_fk")
-//            ,referencedColumnName = "crop_species_seq"
-        )
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private CropSpecies cropSpecies; // 품종 번호
-
-    private Long cropPatternSeq; // 작형 번호
-    // 추후에 JoinColumn 설정 하기
-//    private Long cropPatternSeq; // 작형 번호
-
+    @Column(name = " crop_cd")
+    private String cropCd;
+    @Column(name = "grow_step")
+    private String growStep;
+    @Column(name = "fmwrk_cd")
+    private String fmwrkCd;
+    @Column(name = "recommend")
+    private String recommend;
+    @Column(name="comment")
+    private String comment;
 }

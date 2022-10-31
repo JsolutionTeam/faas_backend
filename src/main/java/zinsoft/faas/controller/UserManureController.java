@@ -1,26 +1,11 @@
 package zinsoft.faas.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import zinsoft.faas.dto.UserManureDto;
 import zinsoft.faas.service.UserManureService;
 import zinsoft.faas.view.UserManureExcelView;
@@ -28,6 +13,11 @@ import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("${api.prefix}/user-manure")
@@ -74,6 +64,7 @@ public class UserManureController {
     @GetMapping(value = "")
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
+
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
             search.put("userId", farmerInfo.getUserId());

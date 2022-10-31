@@ -110,7 +110,11 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
                 dto.setSupInoutCd("O");
                 dto.setDeleteYn("N");
                 dto.setUpdateYn("N");
-                dto.setCropSeq(diaryDto.getCropSeq());
+                Long cropCd = null;
+                try{
+                    cropCd = Long.parseLong(diaryDto.getCropCd());
+                }catch (Exception ignore){}
+                dto.setCropSeq(cropCd);
                 dto.setUserCropSeq(diaryDto.getUserCropSeq());
                 dto.setRemark("영농일지 입력");
 
@@ -180,11 +184,7 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
             search.put("edDt", edDt);
         }
 
-        List<UserChemicalStockDto> list = userChemicalStockMapper.page(search, pageable);
-        int count = userChemicalStockMapper.count(search);
-
-        page = new PageImpl<>(list, pageable, count);
-        return DataTablesResponse.of(page);
+        return DataTablesResponse.of(userChemicalStockRepository.page(search, pageable));
     }
 
 //    @Override
@@ -253,7 +253,11 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
                 if (dto != null) {
                     dto.setUserId(diaryDto.getUserId());
                     dto.setInoutDt(diaryDto.getActDt());
-                    dto.setCropSeq(diaryDto.getCropSeq());
+                    Long cropCd = null;
+                    try{
+                        cropCd = Long.parseLong(diaryDto.getCropCd());
+                    }catch(Exception ignore){}
+                    dto.setCropSeq(cropCd);
                     dto.setUserCropSeq(diaryDto.getUserCropSeq());
                     dto.setSupInoutCd("O");
                     dto.setDeleteYn("N");

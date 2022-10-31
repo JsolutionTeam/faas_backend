@@ -50,38 +50,17 @@ public class UserDiaryDto {
     @ApiModelProperty(notes = "일지(D)/계획(P) 구분코드")
     @Pattern(regexp = "^(P|D)$")
     private String diaryTCd;
-    //    @NotNull
-//    @Min(value = 1)
-//    @ApiModelProperty(notes = "품목일련번호")
-    private Long cropSeq;
-    //    @NotNull
-//    @Min(value = 1)
-//    @ApiModelProperty(notes = "사용자품목일련번호")
-    private Long userCropSeq;
 
-    // 영농일지 품목, 품종, 작형 데이터 바인딩 추가
-    @Schema(name = "품목 번호")
-    @Min(value = 1)
-    private String cropBCd;
+    // 작기명
+    private String cropCd;
+    private String cropCdNm;
+    // 작업 대분류
+    private String growStep;
+    private String growStepNm;
 
-    @Schema(name = "품목 명")
-    private String cropBCdNm;
-
-    @Schema(name = "품종 명")
-    @Min(value = 1)
-    private String cropSpeciesNm;
-
-    @Schema(name = "작형 번호")
-    @Min(value = 1)
-    private Long cropPatternSeq; // 작형 번호
-
-    @Schema(name = "작형 명")
-    @Min(value = 1)
-    private String cropPatternNm; // 작형 번호
-
-    @ApiModelProperty(notes = "작업단계일련번호")
-    @Min(value = 1)
-    private Long activitySeq;
+    // 작업 중분류
+    private String fmwrkCd;
+    private String fmwrkCdNm;
 
     @ApiModelProperty(notes = "자가노동인력수(남)")
     private Double manSelf;
@@ -91,37 +70,46 @@ public class UserDiaryDto {
     @Max(24)
     @ApiModelProperty(notes = "자가노동시간(시간,남)")
     private Integer manSelfTm;
+
     @Digits(integer = 2, fraction = 0)
     @Min(1)
     @Max(60)
     @ApiModelProperty(notes = "자가노동시간(분,남)")
     private Integer manSelfTmm;
+
     @ApiModelProperty(notes = "자가노동인력수(여)")
     private Double womanSelf;
+
     @Digits(integer = 2, fraction = 0)
     @Min(1)
     @Max(24)
     @ApiModelProperty(notes = "자가노동시간(시간,여)")
     private Integer womanSelfTm;
+
     @Digits(integer = 2, fraction = 0)
     @Min(1)
     @Max(60)
     @ApiModelProperty(notes = "자가노동시간(분,여)")
     private Integer womanSelfTmm;
+
     @ApiModelProperty(notes = "고용노동인력수(남)")
     private Double manHire;
+
     @Digits(integer = 2, fraction = 0)
     @Min(1)
     @Max(24)
     @ApiModelProperty(notes = "고용노동시간(시간,남)")
     private Integer manHireTm;
+
     @Digits(integer = 2, fraction = 0)
     @Min(1)
     @Max(60)
     @ApiModelProperty(notes = "고용노동시간(분,남)")
     private Integer manHireTmm;
+
     @ApiModelProperty(notes = "고용노동인력수(여)")
     private Double womanHire;
+
     @Digits(integer = 2, fraction = 0)
     @Min(1)
     @Max(24)
@@ -135,15 +123,19 @@ public class UserDiaryDto {
 
     @ApiModelProperty(notes = "날씨코드")
     private String skyTCd;
+
     @Digits(integer = 2, fraction = 2)
     @ApiModelProperty(notes = "최저기온")
     private Float tmn;
+
     @Digits(integer = 2, fraction = 2)
     @ApiModelProperty(notes = "최고기온")
     private Float tmx;
+
     @Digits(integer = 4, fraction = 2)
     @ApiModelProperty(notes = "강수량")
     private Float rnf;
+
     @Digits(integer = 2, fraction = 2)
     @ApiModelProperty(notes = "기온")
     private Float temp;
@@ -154,14 +146,15 @@ public class UserDiaryDto {
 
     @ApiModelProperty(notes = "참고")
     private String remark;
-    @ApiModelProperty(notes = "활동명")
-    private String actNm;
+
     @ApiModelProperty(notes = "포장단위")
     @Min(value = 0)
     @Digits(integer = 8, fraction = 2)
     private Long unitPack;
+
     @ApiModelProperty(notes = "포장단위구분코드")
     private String packTCd;
+
     @ApiModelProperty(notes = "수량")
     @Min(value = 0)
     @Digits(integer = 8, fraction = 0)
@@ -216,69 +209,8 @@ public class UserDiaryDto {
     @ApiModelProperty(notes = "작업단계카운트")
     private Long actCnt;
 
-    @QueryProjection
-    public UserDiaryDto(UserDiary userDiary
-            , String cropBCdNm
-            , String cropSpeciesNm
-            , String cropPatternNm
-            , String diaryTCdNm
-            , String skyTCdNm
-            , String packTCdNm
-            , String gradeTCdNm
-            , Long actCnt
-            , String userNm
-            , String addr
-            , String emailAddr) {
-        this.userDiarySeq = userDiary.getUserDiarySeq();
-        this.userId = userDiary.getUserId();
-        this.actDt = userDiary.getActDt();
-        this.regDtm = userDiary.getRegDtm();
-        this.updateDtm = userDiary.getUpdateDtm();
-        this.statusCd = userDiary.getStatusCd();
-        this.diaryTCd = userDiary.getDiaryTCd();
-        this.cropSeq = userDiary.getCropSeq();
-        this.userCropSeq = userDiary.getUserCropSeq();
-        this.cropBCd = userDiary.getCropBCd();
-        this.cropPatternSeq = userDiary.getCropPatternSeq();
-        this.activitySeq = userDiary.getActivitySeq();
-        this.manSelf = userDiary.getManSelf();
-        this.manSelfTm = userDiary.getManSelfTm();
-        this.manSelfTmm = userDiary.getManSelfTmm();
-        this.womanSelf = userDiary.getWomanSelf();
-        this.womanSelfTm = userDiary.getWomanSelfTm();
-        this.womanSelfTmm = userDiary.getWomanSelfTmm();
-        this.manHire = userDiary.getManHire();
-        this.manHireTm = userDiary.getManHireTm();
-        this.manHireTmm = userDiary.getManHireTmm();
-        this.womanHire = userDiary.getWomanHire();
-        this.womanHireTm = userDiary.getWomanHireTm();
-        this.womanHireTmm = userDiary.getWomanHireTmm();
-        this.skyTCd = userDiary.getSkyTCd();
-        this.tmn = userDiary.getTmn();
-        this.tmx = userDiary.getTmx();
-        this.rnf = userDiary.getRnf();
-        this.temp = userDiary.getTemp();
-        this.reh = userDiary.getReh();
-        this.remark = userDiary.getRemark();
-        this.actNm = userDiary.getActNm();
-        this.unitPack = userDiary.getUnitPack();
-        this.packTCd = userDiary.getPackTCd();
-        this.quan = userDiary.getQuan();
-        this.gradeTCd = userDiary.getGradeTCd();
-
-        this.cropBCdNm = cropBCdNm;
-        this.cropSpeciesNm = cropSpeciesNm;
-        this.cropPatternNm = cropPatternNm;
-
-        this.diaryTCdNm = diaryTCdNm;
-        this.skyTCdNm = skyTCdNm;
-        this.packTCdNm = packTCdNm;
-        this.gradeTCdNm = gradeTCdNm;
-        this.actCnt = actCnt;
-        this.userNm = userNm;
-        this.addr = addr;
-        this.emailAddr = emailAddr;
-    }
+    @ApiModelProperty(notes = "작물재배현황일련번호")
+    private Long userCropSeq;
 
     public UserDiaryDto() {
     }

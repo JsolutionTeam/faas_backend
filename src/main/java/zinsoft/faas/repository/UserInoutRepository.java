@@ -12,8 +12,6 @@ public interface UserInoutRepository extends JpaRepository<UserInout, Long>, Use
 
     UserInout findByUserIdAndUserInoutSeqAndStatusCd(String userId, Long userInoutSeq, String statusCd);
 
-    int countByUserIdAndUserCropSeq(String userId, Long userCropSeq);
-
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("UPDATE UserInout a SET a.updateDtm = now(), a.statusCd = 'D' WHERE a.userId = :userId AND a.userInoutSeq = :userInoutSeq")

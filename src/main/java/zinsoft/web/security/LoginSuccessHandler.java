@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -20,6 +21,7 @@ import zinsoft.web.common.dto.UserInfoDto;
 import zinsoft.web.common.service.UserAccessLogService;
 import zinsoft.web.common.service.UserInfoService;
 
+@Slf4j
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private ObjectWriter objectWriter = new ObjectMapper().writer();
@@ -42,8 +44,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             userInfo.setRemoteAddr(request.getRemoteAddr());
         }
 
-        // 기능이 주석처리 되어있어서 사용x
-//        userInfoService.updateLastLoginDtm(userId);
+        log.info("userId : {}", userId);
+        userInfoService.updateLastLoginDtm(userId);
         userAccessLogService.login(userId);
 
         response.setStatus(HttpServletResponse.SC_OK);
