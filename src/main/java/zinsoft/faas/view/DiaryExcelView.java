@@ -303,7 +303,7 @@ public class DiaryExcelView extends AbstractExcelView {
         //sheet.setColumnWidth(16, (13 * 256)); //! 수입지출 결제 셀 너비 강제 조정
 
         sheet.addMergedRegion(new CellRangeAddress(firstItemRow, firstItemRow + 1, 0, 2)); //품목
-      //  sheet.addMergedRegion(new CellRangeAddress(firstItemRow, firstItemRow + 1, 3, 4)); //사업유형
+        //  sheet.addMergedRegion(new CellRangeAddress(firstItemRow, firstItemRow + 1, 3, 4)); //사업유형
         sheet.addMergedRegion(new CellRangeAddress(firstItemRow, firstItemRow + 1, 3, 7)); //작업단계
         sheet.addMergedRegion(new CellRangeAddress(firstItemRow, firstItemRow + 1, 20, 20)); //수확량
 
@@ -619,7 +619,7 @@ public class DiaryExcelView extends AbstractExcelView {
         int col = 0;
         String cropNm = "";
 
-        cropNm = vo.getCropBCdNm() != null ? vo.getCropBCdNm()  : "";
+        cropNm = vo.getCropNm() != null ? vo.getCropNm()  : "";
         if (vo.getUserCropAliasNm() != null && vo.getUserCropAliasNm().isEmpty() == false) {
             cropNm += (" (" + vo.getUserCropAliasNm() + ")");
         }

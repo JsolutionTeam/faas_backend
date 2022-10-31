@@ -53,7 +53,7 @@ public class UserStockExcelView extends AbstractExcelView {
         sheet.setColumnWidth(col++, (20 * 256)); //용도
         sheet.setColumnWidth(col++, (20 * 256)); //구분
         sheet.setColumnWidth(col++, (20 * 256)); //농약명 or 비료명
-       // sheet.setColumnWidth(col++, (20 * 256)); // 비료상세
+        // sheet.setColumnWidth(col++, (20 * 256)); // 비료상세
         sheet.setColumnWidth(col++, (10 * 256)); //수량
         sheet.setColumnWidth(col++, (15 * 256)); //구입금액
         if(isAllTerm) {

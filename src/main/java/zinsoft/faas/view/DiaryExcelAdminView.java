@@ -75,7 +75,7 @@ public class DiaryExcelAdminView extends AbstractExcelView {
             setText(row++, 0, "작업단계 : "+actNm, summaryStyle);
         }
 
-     //   setText(row++, 0, "일지/계획 : " + cond.get("diaryTCdNm"), summaryStyle);
+        //   setText(row++, 0, "일지/계획 : " + cond.get("diaryTCdNm"), summaryStyle);
 
         String f = cond.get("field");
         String k = cond.get("keyword");
@@ -169,7 +169,7 @@ public class DiaryExcelAdminView extends AbstractExcelView {
                 setText(row, col++, vo.getUserNm(), dataCStyle);
                 setText(row, col++, getFullDate(vo.getActDt()), dataCStyle);
                 setText(row, col++, vo.getDiaryTCdNm(), dataCStyle);
-                setText(row, col++, vo.getCropNm(), dataLStyle);
+                setText(row, col++, vo.getCropCdNm(), dataLStyle);
                 setText(row, col++, vo.getFmwrkCdNm(), dataLStyle);
                 setText(row, col++, vo.getRemark(), dataLStyle);
                 setText(row, col++, vo.getSkyTCdNm(), dataLStyle);

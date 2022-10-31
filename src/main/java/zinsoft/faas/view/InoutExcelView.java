@@ -64,7 +64,7 @@ public class InoutExcelView extends AbstractExcelView {
         String sTrdDt = cond.get("sTrdDt");
         String eTrdDt = cond.get("eTrdDt");
         if ((sTrdDt != null && sTrdDt.isEmpty() == false) && (eTrdDt != null && eTrdDt.isEmpty() == false)) {
-             setText(row++, 0, "기간 : " + getFullDate(sTrdDt) + "~" + getFullDate(eTrdDt), summaryStyle);
+            setText(row++, 0, "기간 : " + getFullDate(sTrdDt) + "~" + getFullDate(eTrdDt), summaryStyle);
         } else {
             setText(row++, 0, "기간 : 전체", summaryStyle);
         }

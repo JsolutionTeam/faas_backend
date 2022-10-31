@@ -99,12 +99,10 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public void insert(UserDiaryDto dto) throws IllegalStateException, IOException {
-        egovLogger.info("insert(UserDiaryDto dto)");
         dto.setActDt(dto.getActDt().replaceAll("\\D", ""));
         dto.setUserDiarySeq(null);
 
         UserDiary userDiary = modelMapper.map(dto, UserDiary.class);
-        egovLogger.info("diaryDto.getActivitySeq(2) : {}", dto.getActivitySeq());
 
         userDiary = userDiaryRepository.save(userDiary);
 

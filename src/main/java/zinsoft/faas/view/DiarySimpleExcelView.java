@@ -78,7 +78,7 @@ public class DiarySimpleExcelView extends AbstractExcelView {
         String sActDt = cond.get("sActDt");
         String eActDt = cond.get("eActDt");
         if ((sActDt != null && sActDt.isEmpty() == false) && (eActDt != null && eActDt.isEmpty() == false)) {
-             setText(row++, 0, "기간 : " + getFullDate(sActDt) + "~" + getFullDate(eActDt), summaryStyle);
+            setText(row++, 0, "기간 : " + getFullDate(sActDt) + "~" + getFullDate(eActDt), summaryStyle);
         } else {
             setText(row++, 0, "기간 : 전체", summaryStyle);
         }
