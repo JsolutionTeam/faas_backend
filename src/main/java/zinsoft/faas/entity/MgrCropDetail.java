@@ -2,7 +2,10 @@ package zinsoft.faas.entity;
 
 import lombok.Getter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="comtccmmndetailcode", catalog = "mgr")

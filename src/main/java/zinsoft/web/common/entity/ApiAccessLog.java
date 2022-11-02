@@ -21,7 +21,7 @@ import lombok.ToString;
 public class ApiAccessLog {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_access_log_seq")
     private Long apiAccessLogSeq;
 

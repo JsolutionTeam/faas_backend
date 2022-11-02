@@ -14,7 +14,7 @@ import lombok.ToString;
 public class AccountDetail {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ac_detail_seq")
     private Long acDetailSeq;
 

@@ -23,7 +23,7 @@ public class Crop {
     // 작물? 품종?
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name="crop_seq")
     private Long cropSeq;
@@ -71,9 +71,5 @@ public class Crop {
 
     @Column(name = "activity_t_cd")
     private Long activityTCd;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "crop", cascade = {})
-    private List<CropSpecies> cropSpeciesList;
-
 
 }

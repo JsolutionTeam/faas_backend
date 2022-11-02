@@ -21,7 +21,7 @@ import lombok.ToString;
 public class MenuAccessLog {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name="menu_access_log_seq")
     private Long menuAccessLogSeq;

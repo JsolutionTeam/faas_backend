@@ -163,11 +163,6 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
         return query.select(allFields)
                 .from(userDiary)
                 .leftJoin(activity)
-//                .on(userDiary.activitySeq.eq(activity.activitySeq))
-//                .join(userCrop)
-//                .on(userDiary.userCropSeq.eq(userCrop.userCropSeq))
-//                .join(crop)
-//                .on(userCrop.cropSeq.eq(crop.cropSeq))
                 .join(userInfo)
                 .on(userDiary.userId.eq(userInfo.userId))
                 .where(condition)
@@ -205,12 +200,6 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
                 .leftJoin(mgrCropDetail).on(userDiary.cropCd.eq(mgrCropDetail.id.code)).fetchJoin()
                 .leftJoin(mgrCropDetail).on(userDiary.growStep.eq(mgrCropDetail.id.code)).fetchJoin()
                 .leftJoin(episNsFmwrkWrkcd).on(userDiary.fmwrkCd.eq(episNsFmwrkWrkcd.fmwrkCd)).fetchJoin()
-//                                            .leftJoin(activity)
-//                                            .on(userDiary.activitySeq.eq(activity.activitySeq))
-//                                            .join(userCrop)
-//                                            .on(userDiary.userCropSeq.eq(userCrop.userCropSeq))
-//                                            .leftJoin(crop)
-//                                            .on(userCrop.cropSeq.eq(crop.cropSeq))
                 .join(userInfo)
                 .on(userDiary.userId.eq(userInfo.userId)).fetchJoin()
 
@@ -255,36 +244,6 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
         if (StringUtils.isNotBlank(diaryTCd)) {
             condition = condition.and(userDiary.diaryTCd.eq(diaryTCd));
         }
-
-//        if (search.get("cropSeq") != null) {
-//            String strCropSeq = (String)search.get("cropSeq");
-//            if(StringUtils.isNotBlank(strCropSeq)) {
-//                Long cropSeq = Long.valueOf(strCropSeq);
-//                if (cropSeq > 0) {
-//                    condition = condition.and(userDiary.cropSeq.eq(cropSeq));
-//                }
-//            }
-//        }
-
-//        if (search.get("userCropSeq") != null) {
-//            String strUserCropSeq = (String)search.get("userCropSeq");
-//            if(StringUtils.isNotBlank(strUserCropSeq)) {
-//                Long userCropSeq = Long.valueOf(strUserCropSeq);
-//                if (userCropSeq > 0) {
-//                    condition = condition.and(userDiary.userCropSeq.eq(userCropSeq));
-//                }
-//            }
-//        }
-
-//        if (search.get("activitySeq") != null) {
-//            String strActivitySeq = (String)search.get("activitySeq");
-//            if(StringUtils.isNotBlank(strActivitySeq)) {
-//                Long activitySeq = Long.valueOf(strActivitySeq);
-//                if (activitySeq > 0) {
-//                    condition = condition.and(userDiary.activitySeq.eq(activitySeq));
-//                }
-//            }
-//        }
 
         if (search.get("cropCd") != null) {
             String cropCd = (String) search.get("cropCd");
@@ -384,15 +343,13 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
               .from(userDiary)
               .join(episNsFmwrkWrkcd)
               .on(episNsFmwrkWrkcd.fmwrkCd.eq(userDiary.fmwrkCd)).fetchJoin()
-//              .join(activity).on(userDiary.activitySeq.eq(activity.activitySeq))
               .where(condition)
-//              .groupBy(userDiary.activitySeq)
               .groupBy(userDiary.fmwrkCd)
               .fetch()
               .stream()
               .map(t -> {Map<String, Object> m = new HashMap<>();
-                         m.put("actNm", t.get(activity.actNm));
-                         m.put("cnt", t.get(activity.activitySeq.count()));
+                         m.put("actNm", t.get(episNsFmwrkWrkcd.fmwrkNm));
+                         m.put("cnt", t.get(episNsFmwrkWrkcd.fmwrkCd.count()));
                          return m;})
               .collect(Collectors.toList());
   }

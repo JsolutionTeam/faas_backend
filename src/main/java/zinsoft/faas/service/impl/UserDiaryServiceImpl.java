@@ -211,6 +211,10 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         } else {
             String sActDt = (String) search.get("sActDt");
             String eActDt = (String) search.get("eActDt");
+
+            System.out.println("sActDt = " + sActDt);
+            System.out.println("eActDt = " + eActDt);
+
             sActDt = sActDt.replaceAll("[^0-9]", "");
             eActDt = eActDt.replaceAll("[^0-9]", "");
 

@@ -9,13 +9,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 import zinsoft.faas.entity.Crop;
-import zinsoft.faas.entity.CropSpecies;
 import zinsoft.faas.entity.QCrop;
 import zinsoft.util.KeyValueable;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -77,13 +74,6 @@ public class CropDto implements KeyValueable<String> {
         this.cropBCdNm = cropBCdNm;
         this.cropSCdNm = cropSCdNm;
         this.cropCnt = cropCnt;
-//        if(crop.getCropSpeciesList() != null && crop.getCropSpeciesList().size() > 0){
-//            List<CropSpecies> cropSpecies = crop.getCropSpeciesList();
-//            this.cropSpeciesList =
-//                    cropSpecies.stream()
-//                            .map(CropSpeciesDto::new)
-//                            .collect(Collectors.toList());
-//        }
     }
 
     @Override

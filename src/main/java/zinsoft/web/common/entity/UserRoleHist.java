@@ -21,7 +21,7 @@ import lombok.ToString;
 public class UserRoleHist {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_role_hist_seq")
     private Long userRoleHistSeq;
 

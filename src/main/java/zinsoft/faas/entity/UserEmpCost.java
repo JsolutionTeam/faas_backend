@@ -1,15 +1,13 @@
 package zinsoft.faas.entity;
 
-import java.util.Date;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,7 +19,7 @@ import lombok.ToString;
 public class UserEmpCost {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_emp_cost_seq")
     private Long userEmpCostSeq;
     @Column(name="user_id")

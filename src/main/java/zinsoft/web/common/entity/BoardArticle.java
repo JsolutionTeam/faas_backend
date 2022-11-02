@@ -21,8 +21,7 @@ import lombok.ToString;
 public class BoardArticle {
 
     @Id
-    @GeneratedValue
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_seq")
     private Long articleSeq;
 

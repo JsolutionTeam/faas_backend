@@ -21,7 +21,7 @@ import lombok.ToString;
 public class BoardComment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="comment_seq")
     private Long commentSeq;
 

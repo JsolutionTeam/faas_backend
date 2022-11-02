@@ -21,7 +21,7 @@ import lombok.ToString;
 public class BoardCategory {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cat_seq")
     private Long catSeq;
 

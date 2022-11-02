@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import zinsoft.faas.dto.CropDto;
-import zinsoft.faas.dto.CropSpeciesDto;
 import zinsoft.faas.service.CropService;
-import zinsoft.faas.service.impl.CropSpeciesService;
 import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 
@@ -33,9 +31,6 @@ public class CropController {
 
     @Resource
     CropService cropService;
-
-    @Autowired
-    private CropSpeciesService cropSpeciesService;
 
     @GetMapping(value = "/{cropSeq}")
     @ResponseBody
@@ -66,13 +61,6 @@ public class CropController {
         //Map<String, Object> map = new HashMap<>();
         List<CropDto> list = cropService.list(map);
         return new Result(true, "0000", list);
-    }
-
-    @GetMapping(value = "/species/{cropBCd}")
-    @ResponseBody
-    public Result getCropSpeciesList(@PathVariable String cropBCd) throws Exception {
-        List<CropSpeciesDto> speciesDTOList = cropSpeciesService.getAllByCropBCd(cropBCd);
-        return new Result(true, "0000", speciesDTOList);
     }
 
     @PutMapping(value = "/{cropSeq}")

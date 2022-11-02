@@ -77,17 +77,6 @@ public class UserDiaryValidator implements Validator {
             errors.rejectValue("fmwrkCd", Result.INVALID_FMWRKCD);
         }
 
-//        if (userDiaryDto.getActivitySeq() != null && userDiaryDto.getActivitySeq() > 0) {
-//            boolean res = activityService.isExistActivityId(userDiaryDto.getActivitySeq());
-//            if (!res) {
-//                errors.rejectValue("activitySeq", Result.INVALID_ACTIVITY);
-//            }
-//        } else {
-//            if (StringUtils.isBlank(userDiaryDto.getActNm())) {
-//                errors.rejectValue("activitySeq", Result.INVALID_ACTIVITY);
-//            }
-//        }
-
         if (userDiaryDto.getPackTCd() != null && userDiaryDto.getPackTCd().isEmpty() == false) {
             List<CodeDto> codeDto = codeService.listStartsWithCodeVal("PACK_T_CD", userDiaryDto.getPackTCd());
             if (codeDto == null || codeDto.size() == 0) {

@@ -20,9 +20,9 @@ public class ApiAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
     @Value("${api.prefix:}")
     private String apiPrefix;
 
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
 
-    private ApiAccessLogRepository apiAccessLogRepository;
+    private final ApiAccessLogRepository apiAccessLogRepository;
 
     @Autowired
     public ApiAccessLogServiceImpl(

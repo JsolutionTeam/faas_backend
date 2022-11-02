@@ -1,6 +1,5 @@
 package zinsoft.faas.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.Column;

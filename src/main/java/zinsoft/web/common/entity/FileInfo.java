@@ -21,7 +21,7 @@ import lombok.ToString;
 public class FileInfo {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="file_seq")
     private Long fileSeq;
     
