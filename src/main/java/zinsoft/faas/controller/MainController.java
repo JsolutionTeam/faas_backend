@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ import zinsoft.faas.service.ActivityService;
 import zinsoft.faas.service.CalService;
 import zinsoft.faas.service.FaasDataService;
 import zinsoft.faas.service.UserCropService;
+import zinsoft.faas.service.impl.BasicDataServiceImpl;
 import zinsoft.util.AppPropertyUtil;
 import zinsoft.util.Constants;
 import zinsoft.util.Result;
@@ -43,10 +45,12 @@ import zinsoft.web.exception.CodeMessageException;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class MainController {
 
     @Resource
     FaasDataService customDataService;
+//    private final BasicDataServiceImpl customDataService;
 
     @Resource
     UserInfoService userInfoService;

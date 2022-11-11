@@ -62,10 +62,12 @@ public class UserChemicalStockDto {
     @Digits(integer = 8, fraction = 2)
     @ApiModelProperty(notes = "수량")
     private Double quan;
+
     @ApiModelProperty(notes = "금액")
     @Min(value = 0)
     @Digits(integer = 10, fraction = 0)
     private Long amt;
+
     @ApiModelProperty(notes = "남은수")
     private Double remainingQuan;
     private String remark;

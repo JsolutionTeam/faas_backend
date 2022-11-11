@@ -13,6 +13,7 @@ import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
+import zinsoft.web.exception.CodeMessageException;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -49,9 +50,10 @@ public class UserManureController {
     @PostMapping(value = "")
     @ResponseBody
     public Result insert(@Valid UserManureDto dto) throws Exception {
-        if(UserInfoUtil.isAdmin() || UserInfoUtil.isManager()) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isAdmin() || UserInfoUtil.isManager()) {
+//            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId(farmerInfo.getUserId());
@@ -97,9 +99,10 @@ public class UserManureController {
     @PutMapping(value = "/{userManureSeq}")
     @ResponseBody
     public Result update(@PathVariable("userManureSeq") Long userCropSeq, @Valid UserManureDto dto) throws Exception {
-        if( UserInfoUtil.isManager()) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if( UserInfoUtil.isManager()) {
+//            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -115,9 +118,10 @@ public class UserManureController {
     @ResponseBody
     public Result delete(@PathVariable("userManureSeq") Long userManureSeq) throws Exception {
 
-        if( UserInfoUtil.isManager()) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if( UserInfoUtil.isManager()) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         String userId = null;
         if (!UserInfoUtil.isAdmin()) {

@@ -40,6 +40,7 @@
                                FROM tf_code z
                               WHERE z.code_id = #{codeId})
                         </otherwise>
-                    </choose>)
+                    </choose>
+                    )
     </insert>
 </mapper>

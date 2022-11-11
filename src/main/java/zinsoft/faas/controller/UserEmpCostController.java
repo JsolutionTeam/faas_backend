@@ -75,9 +75,10 @@ public class UserEmpCostController {
     @PostMapping(value = "")
     @ResponseBody
     public Result insert(@Valid UserEmpCostDto dto, HttpServletResponse response) throws Exception {
-        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId(farmerInfo.getUserId());
@@ -112,9 +113,10 @@ public class UserEmpCostController {
     @PutMapping(value = "/{userEmpCostSeq}")
     @ResponseBody
     public Result put( @Valid UserEmpCostDto dto) throws Exception {
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if(!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -133,9 +135,10 @@ public class UserEmpCostController {
     @DeleteMapping(value = "/{userEmpCostSeq}")
     @ResponseBody
     public Result delete(@PathVariable("userEmpCostSeq")Long userEmpCostSeq) throws Exception {
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
         String userId = null;
         if(!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();

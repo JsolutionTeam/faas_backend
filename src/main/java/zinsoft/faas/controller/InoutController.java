@@ -165,9 +165,9 @@ public class InoutController {
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             dto.setUserId(farmerInfo.getUserId());
@@ -184,9 +184,9 @@ public class InoutController {
         String userId = null;
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
@@ -206,9 +206,9 @@ public class InoutController {
             throw new CodeMessageException(Result.BAD_REQUEST);
         }
 
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         String userId = null;
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -243,9 +243,9 @@ public class InoutController {
     public Result insertReversing(@PathVariable("userInoutSeq") Long userInoutSeq, UserInoutDto rDto) throws Exception {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             rDto.setUserId(farmerInfo.getUserId());
@@ -269,9 +269,10 @@ public class InoutController {
     public Result deleteReversing(@PathVariable("userInoutSeq") Long userInoutSeq) throws Exception {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         String userId = null;
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();

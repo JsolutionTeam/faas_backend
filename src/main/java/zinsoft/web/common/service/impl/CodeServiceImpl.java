@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,14 @@ import zinsoft.web.exception.CodeMessageException;
 
 @Service("codeService")
 @Transactional
+@RequiredArgsConstructor
 public class CodeServiceImpl extends EgovAbstractServiceImpl implements CodeService {
 
     //private Type dtoListType = new TypeToken<List<CodeDto>>() {}.getType();
 
-    @Autowired
-    ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Resource
-    CodeMapper codeMapper;
+    private final CodeMapper codeMapper;
 
     @Resource
     CodeRepository codeRepository;

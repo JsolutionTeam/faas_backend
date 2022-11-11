@@ -31,6 +31,7 @@ import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
+import zinsoft.web.exception.CodeMessageException;
 
 @Controller
 @RequestMapping("${api.prefix}/user-stock")
@@ -79,9 +80,10 @@ public class UserStockController {
     @PostMapping(value = "/chemical")
     @ResponseBody
     public Result insertChemical(@Valid UserChemicalStockDto dto) throws Exception {
-        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId( farmerInfo.getUserId());
@@ -122,9 +124,10 @@ public class UserStockController {
     @PutMapping(value = "/chemical/{userChemicalStockSeq}")
     @ResponseBody
     public Result putChemical(@PathVariable("userChemicalStockSeq") Long userChemicalStockSeq, @Valid UserChemicalStockDto dto) throws Exception {
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if(!UserInfoUtil.isAdmin() ) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -140,7 +143,8 @@ public class UserStockController {
     @ResponseBody
     public Result deleteChemical(@PathVariable("userChemicalStockSeq") Long userChemicalStockSeq) throws Exception {
         if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
+            //            return new Result(false, Result.FORBIDDEN);
+            throw new CodeMessageException(Result.FORBIDDEN);
         }
 
         String userId = null;
@@ -171,9 +175,10 @@ public class UserStockController {
     @PostMapping(value = "/manure")
     @ResponseBody
     public Result insertManure(@Valid UserManureStockDto dto) throws Exception {
-        if(UserInfoUtil.isManager() ||  UserInfoUtil.isAdmin()) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ||  UserInfoUtil.isAdmin()) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId( farmerInfo.getUserId());
@@ -214,9 +219,10 @@ public class UserStockController {
     @PutMapping(value = "/manure/{userManureStockSeq}")
     @ResponseBody
     public Result putManure(@PathVariable("userManureStockSeq") Long userManureStockSeq, @Valid UserManureStockDto dto) throws Exception {
-        if(UserInfoUtil.isManager()) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager()) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if(!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -232,9 +238,10 @@ public class UserStockController {
     @ResponseBody
     public Result deleteManure(@PathVariable("userManureStockSeq") Long userManureStockSeq) throws Exception {
 
-        if(UserInfoUtil.isManager()) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager()) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         String userId = null;
         if(!UserInfoUtil.isAdmin()) {

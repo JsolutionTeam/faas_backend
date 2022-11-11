@@ -168,8 +168,8 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
             param.put("stDt", stDt);
             param.put("edDt", edDt);
         }
-        return userChemicalStockMapper.list(param);
-        //return userChemicalStockRepository.list(param);
+//        return userChemicalStockMapper.list(param);
+        return userChemicalStockRepository.list(param);
     }
 
     @Override

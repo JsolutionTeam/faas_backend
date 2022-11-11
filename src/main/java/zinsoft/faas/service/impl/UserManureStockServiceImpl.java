@@ -155,8 +155,8 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
             param.put("stDt", stDt);
             param.put("edDt", edDt);
         }
-        return userManureStockMapper.list(param);
-        //return userManureStockRepository.list(param);
+//        return userManureStockMapper.list(param);
+        return userManureStockRepository.list(param);
     }
 
     @Override

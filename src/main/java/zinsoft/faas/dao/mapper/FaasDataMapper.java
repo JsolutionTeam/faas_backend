@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
-@Mapper
+@Mapper("FaasDataMapper")
 public interface FaasDataMapper {
 
     List<Map<String, Object>> getDataCount(@Param("userId") String userId, @Param("startDt") String startDt, @Param("endDt") String endDt);

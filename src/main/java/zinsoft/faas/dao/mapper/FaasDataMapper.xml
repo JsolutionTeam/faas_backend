@@ -78,9 +78,9 @@
     </select>
     
     <sql id="checkUserId">
-        <if test='userId != null and userId != ""'> 
-            AND z.user_id = #{userId}
-        </if>
+            <if test='userId != null and userId != ""'>
+                AND z.user_id = #{userId}
+            </if>
     </sql>
     
     <select id="getCalendarData" resultMap="calendarResultMap">

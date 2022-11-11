@@ -73,7 +73,9 @@ public class DiaryController {
         DataTablesResponse<?> dataTablesList = userDiaryService.page(param, pageable);
         List<UserDiaryDto> list = (List<UserDiaryDto>) dataTablesList.getItems();
 
-            view = ((!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager())) ? new DiarySimpleExcelView() : new DiarySimpleExcelAdminView();
+            view = ((!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager())) ?
+                    new DiarySimpleExcelView() :
+                    new DiarySimpleExcelAdminView();
 
 
         ModelAndView mv = new ModelAndView(view);
@@ -206,9 +208,10 @@ public class DiaryController {
     @ResponseBody
     public Result update(@PathVariable("userDiarySeq") Long userDiarySeq, @Valid UserDiaryDto dto) throws Exception {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             dto.setUserId(farmerInfo.getUserId());
@@ -224,9 +227,9 @@ public class DiaryController {
         String userId = null;
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
@@ -246,9 +249,9 @@ public class DiaryController {
             throw new CodeMessageException(Result.BAD_REQUEST);
         }
 
-        if (UserInfoUtil.isManager()) {
-            throw new CodeMessageException(Result.FORBIDDEN);
-        }
+//        if (UserInfoUtil.isManager()) {
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
         String userId = null;
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         if (!UserInfoUtil.isAdmin()) {

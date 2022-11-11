@@ -63,9 +63,10 @@ public class UserProductionController {
     @PostMapping(value = "")
     @ResponseBody
     public Result insert(@Valid UserProductionDto dto) throws Exception {
-        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin()) {
+//            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId(farmerInfo.getUserId());
@@ -126,9 +127,10 @@ public class UserProductionController {
     @ResponseBody
     public Result update(@PathVariable("userProductionSeq") Long userCropSeq, @Valid UserProductionDto dto) throws Exception {
 
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -145,9 +147,10 @@ public class UserProductionController {
     public Result delete(@PathVariable("userProductionSeq") Long userProductionSeq) throws Exception {
         String userId = null;
 
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -167,9 +170,10 @@ public class UserProductionController {
             throw new CodeMessageException(Result.BAD_REQUEST);
         }
 
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();

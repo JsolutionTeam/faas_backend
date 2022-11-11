@@ -29,6 +29,7 @@ import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
+import zinsoft.web.exception.CodeMessageException;
 
 @Controller
 @RequestMapping("${api.prefix}/user-chemical")
@@ -69,9 +70,10 @@ public class UserChemicalController {
     @PostMapping(value = "")
     @ResponseBody
     public Result insert(@Valid UserChemicalDto dto) throws Exception {
-        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() || UserInfoUtil.isAdmin() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId( farmerInfo.getUserId());
@@ -102,9 +104,10 @@ public class UserChemicalController {
     @PutMapping(value = "/{userChemicalSeq}")
     @ResponseBody
     public Result put(@PathVariable("userChemicalSeq") Long userChemicalSeq, @Valid UserChemicalDto dto) throws Exception {
-        if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
-        }
+//        if(UserInfoUtil.isManager() ) {
+            //            return new Result(false, Result.FORBIDDEN);
+//            throw new CodeMessageException(Result.FORBIDDEN);
+//        }
 
         if (!UserInfoUtil.isAdmin() ) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
@@ -120,13 +123,14 @@ public class UserChemicalController {
     @ResponseBody
     public Result delete(@PathVariable("userChemicalSeq") Long userChemicalSeq, String userId) throws Exception {
         if(UserInfoUtil.isManager() ) {
-            return new Result(false, Result.FORBIDDEN);
+            //            return new Result(false, Result.FORBIDDEN);
+            throw new CodeMessageException(Result.FORBIDDEN);
         }
 
-        if (!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-            userId = farmerInfo.getUserId();
-        }
+//        if (!UserInfoUtil.isAdmin()) {
+//            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//            userId = farmerInfo.getUserId();
+//        }
 
         userChemicalService.delete(userId, userChemicalSeq);
         return new Result(true, "0000");
