@@ -7,11 +7,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import zinsoft.faas.dao.mapper.FaasDataMapper;
+import zinsoft.faas.dao.mapper.FaasDataRepository;
 import zinsoft.faas.dto.AccountDto;
 import zinsoft.faas.dto.CropDto;
 import zinsoft.faas.dto.UserCropDto;
@@ -21,7 +23,10 @@ import zinsoft.web.common.service.AppPropertiesService;
 import zinsoft.web.common.service.CodeService;
 
 @Service
+@RequiredArgsConstructor
 public class FaasDataService {
+
+    private final FaasDataRepository faasDataRepository;
 
     @Autowired
     ServletContext servletContext;
@@ -210,7 +215,8 @@ public class FaasDataService {
     }
 
     public List<Map<String, Object>> getCalendarData(String userId, String startDt, String endDt) {
-        return faasDataMapper.getCalendarData(userId, startDt, endDt);
+        return faasDataRepository.getCalendarData(userId, startDt, endDt);
+//        return faasDataMapper.getCalendarData(userId, startDt, endDt);
     }
 
     public List<Map<String, Object>> getFarmingStatus(String userId) {

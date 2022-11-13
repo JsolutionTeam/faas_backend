@@ -8,6 +8,9 @@ import zinsoft.faas.dto.EpisNsFmwrkActCalResDto;
 import zinsoft.faas.dto.QEpisNsFmwrkActCalResDto;
 import zinsoft.faas.entity.EpisNsFmwrkActCal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static zinsoft.faas.entity.QEpisNsFmwrkAct.episNsFmwrkAct;
 import static zinsoft.faas.entity.QEpisNsFmwrkActCal.episNsFmwrkActCal;
 import static zinsoft.faas.entity.QEpisNsFmwrkWrkcd.episNsFmwrkWrkcd;
@@ -24,7 +27,7 @@ public class EpisNsFmwrkActCalQueryRespository extends QuerydslRepositorySupport
     }
 
     public EpisNsFmwrkActCalResDto getFmwrkActCal(String cropCd, String growStep, String fmwrkCd) {
-        return queryFactory.select(
+        List<EpisNsFmwrkActCalResDto> result = queryFactory.select(
                         new QEpisNsFmwrkActCalResDto(episNsFmwrkActCal)
                 ).from(episNsFmwrkActCal)
                 .leftJoin(episNsFmwrkAct).on(episNsFmwrkAct.fmwrkActCode.eq(episNsFmwrkActCal.fmwrkActCode))
@@ -33,7 +36,8 @@ public class EpisNsFmwrkActCalQueryRespository extends QuerydslRepositorySupport
                         episNsFmwrkAct.cropCd.eq(cropCd)
                                 .and(episNsFmwrkActCal.growStep.eq(growStep))
                                 .and(episNsFmwrkActCal.fmwrkCd.eq(fmwrkCd))
-                ).fetchOne();
+                ).fetch();
+        return result.size() > 0 ? result.get(0) : null;
 
     }
 }

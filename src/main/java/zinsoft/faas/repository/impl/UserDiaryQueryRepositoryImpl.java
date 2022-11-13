@@ -162,9 +162,10 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
 
         return query.select(allFields)
                 .from(userDiary)
-                .leftJoin(activity)
+//                .leftJoin(activity)
+//                .on(activity.activitySeq.eq(userDiary.activitySeq))
                 .join(userInfo)
-                .on(userDiary.userId.eq(userInfo.userId))
+                    .on(userDiary.userId.eq(userInfo.userId))
                 .where(condition)
                 .fetchOne();
     }
