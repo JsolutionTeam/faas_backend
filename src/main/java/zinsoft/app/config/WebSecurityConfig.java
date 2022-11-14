@@ -110,24 +110,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/content/login").permitAll()
                         .antMatchers("/").permitAll()
                 */
-                .and()
-                .authorizeRequests()
-                .antMatchers("/test/**").permitAll() //   /test/** 경로는 로그인 확인 x
+
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/test/**").permitAll() //   /test/** 경로는 로그인 확인 x
 
                 .and()
-                .formLogin()
-                //.loginPage(Constants.WEB_SECURITY_LOGIN_PAGE) // authenticationEntryPoint에서 처리
-                .loginProcessingUrl(apiPrefix + Constants.WEB_SECURITY_LOGIN_PROCESSING_URL)
-                .usernameParameter(Constants.WEB_SECURITY_USERNAME_PARAMETER)
-                .passwordParameter(Constants.WEB_SECURITY_PASSWORD_PARAMETER)
-                .successHandler(loginSuccessHandler())
-                .failureHandler(loginFailureHandler())
+                    .formLogin()
+                    //.loginPage(Constants.WEB_SECURITY_LOGIN_PAGE) // authenticationEntryPoint에서 처리
+                        .loginProcessingUrl(apiPrefix + Constants.WEB_SECURITY_LOGIN_PROCESSING_URL)
+                        .usernameParameter(Constants.WEB_SECURITY_USERNAME_PARAMETER)
+                        .passwordParameter(Constants.WEB_SECURITY_PASSWORD_PARAMETER)
+                        .successHandler(loginSuccessHandler())
+                        .failureHandler(loginFailureHandler())
                 //.permitAll()
                 .and()
-                .logout()
-                .logoutUrl(apiPrefix + Constants.WEB_SECURITY_LOGOUT_URL)
-                .logoutSuccessHandler(logoutSuccessHandler())
-                .deleteCookies("JSESSIONID")
+                    .logout()
+                        .logoutUrl(apiPrefix + Constants.WEB_SECURITY_LOGOUT_URL)
+                            .logoutSuccessHandler(logoutSuccessHandler())
+                            .deleteCookies("JSESSIONID")
                 .and()
                 .rememberMe()
                 .key("q2F5yMWEg")

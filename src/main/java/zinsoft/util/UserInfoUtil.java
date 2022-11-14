@@ -42,9 +42,10 @@ public class UserInfoUtil {
                 return user;
             }
         } catch (Exception e) {
+            log.error(e.getMessage());
+            log.error(e.getCause().toString());
             return null;
         }
-
         return null;
     }
 
@@ -176,6 +177,8 @@ public class UserInfoUtil {
             }
         } catch (Exception e) {
             // ignore
+            log.error(e.getMessage());
+            log.error(e.getCause().toString());
         }
 
         return getUserInfo();
