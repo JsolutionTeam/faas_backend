@@ -238,6 +238,7 @@ public class InoutController {
         return new Result(true, Result.OK, list);
     }
 
+    // /r/~~~ 오타 아님
     @PutMapping(value = "/r/{userInoutSeq}")
     @ResponseBody
     public Result insertReversing(@PathVariable("userInoutSeq") Long userInoutSeq, UserInoutDto rDto) throws Exception {
@@ -264,6 +265,7 @@ public class InoutController {
         return new Result(true, "0000");
     }
 
+    // /r/~~~ 오타 아님
     @DeleteMapping(value = "/r/{userInoutSeq}")
     @ResponseBody
     public Result deleteReversing(@PathVariable("userInoutSeq") Long userInoutSeq) throws Exception {
