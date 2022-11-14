@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import zinsoft.web.exception.CodeMessageException;
 
 @RestController
 @RequestMapping("${api.prefix}")
+@Slf4j
 public class BasicController {
 
     @Resource
@@ -70,16 +72,19 @@ public class BasicController {
 
     @GetMapping("/session")
     public Result session(String menuId, boolean withMenu) {
+        log.info("request /session, menuId : {}, withMenu : {}", menuId, withMenu);
         UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-
+        log.info("/session - userInfo : {}", userInfo);
         if (StringUtils.isNotBlank(menuId)) {
             String userId = userInfo != null ? userInfo.getUserId() : null;
+            log.info("/session - userId : {}", userId);
             menuAccessLogService.insert(menuId, userId, null);
         }
 
         // 권한관리에서 메뉴 권한이 수정될 수 있으므로 실제로 세션에 데이터를 넣으면 안됨
 
         String roleId = UserInfoUtil.getMainRoleId(userInfo);
+        log.info("/session - roleId : {}", roleId);
         Map<String, Object> ret = new HashMap<>();
 
         ret.put("userInfo", userInfo);
@@ -88,6 +93,7 @@ public class BasicController {
             HierarchicalMenu hierarchicalMenu = hierarchicalMenuMap.get(roleId);
             ret.put("menuList", hierarchicalMenu != null ? hierarchicalMenu.getSubMenu() : null);
         }
+        log.info("/session - ret : {}", ret);
 
         return new Result(true, Result.OK, ret);
     }
