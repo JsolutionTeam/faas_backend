@@ -17,7 +17,6 @@ import zinsoft.faas.dao.mapper.FaasDataRepository;
 import zinsoft.faas.dto.AccountDto;
 import zinsoft.faas.dto.CropDto;
 import zinsoft.faas.dto.UserCropDto;
-import zinsoft.faas.repository.FaasDataRepository;
 import zinsoft.faas.vo.UserActivity;
 import zinsoft.web.common.dto.CodeDto;
 import zinsoft.web.common.service.AppPropertiesService;
@@ -35,8 +34,6 @@ public class FaasDataService {
     @Resource
     FaasDataMapper faasDataMapper;
 
-
-    private final FaasDataRepository faasDataRepository;
 
     @Resource
     AppPropertiesService appPropertiesService;
