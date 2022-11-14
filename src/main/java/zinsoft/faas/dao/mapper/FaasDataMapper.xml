@@ -3,47 +3,47 @@
 <mapper namespace="zinsoft.faas.dao.mapper.FaasDataMapper">
 
     <resultMap id="userDiaryResultMap" type="java.util.HashMap">
-        <id column="USER_DIARY_SEQ" property="userDiarySeq" jdbcType="NUMERIC" />
-        <result column="DIARY_ACT_NM" property="diaryActNm" jdbcType="VARCHAR" />
-        <result column="DIARY_MARK_T_CD_NM" property="diaryMarkTCdNm" jdbcType="VARCHAR" />
-        <result column="DIARY_MARK_T_CD" property="diaryMarkTCd" jdbcType="VARCHAR" />
-        <result column="DIARY_CROP_NM" property="diaryCropNm" jdbcType="VARCHAR" />
-        <result column="DIARY_USER_CROP_ALIAS_NM" property="diaryUserCropAliasNm" jdbcType="VARCHAR" />
+        <id column="USER_DIARY_SEQ" property="userDiarySeq" jdbcType="NUMERIC"/>
+        <result column="DIARY_ACT_NM" property="diaryActNm" jdbcType="VARCHAR"/>
+        <result column="DIARY_MARK_T_CD_NM" property="diaryMarkTCdNm" jdbcType="VARCHAR"/>
+        <result column="DIARY_MARK_T_CD" property="diaryMarkTCd" jdbcType="VARCHAR"/>
+        <result column="DIARY_CROP_NM" property="diaryCropNm" jdbcType="VARCHAR"/>
+        <result column="DIARY_USER_CROP_ALIAS_NM" property="diaryUserCropAliasNm" jdbcType="VARCHAR"/>
     </resultMap>
-    
+
     <resultMap id="userInoutResultMap" type="java.util.HashMap">
-        <id column="USER_INOUT_SEQ" property="userInoutSeq" jdbcType="NUMERIC" />
-        <result column="INOUT_AMT" property="inoutAmt" jdbcType="NUMERIC" />
-        <result column="INOUT_CD_NM" property="inoutCdNm" jdbcType="VARCHAR" />
-        <result column="INOUT_CROP_NM" property="inoutCropNm" jdbcType="VARCHAR" />
-        <result column="INOUT_AC_NM" property="inoutAcNm" jdbcType="VARCHAR" />
-        <result column="INOUT_T_CD_NM" property="inoutTCdNm" jdbcType="VARCHAR" />
-        <result column="INOUT_USER_CROP_ALIAS_NM" property="inoutUserCropAliasNm" jdbcType="VARCHAR" />
+        <id column="USER_INOUT_SEQ" property="userInoutSeq" jdbcType="NUMERIC"/>
+        <result column="INOUT_AMT" property="inoutAmt" jdbcType="NUMERIC"/>
+        <result column="INOUT_CD_NM" property="inoutCdNm" jdbcType="VARCHAR"/>
+        <result column="INOUT_CROP_NM" property="inoutCropNm" jdbcType="VARCHAR"/>
+        <result column="INOUT_AC_NM" property="inoutAcNm" jdbcType="VARCHAR"/>
+        <result column="INOUT_T_CD_NM" property="inoutTCdNm" jdbcType="VARCHAR"/>
+        <result column="INOUT_USER_CROP_ALIAS_NM" property="inoutUserCropAliasNm" jdbcType="VARCHAR"/>
     </resultMap>
-    
+
     <resultMap id="userEduResultMap" type="java.util.HashMap">
-        <id column="USER_EDU_SEQ" property="userEduSeq" jdbcType="NUMERIC" />
-        <result column="EDU_ST_TM" property="eduStTm" jdbcType="CHAR" />
-        <result column="EDU_ED_TM" property="eduEdTm" jdbcType="CHAR" />
-        <result column="LOCATION" property="location" jdbcType="VARCHAR" />
-        <result column="SUBJECT" property="subject" jdbcType="VARCHAR" />
+        <id column="USER_EDU_SEQ" property="userEduSeq" jdbcType="NUMERIC"/>
+        <result column="EDU_ST_TM" property="eduStTm" jdbcType="CHAR"/>
+        <result column="EDU_ED_TM" property="eduEdTm" jdbcType="CHAR"/>
+        <result column="LOCATION" property="location" jdbcType="VARCHAR"/>
+        <result column="SUBJECT" property="subject" jdbcType="VARCHAR"/>
     </resultMap>
-    
+
     <resultMap id="calendarResultMap" type="java.util.HashMap">
-        <id property="calDT" column="cal_dt" />
-        <result column="USER_DIARY_CNT" property="userDiaryCnt" jdbcType="NUMERIC" />
-        <result column="USER_INOUT_CNT" property="userInoutCnt" jdbcType="NUMERIC" />
-        <result column="USER_PRD_CNT" property="userProductionCnt" jdbcType="NUMERIC" />
-        <result column="USER_SHIP_CNT" property="userShipCnt" jdbcType="NUMERIC" />
+        <id property="calDT" column="cal_dt"/>
+        <result column="USER_DIARY_CNT" property="userDiaryCnt" jdbcType="NUMERIC"/>
+        <result column="USER_INOUT_CNT" property="userInoutCnt" jdbcType="NUMERIC"/>
+        <result column="USER_PRD_CNT" property="userProductionCnt" jdbcType="NUMERIC"/>
+        <result column="USER_SHIP_CNT" property="userShipCnt" jdbcType="NUMERIC"/>
     </resultMap>
-    
-    
+
+
     <select id="getDataCount" resultType="HashMap">
         SELECT COUNT (*) cnt, '영농일지' cnt_nm
-          FROM tf_user_diary z
-         WHERE     z.status_cd = 'N'
-               AND z.user_id = #{userId}
-               AND z.act_dt BETWEEN #{startDt} AND #{endDt}
+        FROM tf_user_diary z
+        WHERE z.status_cd = 'N'
+        AND z.user_id = #{userId}
+        AND z.act_dt BETWEEN #{startDt} AND #{endDt}
         <!-- UNION ALL
         SELECT COUNT (DISTINCT z.slip_no) cnt, '전표' cnt_nm
           FROM tf_user_slip z
@@ -52,305 +52,308 @@
                AND z.trd_dt BETWEEN #{startDt} AND #{endDt} -->
         UNION ALL
         SELECT COUNT (*) cnt, '입출금' cnt_nm
-          FROM tf_user_inout z
-         WHERE     z.status_cd = 'N'
-               AND z.user_id = #{userId}
-               AND z.trd_dt BETWEEN #{startDt} AND #{endDt}
+        FROM tf_user_inout z
+        WHERE z.status_cd = 'N'
+        AND z.user_id = #{userId}
+        AND z.trd_dt BETWEEN #{startDt} AND #{endDt}
         UNION ALL
-          SELECT COUNT (*) cnt, 
-                 (SELECT zz.code_nm
-                    FROM tf_code zz
-                   WHERE zz.code_id = 'MARK_T_CD' AND zz.code_val = y.mark_t_cd) cnt_nm
-            FROM tf_user_diary z, tf_activity y
-           WHERE     z.status_cd = 'N'
-                 AND y.status_cd = 'N'
-                 AND z.activity_seq = y.activity_seq
-                 AND z.user_id = #{userId}
-                 AND z.act_dt BETWEEN #{startDt} AND #{endDt}
+        SELECT COUNT (*) cnt,
+        (SELECT zz.code_nm
+        FROM tf_code zz
+        WHERE zz.code_id = 'MARK_T_CD' AND zz.code_val = y.mark_t_cd) cnt_nm
+        FROM tf_user_diary z, tf_activity y
+        WHERE z.status_cd = 'N'
+        AND y.status_cd = 'N'
+        AND z.activity_seq = y.activity_seq
+        AND z.user_id = #{userId}
+        AND z.act_dt BETWEEN #{startDt} AND #{endDt}
         GROUP BY y.mark_t_cd
-          HAVING y.mark_t_cd IS NOT NULL
-        UNION ALL  
+        HAVING y.mark_t_cd IS NOT NULL
+        UNION ALL
         SELECT COUNT (*) cnt, '교육' cnt_nm
-          FROM tf_user_edu z
-         WHERE     z.status_cd = 'N'
-               AND z.user_id = #{userId}
-               AND z.edu_st_dt BETWEEN #{startDt} AND #{endDt}  
+        FROM tf_user_edu z
+        WHERE z.status_cd = 'N'
+        AND z.user_id = #{userId}
+        AND z.edu_st_dt BETWEEN #{startDt} AND #{endDt}
     </select>
-    
+
     <sql id="checkUserId">
             <if test='userId != null and userId != ""'>
                 AND z.user_id = #{userId}
             </if>
     </sql>
-    
+
     <select id="getCalendarData" resultMap="calendarResultMap">
         WITH RECURSIVE DT_CNT AS(
-                SELECT DATEDIFF(STR_TO_DATE(#{endDt}, '%Y%m%d'), STR_TO_DATE(#{startDt}, '%Y%m%d')) cnt
-            ), DT_TABLE AS (
-               SELECT #{startDt} as dt, 1 AS LEVEL 
-            UNION ALL 
-               SELECT DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{startDt}, '%Y%m%d'), INTERVAL DT_TABLE.LEVEL DAY) , '%Y%m%d') dt,
-                      1 + DT_TABLE.LEVEL AS LEVEL
-                 FROM DT_CNT, DT_TABLE 
-               <![CDATA[
-                WHERE DT_TABLE.LEVEL <= DT_CNT.cnt
-               ]]> 
-            ) 
+        SELECT DATEDIFF(STR_TO_DATE(#{endDt}, '%Y%m%d'), STR_TO_DATE(#{startDt}, '%Y%m%d')) cnt
+        ), DT_TABLE AS (
+        SELECT #{startDt} as dt, 1 AS LEVEL
+        UNION ALL
+        SELECT DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{startDt}, '%Y%m%d'), INTERVAL DT_TABLE.LEVEL DAY) , '%Y%m%d') dt,
+        1 + DT_TABLE.LEVEL AS LEVEL
+        FROM DT_CNT, DT_TABLE
+        WHERE DT_TABLE.LEVEL<= DT_CNT.cnt
+
+        )
         SELECT z.dt cal_dt,
-               a.cnt user_diary_cnt,
-               b.cnt user_inout_cnt,
-               c.cnt user_prd_cnt,
-               d.cnt user_ship_cnt
-          FROM DT_TABLE z
-               LEFT JOIN (  SELECT COUNT(z.user_diary_seq) cnt, z.act_dt day
-                              FROM tf_user_diary z
-                             WHERE z.status_cd = 'N'
-                                <include refid="checkUserId"/>
-                          GROUP BY z.act_dt) a
-                      ON z.dt = a.day
-               LEFT JOIN (  SELECT COUNT(z.user_inout_seq) cnt, z.trd_dt day
-                              FROM tf_user_inout z
-                             WHERE z.status_cd = 'N'
-                                <include refid="checkUserId"/>
-                          GROUP BY z.trd_dt) b
-                      ON z.dt = b.day
-               LEFT JOIN (  SELECT COUNT(z.user_production_seq) cnt, z.prd_dt day
-                              FROM tf_user_production z
-                             WHERE z.status_cd = 'N'
-                                <include refid="checkUserId"/>
-                          GROUP BY z.prd_dt) c
-                      ON z.dt = c.day
-               LEFT JOIN (  SELECT COUNT(z.user_ship_seq) cnt, z.ship_dt day
-                              FROM tf_user_ship z
-                             WHERE z.status_cd = 'N'
-                                <include refid="checkUserId"/>
-                          GROUP BY z.ship_dt) d
-                      ON z.dt = d.day
-         WHERE z.dt BETWEEN #{startDt} AND #{endDt}
-      ORDER BY z.dt
+        a.cnt user_diary_cnt,
+        b.cnt user_inout_cnt,
+        c.cnt user_prd_cnt,
+        d.cnt user_ship_cnt
+        FROM DT_TABLE z
+        LEFT JOIN ( SELECT COUNT(z.user_diary_seq) cnt, z.act_dt day
+        FROM tf_user_diary z
+        WHERE z.status_cd = 'N'
+
+        <if test='userId != null and userId != ""'>
+            AND z.user_id = #{userId}
+        </if>
+        GROUP BY z.act_dt) a
+        ON z.dt = a.day
+        LEFT JOIN ( SELECT COUNT(z.user_inout_seq) cnt, z.trd_dt day
+        FROM tf_user_inout z
+        WHERE z.status_cd = 'N'
+
+        <include refid="checkUserId"/>
+        GROUP BY z.trd_dt) b
+        ON z.dt = b.day
+        LEFT JOIN ( SELECT COUNT(z.user_production_seq) cnt, z.prd_dt day
+        FROM tf_user_production z
+        WHERE z.status_cd = 'N'
+        <include refid="checkUserId"/>
+        GROUP BY z.prd_dt) c
+        ON z.dt = c.day
+        LEFT JOIN ( SELECT COUNT(z.user_ship_seq) cnt, z.ship_dt day
+        FROM tf_user_ship z
+        WHERE z.status_cd = 'N'
+        <include refid="checkUserId"/>
+        GROUP BY z.ship_dt) d
+        ON z.dt = d.day
+        WHERE z.dt BETWEEN #{startDt} AND #{endDt}
+        ORDER BY z.dt
     </select>
 
     <select id="getFarmingStatus" parameterType="String" resultType="HashMap">
         SELECT baseDt.trd_dt
-                  "trdDt",
-               diary.cnt "diary",
-               inout.cnt "inout",
-               slip.cnt "slip",
-               ROUND(work.h) "work",
-               chemical.quan "chemical",
-               manure.quan "manure",
+                              "trdDt",
+               diary.cnt      "diary",
+               inout.cnt      "inout",
+               slip.cnt       "slip",
+               ROUND(work.h)  "work",
+               chemical.quan  "chemical",
+               manure.quan    "manure",
                machine.use_tm "machine"
-          FROM (  SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -((LEVEL-1)*12)),'yyyy') trd_dt
+        FROM (SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -((LEVEL - 1) * 12)), 'yyyy') trd_dt
            <![CDATA[
-                    FROM DUAL CONNECT BY LEVEL <= 3
+              FROM DUAL CONNECT BY LEVEL <= 3
            ]]>         
                 ) baseDt
-               FULL OUTER JOIN     
-               (  SELECT SUBSTR (z.act_dt, 1, 4) trd_dt, COUNT (*) cnt
-                    FROM tf_user_diary z
-                   WHERE     z.status_cd = 'N'
-                         AND z.user_id = #{userId}
-                         AND z.act_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),
-                                                          'yyyy')
-                                              || '0101'
-                                          AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                GROUP BY SUBSTR (z.act_dt, 1, 4)) diary
-                  ON baseDt.trd_dt = diary.trd_dt
-               FULL OUTER JOIN
-               (  SELECT SUBSTR (z.trd_dt, 1, 4) trd_dt, COUNT (*) cnt
-                    FROM tf_user_inout z
-                   WHERE     z.status_cd = 'N'
-                         AND z.user_id = #{userId}
-                         AND z.trd_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),
-                                                          'yyyy')
-                                              || '0101'
-                                          AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                GROUP BY SUBSTR (z.trd_dt, 1, 4)) inout
-                  ON baseDt.trd_dt = inout.trd_dt
-               FULL OUTER JOIN
-               (  SELECT SUBSTR (z.trd_dt, 1, 4) trd_dt, SUM (z.cnt) cnt
-                    FROM (  SELECT a.trd_dt trd_dt, COUNT (DISTINCT a.slip_no) cnt
-                              FROM tf_user_slip a
-                             WHERE     a.status_cd = 'N'
-                                   AND a.user_id = #{userId}
-                                   AND a.trd_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),
-                                                                    'yyyy')
-                                                        || '0101'
-                                                    AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                          GROUP BY a.trd_dt) z
-                GROUP BY SUBSTR (z.trd_dt, 1, 4)) slip
-                  ON baseDt.trd_dt = slip.trd_dt
-               FULL OUTER JOIN
-               (  SELECT SUBSTR (z.act_dt, 1, 4) trd_dt,
-                           NVL (SUM (z.man_self * z.man_self_tm), 0)
-                         + NVL (SUM (z.man_self * z.man_self_tmm / 60), 0)
-                         + NVL (SUM (z.woman_self * z.woman_self_tm), 0)
-                         + NVL (SUM (z.woman_self * z.woman_self_tmm / 60), 0)
-                         + NVL (SUM (z.man_hire * z.man_hire_tm), 0)
-                         + NVL (SUM (z.man_hire * z.man_hire_tmm / 60), 0)
-                         + NVL (SUM (z.woman_hire * z.woman_hire_tm), 0)
-                         + NVL (SUM (z.woman_hire * z.woman_hire_tmm / 60), 0)
-                            h
-                    FROM tf_user_diary z
-                   WHERE     z.status_cd = 'N'
-                         AND z.user_id = #{userId}
-                         AND z.act_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),
-                                                          'yyyy')
-                                              || '0101'
-                                          AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                GROUP BY SUBSTR (z.act_dt, 1, 4)) work
-                  ON baseDt.trd_dt = work.trd_dt
-               FULL OUTER JOIN
-               (  SELECT trd_dt,
-                         LISTAGG (quan, ',') WITHIN GROUP (ORDER BY pack_t_cd) quan
-                    FROM (  SELECT SUBSTR (z.act_dt, 1, 4) trd_dt,
-                                   y.pack_t_cd,
-                                      SUM (y.quan)
-                                   || (SELECT x.code_nm
-                                         FROM tf_code x
-                                        WHERE     x.code_id = 'PACK_T_CD'
-                                              AND x.code_val = y.pack_t_cd)
-                                      quan
-                              FROM tf_user_diary z, tf_user_diary_chemical y
-                             WHERE     z.user_diary_seq = y.user_diary_seq
-                                   AND z.status_cd = 'N'
-                                   AND z.user_id = #{userId}
-                                   AND z.act_dt BETWEEN    TO_CHAR (
-                                                              ADD_MONTHS (SYSDATE, -24),
-                                                              'yyyy')
-                                                        || '0101'
-                                                    AND    TO_CHAR (SYSDATE, 'yyyy')
-                                                        || '1231'
-                                   AND y.status_cd = 'N'
-                                   AND y.quan > 0
-                          GROUP BY SUBSTR (z.act_dt, 1, 4), y.pack_t_cd)
-                GROUP BY trd_dt) chemical
-                  ON baseDt.trd_dt = chemical.trd_dt
-               FULL OUTER JOIN
-               (  SELECT trd_dt,
-                         LISTAGG (quan, ',') WITHIN GROUP (ORDER BY pack_t_cd) quan
-                    FROM (  SELECT SUBSTR (z.act_dt, 1, 4) trd_dt,
-                                   y.pack_t_cd,
-                                      SUM (y.quan)
-                                   || (SELECT x.code_nm
-                                         FROM tf_code x
-                                        WHERE     x.code_id = 'PACK_T_CD'
-                                              AND x.code_val = y.pack_t_cd)
-                                      quan
-                              FROM tf_user_diary z, tf_user_diary_manure y
-                             WHERE     z.user_diary_seq = y.user_diary_seq
-                                   AND z.status_cd = 'N'
-                                   AND z.user_id = #{userId}
-                                   AND z.act_dt BETWEEN    TO_CHAR (
-                                                              ADD_MONTHS (SYSDATE, -24),
-                                                              'yyyy')
-                                                        || '0101'
-                                                    AND    TO_CHAR (SYSDATE, 'yyyy')
-                                                        || '1231'
-                                   AND y.status_cd = 'N'
-                                   AND y.quan > 0
-                          GROUP BY SUBSTR (z.act_dt, 1, 4), y.pack_t_cd) a
-                GROUP BY trd_dt) manure
-                  ON baseDt.trd_dt = manure.trd_dt
-               FULL OUTER JOIN
-               (  SELECT SUBSTR (z.act_dt, 1, 4) trd_dt, SUM (y.use_tm) use_tm
-                    FROM tf_user_diary z, tf_user_diary_machine y
-                   WHERE     z.user_diary_seq = y.user_diary_seq
-                         AND z.status_cd = 'N'
-                         AND z.user_id = #{userId}
-                         AND z.act_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),
-                                                          'yyyy')
-                                              || '0101'
-                                          AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                         AND y.status_cd = 'N'
-                GROUP BY SUBSTR (z.act_dt, 1, 4)) machine
-                  ON baseDt.trd_dt = machine.trd_dt
+                 FULL OUTER JOIN
+             (SELECT SUBSTR(z.act_dt, 1, 4) trd_dt, COUNT(*) cnt
+              FROM tf_user_diary z
+              WHERE z.status_cd = 'N'
+                AND z.user_id = #{userId}
+                AND z.act_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -24),
+                                             'yyyy')
+                  || '0101'
+                  AND TO_CHAR(SYSDATE, 'yyyy') || '1231'
+              GROUP BY SUBSTR(z.act_dt, 1, 4)) diary
+             ON baseDt.trd_dt = diary.trd_dt
+                 FULL OUTER JOIN
+             (SELECT SUBSTR(z.trd_dt, 1, 4) trd_dt, COUNT(*) cnt
+              FROM tf_user_inout z
+              WHERE z.status_cd = 'N'
+                AND z.user_id = #{userId}
+                AND z.trd_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -24),
+                                             'yyyy')
+                  || '0101'
+                  AND TO_CHAR(SYSDATE, 'yyyy') || '1231'
+              GROUP BY SUBSTR(z.trd_dt, 1, 4)) inout
+             ON baseDt.trd_dt = inout.trd_dt
+                 FULL OUTER JOIN
+             (SELECT SUBSTR(z.trd_dt, 1, 4) trd_dt, SUM(z.cnt) cnt
+              FROM (SELECT a.trd_dt trd_dt, COUNT(DISTINCT a.slip_no) cnt
+                    FROM tf_user_slip a
+                    WHERE a.status_cd = 'N'
+                      AND a.user_id = #{userId}
+                      AND a.trd_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -24),
+                                                   'yyyy')
+                        || '0101'
+                        AND TO_CHAR(SYSDATE, 'yyyy') || '1231'
+                    GROUP BY a.trd_dt) z
+              GROUP BY SUBSTR(z.trd_dt, 1, 4)) slip
+             ON baseDt.trd_dt = slip.trd_dt
+                 FULL OUTER JOIN
+             (SELECT SUBSTR(z.act_dt, 1, 4) trd_dt,
+                     NVL(SUM(z.man_self * z.man_self_tm), 0)
+                         + NVL(SUM(z.man_self * z.man_self_tmm / 60), 0)
+                         + NVL(SUM(z.woman_self * z.woman_self_tm), 0)
+                         + NVL(SUM(z.woman_self * z.woman_self_tmm / 60), 0)
+                         + NVL(SUM(z.man_hire * z.man_hire_tm), 0)
+                         + NVL(SUM(z.man_hire * z.man_hire_tmm / 60), 0)
+                         + NVL(SUM(z.woman_hire * z.woman_hire_tm), 0)
+                         + NVL(SUM(z.woman_hire * z.woman_hire_tmm / 60), 0)
+                                            h
+              FROM tf_user_diary z
+              WHERE z.status_cd = 'N'
+                AND z.user_id = #{userId}
+                AND z.act_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -24),
+                                             'yyyy')
+                  || '0101'
+                  AND TO_CHAR(SYSDATE, 'yyyy') || '1231'
+              GROUP BY SUBSTR(z.act_dt, 1, 4)) work
+        ON baseDt.trd_dt = work.trd_dt
+            FULL OUTER JOIN
+            ( SELECT trd_dt,
+            LISTAGG (quan, ',') WITHIN GROUP (ORDER BY pack_t_cd) quan
+            FROM ( SELECT SUBSTR (z.act_dt, 1, 4) trd_dt,
+            y.pack_t_cd,
+            SUM (y.quan)
+            || (SELECT x.code_nm
+            FROM tf_code x
+            WHERE x.code_id = 'PACK_T_CD'
+            AND x.code_val = y.pack_t_cd)
+            quan
+            FROM tf_user_diary z, tf_user_diary_chemical y
+            WHERE z.user_diary_seq = y.user_diary_seq
+            AND z.status_cd = 'N'
+            AND z.user_id = #{userId}
+            AND z.act_dt BETWEEN TO_CHAR (
+            ADD_MONTHS (SYSDATE, -24),
+            'yyyy')
+            || '0101'
+            AND TO_CHAR (SYSDATE, 'yyyy')
+            || '1231'
+            AND y.status_cd = 'N'
+            AND y.quan > 0
+            GROUP BY SUBSTR (z.act_dt, 1, 4), y.pack_t_cd)
+            GROUP BY trd_dt) chemical
+            ON baseDt.trd_dt = chemical.trd_dt
+            FULL OUTER JOIN
+            ( SELECT trd_dt,
+            LISTAGG (quan, ',') WITHIN GROUP (ORDER BY pack_t_cd) quan
+            FROM ( SELECT SUBSTR (z.act_dt, 1, 4) trd_dt,
+            y.pack_t_cd,
+            SUM (y.quan)
+            || (SELECT x.code_nm
+            FROM tf_code x
+            WHERE x.code_id = 'PACK_T_CD'
+            AND x.code_val = y.pack_t_cd)
+            quan
+            FROM tf_user_diary z, tf_user_diary_manure y
+            WHERE z.user_diary_seq = y.user_diary_seq
+            AND z.status_cd = 'N'
+            AND z.user_id = #{userId}
+            AND z.act_dt BETWEEN TO_CHAR (
+            ADD_MONTHS (SYSDATE, -24),
+            'yyyy')
+            || '0101'
+            AND TO_CHAR (SYSDATE, 'yyyy')
+            || '1231'
+            AND y.status_cd = 'N'
+            AND y.quan > 0
+            GROUP BY SUBSTR (z.act_dt, 1, 4), y.pack_t_cd) a
+            GROUP BY trd_dt) manure
+            ON baseDt.trd_dt = manure.trd_dt
+            FULL OUTER JOIN
+            ( SELECT SUBSTR (z.act_dt, 1, 4) trd_dt, SUM (y.use_tm) use_tm
+            FROM tf_user_diary z, tf_user_diary_machine y
+            WHERE z.user_diary_seq = y.user_diary_seq
+            AND z.status_cd = 'N'
+            AND z.user_id = #{userId}
+            AND z.act_dt BETWEEN TO_CHAR (ADD_MONTHS (SYSDATE, -24),
+            'yyyy')
+            || '0101'
+            AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
+            AND y.status_cd = 'N'
+            GROUP BY SUBSTR (z.act_dt, 1, 4)) machine
+            ON baseDt.trd_dt = machine.trd_dt
         ORDER BY "trdDt" DESC
     </select>
 
     <select id="getInoutStatus" parameterType="String" resultType="HashMap">
-        SELECT 0 "sort",
-               trd_dt "trdDt",
-               MAX (income) "income",
-               MAX (outgoing) "outgoing"
-          FROM (SELECT 'TOTAL' trd_dt,
-                       SUM (DECODE (z.inout_cd, 'I', z.amt, 0)) income,
-                       SUM (DECODE (z.inout_cd, 'O', z.amt, 0)) outgoing
-                  FROM tf_user_inout z
-                 WHERE z.status_cd = 'N' AND z.user_id = #{userId})
+        SELECT 0             "sort",
+               trd_dt        "trdDt",
+               MAX(income)   "income",
+               MAX(outgoing) "outgoing"
+        FROM (SELECT 'TOTAL'                                trd_dt,
+                     SUM(DECODE(z.inout_cd, 'I', z.amt, 0)) income,
+                     SUM(DECODE(z.inout_cd, 'O', z.amt, 0)) outgoing
+              FROM tf_user_inout z
+              WHERE z.status_cd = 'N'
+                AND z.user_id = #{userId})
         UNION ALL
-          SELECT 1 "sort",
-                 baseDt.trd_dt "trdDt",
-                 MAX (income) "income",
-                 MAX (outgoing) "outgoing"
-            FROM (  SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -((LEVEL-1)*12)),'yyyy') trd_dt 
+        SELECT 1             "sort",
+               baseDt.trd_dt "trdDt",
+               MAX(income)   "income",
+               MAX(outgoing) "outgoing"
+        FROM (SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -((LEVEL - 1) * 12)), 'yyyy') trd_dt
                  <![CDATA[
-                     FROM DUAL CONNECT BY LEVEL <= 3
+              FROM DUAL CONNECT BY LEVEL <= 3
                  ]]>         
                  ) baseDt
                  LEFT OUTER JOIN
-                 (  SELECT SUBSTR (z.trd_dt, 1, 4) trd_dt,
-                           SUM (DECODE (z.inout_cd, 'I', z.amt, 0)) income,
-                           SUM (DECODE (z.inout_cd, 'O', z.amt, 0)) outgoing
-                      FROM tf_user_inout z
-                     WHERE     z.status_cd = 'N'
-                           AND z.user_id = #{userId}
-                           AND z.trd_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),
-                                                            'yyyy')
-                                                || '0101'
-                                            AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                  GROUP BY SUBSTR (z.trd_dt, 1, 4), z.inout_cd) inout
-                    ON baseDt.trd_dt = inout.trd_dt
+             (SELECT SUBSTR(z.trd_dt, 1, 4)                 trd_dt,
+                     SUM(DECODE(z.inout_cd, 'I', z.amt, 0)) income,
+                     SUM(DECODE(z.inout_cd, 'O', z.amt, 0)) outgoing
+              FROM tf_user_inout z
+              WHERE z.status_cd = 'N'
+                AND z.user_id = #{userId}
+                AND z.trd_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -24),
+                                             'yyyy')
+                  || '0101'
+                  AND TO_CHAR(SYSDATE, 'yyyy') || '1231'
+              GROUP BY SUBSTR(z.trd_dt, 1, 4), z.inout_cd) inout
+             ON baseDt.trd_dt = inout.trd_dt
         GROUP BY baseDt.trd_dt
         UNION ALL
-          SELECT 2 "sort",
-                 baseDt.trd_dt "trdDt",
-                 MAX (income) "income",
-                 MAX (outgoing) "outgoing"
-            FROM (  SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -(LEVEL-1)),'yyyymm') trd_dt 
+        SELECT 2             "sort",
+               baseDt.trd_dt "trdDt",
+               MAX(income)   "income",
+               MAX(outgoing) "outgoing"
+        FROM (SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -(LEVEL - 1)), 'yyyymm') trd_dt
                  <![CDATA[
-                     FROM DUAL CONNECT BY LEVEL <= 3
+              FROM DUAL CONNECT BY LEVEL <= 3
                  ]]>         
                  ) baseDt
                  LEFT OUTER JOIN
-                 (  SELECT SUBSTR (z.trd_dt, 1, 6) trd_dt,
-                           SUM (DECODE (z.inout_cd, 'I', z.amt, 0)) income,
-                           SUM (DECODE (z.inout_cd, 'O', z.amt, 0)) outgoing
-                      FROM tf_user_inout z
-                     WHERE     z.status_cd = 'N'
-                           AND z.user_id = #{userId}
-                           AND z.trd_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -2),
-                                                            'yyyymm')
-                                                || '01'
-                                            AND TO_CHAR (SYSDATE, 'yyyymm') || '31'
-                  GROUP BY SUBSTR (z.trd_dt, 1, 6), z.inout_cd) inout
-                    ON baseDt.trd_dt = inout.trd_dt
+             (SELECT SUBSTR(z.trd_dt, 1, 6)                 trd_dt,
+                     SUM(DECODE(z.inout_cd, 'I', z.amt, 0)) income,
+                     SUM(DECODE(z.inout_cd, 'O', z.amt, 0)) outgoing
+              FROM tf_user_inout z
+              WHERE z.status_cd = 'N'
+                AND z.user_id = #{userId}
+                AND z.trd_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -2),
+                                             'yyyymm')
+                  || '01'
+                  AND TO_CHAR(SYSDATE, 'yyyymm') || '31'
+              GROUP BY SUBSTR(z.trd_dt, 1, 6), z.inout_cd) inout
+             ON baseDt.trd_dt = inout.trd_dt
         GROUP BY baseDt.trd_dt
         ORDER BY "sort", "trdDt" DESC
     </select>
 
     <select id="getInout" parameterType="String" resultType="HashMap">
         <![CDATA[
-          SELECT x.*
-            FROM ( SELECT baseDt.trd_dt "trdDt",
-                          MAX (income) "income",
-                          MAX (outgoing) "outgoing"
-                     FROM  (  SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -((LEVEL-1)*12)),'yyyy') trd_dt 
-                                FROM DUAL CONNECT BY LEVEL <= 3
-                           ) baseDt
-                           LEFT OUTER JOIN  
-                           (  SELECT SUBSTR (z.trd_dt, 1, 4) trd_dt,
-                                    SUM (DECODE (z.inout_cd, 'I', z.amt, 0)) income,
-                                    SUM (DECODE (z.inout_cd, 'O', z.amt, 0)) outgoing
-                               FROM tf_user_inout z
-                              WHERE     z.status_cd = 'N'
-                                    AND z.user_id = #{userId}
-                                    AND z.trd_dt BETWEEN    TO_CHAR (ADD_MONTHS (SYSDATE, -24),'yyyy') || '0101'
-                                                     AND TO_CHAR (SYSDATE, 'yyyy') || '1231'
-                           GROUP BY SUBSTR (z.trd_dt, 1, 4), z.inout_cd) inout
-                             ON baseDt.trd_dt = inout.trd_dt
-                 GROUP BY baseDt.trd_dt
-                 ORDER BY "trdDt" desc) x
+        SELECT x.*
+        FROM (SELECT baseDt.trd_dt "trdDt",
+                     MAX(income)   "income",
+                     MAX(outgoing) "outgoing"
+              FROM (SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -((LEVEL - 1) * 12)), 'yyyy') trd_dt
+                    FROM DUAL CONNECT BY LEVEL <= 3) baseDt
+                       LEFT OUTER JOIN
+                   (SELECT SUBSTR(z.trd_dt, 1, 4)                 trd_dt,
+                           SUM(DECODE(z.inout_cd, 'I', z.amt, 0)) income,
+                           SUM(DECODE(z.inout_cd, 'O', z.amt, 0)) outgoing
+                    FROM tf_user_inout z
+                    WHERE z.status_cd = 'N'
+                      AND z.user_id = #{userId}
+                      AND z.trd_dt BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -24), 'yyyy') || '0101'
+                        AND TO_CHAR(SYSDATE, 'yyyy') || '1231'
+                    GROUP BY SUBSTR(z.trd_dt, 1, 4), z.inout_cd) inout
+                   ON baseDt.trd_dt = inout.trd_dt
+              GROUP BY baseDt.trd_dt
+              ORDER BY "trdDt" desc) x
         WHERE ROWNUM <= 3
         ORDER BY "trdDt"
         ]]>
