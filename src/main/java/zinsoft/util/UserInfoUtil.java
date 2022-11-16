@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -31,14 +32,14 @@ public class UserInfoUtil {
     public static UserInfoDto getUserInfo() {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            log.info("auth : {}", auth.toString());
+//            log.info("auth : {}", auth.toString());
             Object principal = auth.getPrincipal();
-            log.info("principal : {}", principal.toString());
+//            log.info("principal : {}", principal.toString());
 
             if (principal instanceof WebUser) {
 
                 UserInfoDto user = ((WebUser) principal).getUser();
-                log.info("user : {}", user.toString());
+//                log.info("user : {}", user.toString());
                 return user;
             }
         } catch (Exception e) {
@@ -165,12 +166,9 @@ public class UserInfoUtil {
     public static UserInfoDto getFarmerInfo() {
         try {
             ServletRequestAttributes requestAttr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            log.info("requestAttr : {}", requestAttr.toString());
             HttpSession session = requestAttr.getRequest().getSession();
-            log.info("session : {}", session.toString());
-//            Enumeration<String> names = session.getAttributeNames();
             UserInfoDto farmerInfoDto = (UserInfoDto) session.getAttribute(Constants.SESSION_FARMER_INFO);
-            log.info("farmerInfoDto : {}", farmerInfoDto.toString());
+//            log.info("farmerInfoDto : {}", farmerInfoDto != null ? farmerInfoDto.toString() : "null");
 
             if (farmerInfoDto != null) {
                 return farmerInfoDto;
@@ -178,7 +176,7 @@ public class UserInfoUtil {
         } catch (Exception e) {
             // ignore
             log.error(e.getMessage());
-            log.error(e.getCause().toString());
+            e.printStackTrace();
         }
 
         return getUserInfo();

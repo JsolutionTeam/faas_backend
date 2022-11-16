@@ -44,6 +44,7 @@ public class UserShipController {
     public ModelAndView excel(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -66,7 +67,8 @@ public class UserShipController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         dto.setUserId(farmerInfo.getUserId());
 
         userShipService.insert(dto);
@@ -78,7 +80,8 @@ public class UserShipController {
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -97,7 +100,8 @@ public class UserShipController {
 
         String userId = null;
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 
@@ -111,7 +115,8 @@ public class UserShipController {
     public Result chart(@RequestParam Map<String, Object> search) throws Exception {
 
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -129,7 +134,8 @@ public class UserShipController {
 //        }
 
         if (!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             dto.setUserId(farmerInfo.getUserId());
         }
 
@@ -148,7 +154,8 @@ public class UserShipController {
 
         String userId = null;
         if (!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 
@@ -171,7 +178,8 @@ public class UserShipController {
 //        }
 
         if (!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 

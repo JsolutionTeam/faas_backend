@@ -33,7 +33,8 @@ public class UserManureController {
     @RequestMapping(value = "/excel", method = RequestMethod.GET)
     public ModelAndView excel(@RequestParam Map<String, Object> search) throws Exception {
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -55,7 +56,8 @@ public class UserManureController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         dto.setUserId(farmerInfo.getUserId());
 
         userManureService.insert(dto);
@@ -68,7 +70,8 @@ public class UserManureController {
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
 
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
         search.put("orderBy", "DESC");
@@ -89,7 +92,8 @@ public class UserManureController {
         dto.setUserManureSeq(userManureSeq);
 
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             dto.setUserId(farmerInfo.getUserId());
         }
 
@@ -105,7 +109,8 @@ public class UserManureController {
 //        }
 
         if (!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             dto.setUserId(farmerInfo.getUserId());
         }
 
@@ -125,7 +130,8 @@ public class UserManureController {
 
         String userId = null;
         if (!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 

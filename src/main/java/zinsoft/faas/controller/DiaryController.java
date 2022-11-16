@@ -64,7 +64,8 @@ public class DiaryController {
 
     @GetMapping(value = "/excel")
     public ModelAndView excel(@RequestParam Map<String, Object> param, @PageableDefault Pageable pageable) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         View view = null;
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             param.put("userId", farmerInfo.getUserId());
@@ -126,7 +127,8 @@ public class DiaryController {
             throw new CodeMessageException(Result.TOO_LONG_TERM);
         }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         dto.setUserId(farmerInfo.getUserId());
 
         //        if (vo.getUserCropSeq() > 0) {
@@ -153,7 +155,8 @@ public class DiaryController {
         }
 
         if (!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 
@@ -173,7 +176,8 @@ public class DiaryController {
     @GetMapping(value = "")
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (UserInfoUtil.isAdmin() || UserInfoUtil.isManager()) {
             search.put("orderBy", "DESC");
@@ -195,7 +199,8 @@ public class DiaryController {
     public Result listYear(String diaryTCd, String year) throws Exception {
         String userId = null;
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             userId = farmerInfo.getUserId();
         }
@@ -207,7 +212,8 @@ public class DiaryController {
     @PutMapping(value = "/{userDiarySeq}")
     @ResponseBody
     public Result update(@PathVariable("userDiarySeq") Long userDiarySeq, @Valid UserDiaryDto dto) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
 //            throw new CodeMessageException(Result.FORBIDDEN);
@@ -225,7 +231,8 @@ public class DiaryController {
     @ResponseBody
     public Result delete(@PathVariable("userDiarySeq") Long userDiarySeq) throws Exception {
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
 //            throw new CodeMessageException(Result.FORBIDDEN);
@@ -253,7 +260,8 @@ public class DiaryController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
             if (StringUtils.isBlank(userId)) {
@@ -285,7 +293,8 @@ public class DiaryController {
     @ResponseBody
     public Result countByActNm(String actDt) throws Exception {
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             userId = farmerInfo.getUserId();

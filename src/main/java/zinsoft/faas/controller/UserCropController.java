@@ -44,7 +44,8 @@ public class UserCropController {
     @ResponseBody
     public UserCropDto get(@PathVariable("userCropSeq") Long userCropSeq, String userId, HttpServletRequest request, HttpSession session, Model model) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         UserCropDto dto = new UserCropDto();
         dto.setUserCropSeq(userCropSeq);
@@ -57,7 +58,8 @@ public class UserCropController {
     @ResponseBody
     public Result insert(@Valid UserCropDto dto) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         /*
         dto.setUserId( farmerInfo.getUserId()); // valid test로 주석처리함. 추후 주석 해제 필요 TODO
         */
@@ -74,7 +76,8 @@ public class UserCropController {
     @ResponseBody
     public DataTablesResponse<UserCropDto> page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable, HttpSession session) throws Exception {
         if(!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
         search.put("cropCd", "1");
@@ -86,7 +89,8 @@ public class UserCropController {
     @ResponseBody
     public List<UserCropDto> list(@RequestParam Map<String, Object> search) throws Exception {
         if(!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -97,7 +101,8 @@ public class UserCropController {
     @ResponseBody
     public Result put(@PathVariable("userCropSeq") Long userCropSeq, @Valid UserCropDto dto) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (farmerInfo != null && farmerInfo.getUserId() != null) {
             dto.setUserId(farmerInfo.getUserId());
         } else {
@@ -121,7 +126,8 @@ public class UserCropController {
     @ResponseBody
     public Result delete(@PathVariable("userCropSeq") Long userCropSeq, String userId) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (farmerInfo != null && farmerInfo.getUserId() != null) {
             userId = farmerInfo.getUserId();
         } else if (StringUtils.isBlank(userId)) {

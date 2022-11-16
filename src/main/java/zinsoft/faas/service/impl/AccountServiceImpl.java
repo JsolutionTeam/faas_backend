@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import zinsoft.web.common.service.BasicDataService;
 import zinsoft.web.exception.CodeMessageException;
 
 @Service
+@Slf4j
 public class AccountServiceImpl extends EgovAbstractServiceImpl implements AccountService {
 
     @Resource
@@ -54,6 +56,9 @@ public class AccountServiceImpl extends EgovAbstractServiceImpl implements Accou
     @Override
     public void insert(AccountDto dto) {
         //accountMapper.insert(dto);
+        if(acIdByAcNm != null) {
+            throw new IllegalArgumentException("이미 존재하는 계정과목입니다.");
+        }
         String acId = accountRepository.nextAcId(dto.getUpAcId());
         Long exprSeq = accountRepository.nextExprSeqByUpAcId(dto.getUpAcId());
         String cdTCd = dto.getRootAcId().equals("400") ? "C" : "D";

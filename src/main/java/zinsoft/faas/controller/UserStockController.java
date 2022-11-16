@@ -51,7 +51,8 @@ public class UserStockController {
     @RequestMapping(value = "/excel", method = RequestMethod.GET)
     public ModelAndView excel(@RequestParam Map<String, Object> search) throws Exception {
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
         search.put("orderBy", "ASC");
@@ -73,7 +74,8 @@ public class UserStockController {
     @ResponseBody
     public Result getChemical(@PathVariable("userChemicalStockSeq") Long userChemicalStockSeq) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return new Result(true, Result.OK, userChemicalStockService.get(farmerInfo.getUserId(), userChemicalStockSeq));
     }
 
@@ -85,7 +87,8 @@ public class UserStockController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         dto.setUserId( farmerInfo.getUserId());
 
         userChemicalStockService.insertWith(dto);
@@ -97,7 +100,8 @@ public class UserStockController {
     @ResponseBody
     public Result pageChemical(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable, HttpSession session) throws Exception {
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -114,7 +118,8 @@ public class UserStockController {
     @ResponseBody
     public List<UserChemicalStockDto> listChemical(@RequestParam Map<String, Object> search) throws Exception {
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -130,7 +135,8 @@ public class UserStockController {
 //        }
 
         if(!UserInfoUtil.isAdmin() ) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             dto.setUserId(farmerInfo.getUserId());
         }
 
@@ -149,7 +155,8 @@ public class UserStockController {
 
         String userId = null;
         if(!UserInfoUtil.isAdmin() ) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 
@@ -168,7 +175,8 @@ public class UserStockController {
     @ResponseBody
     public Result getManure(@PathVariable("userManureStockSeq") Long userManureStockSeq) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return new Result(true, "0000", userManureStockService.get(farmerInfo.getUserId(), userManureStockSeq));
     }
 
@@ -180,7 +188,8 @@ public class UserStockController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         dto.setUserId( farmerInfo.getUserId());
 
         userManureStockService.insertWith(dto);
@@ -192,7 +201,8 @@ public class UserStockController {
     @ResponseBody
     public Result pageManure(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable, HttpSession session) throws Exception {
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -209,7 +219,8 @@ public class UserStockController {
     @ResponseBody
     public List<UserManureStockDto> listManure(@RequestParam Map<String, Object> search) throws Exception {
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -225,7 +236,8 @@ public class UserStockController {
 //        }
 
         if(!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             dto.setUserId(farmerInfo.getUserId());
         }
 
@@ -245,7 +257,8 @@ public class UserStockController {
 
         String userId = null;
         if(!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId =farmerInfo.getUserId();
         }
 

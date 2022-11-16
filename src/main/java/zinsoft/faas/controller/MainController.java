@@ -120,7 +120,8 @@ public class MainController {
     @RequestMapping(value = "/api/*/listUserCrop", method = RequestMethod.GET)
     @ResponseBody
     public List<UserCropDto> listUserCrop(String sYear, String eYear, String year, String userId, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         log.info("api/*/listUserCrop!!!");
         log.info("request.isUserInRole(\"ROLE_0000\") : {}", request.isUserInRole("ROLE_0000"));
         log.info("request.isUserInRole(\"ROLE_0001\") : {}", request.isUserInRole("ROLE_0001"));
@@ -146,7 +147,8 @@ public class MainController {
     @RequestMapping(value = "/api/*/listUserCropSort", method = RequestMethod.GET)
     @ResponseBody
     public List<UserCropDto> listUserCropSort(String sYear, String eYear, String year, String userId, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         /*if (request.isUserInRole("ROLE_0000") || request.isUserInRole("ROLE_0001") || request.isUserInRole("ROLE_0008")) {
             if (userId != null && !userId.isEmpty()) {
@@ -169,7 +171,8 @@ public class MainController {
     @RequestMapping(value = "/api/*/listActivity", method = RequestMethod.GET)
     @ResponseBody
     public List<ActivityDto> listActivity(Long cropSeq, Long userCropSeq, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return activityService.listByUserIdCropSeq(farmerInfo.getUserId(), cropSeq, userCropSeq);
     }
 
@@ -196,14 +199,16 @@ public class MainController {
     @RequestMapping(value = "/api/userData/get", method = RequestMethod.GET)
     @ResponseBody
     public Object getUserData(String[] data, String cropNm, String custNm, Long cropSeq, Long userCropSeq, String actNm, String inoutCd, String detail, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return customDataService.getUserData(farmerInfo.getUserId(), data, cropNm, custNm, cropSeq, userCropSeq, actNm, inoutCd, detail);
     }
 
     @RequestMapping(value = "/api/v1/userData/getDataCount", method = RequestMethod.GET)
     @ResponseBody
     public Object getDataCount(String searchYM, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         String startDt = null, endDt = null;
         SimpleDateFormat f =  new SimpleDateFormat("yyyyMMdd");
         Calendar cal = Calendar.getInstance();
@@ -231,7 +236,8 @@ public class MainController {
     public Object getCalendarData(String startDt, String endDt, HttpServletRequest request, HttpSession session, Model model) throws Exception {
         String userId = null;
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
         return customDataService.getCalendarData(userId, startDt, endDt);
@@ -240,21 +246,24 @@ public class MainController {
     @RequestMapping(value = "/api/userData/getFarmingStatus", method = RequestMethod.GET)
     @ResponseBody
     public Object getFarmingStatus(HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return customDataService.getFarmingStatus(farmerInfo.getUserId());
     }
 
     @RequestMapping(value = "/api/userData/getInoutStatus", method = RequestMethod.GET)
     @ResponseBody
     public Object getInoutStatus(HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return customDataService.getInoutStatus(farmerInfo.getUserId());
     }
 
     @RequestMapping(value = "/api/userData/getInout", method = RequestMethod.GET)
     @ResponseBody
     public Object getInout(HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         return customDataService.getInout(farmerInfo.getUserId());
     }
 

@@ -1,5 +1,6 @@
 package zinsoft.faas.controller;
 
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,6 +34,7 @@ import zinsoft.web.common.dto.UserInfoDto;
 import zinsoft.web.exception.CodeMessageException;
 
 @Controller
+@Slf4j
 @RequestMapping("${api.prefix}/user-chemical")
 public class UserChemicalController {
 
@@ -87,6 +90,13 @@ public class UserChemicalController {
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable, HttpSession session) throws Exception {
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
+            log.info("UserChemicalController - page - session names start!");
+            Enumeration<String> attributeNames = session.getAttributeNames();
+            while(attributeNames.hasMoreElements()){
+                String name = attributeNames.nextElement();
+                log.info("name : {}, value : {}", name, session.getAttribute(name));
+            }
+            log.info("session names end!");
             UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
             search.put("userId", farmerInfo.getUserId());
             search.put("orderBy", "DESC");

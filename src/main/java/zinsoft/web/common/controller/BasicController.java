@@ -72,12 +72,12 @@ public class BasicController {
 
     @GetMapping("/session")
     public Result session(String menuId, boolean withMenu) {
-        log.info("request /session, menuId : {}, withMenu : {}", menuId, withMenu);
-        UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        log.info("/session - userInfo : {}", userInfo);
+//        log.info("request /session, menuId : {}, withMenu : {}", menuId, withMenu);
+        UserInfoDto userInfo = UserInfoUtil.getFarmerInfo();
+//        log.info("/session - userInfo : {}", userInfo);
         if (StringUtils.isNotBlank(menuId)) {
             String userId = userInfo != null ? userInfo.getUserId() : null;
-            log.info("/session - userId : {}", userId);
+//            log.info("/session - userId : {}", userId);
             menuAccessLogService.insert(menuId, userId, null);
         }
 

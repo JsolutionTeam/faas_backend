@@ -193,7 +193,9 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public Result handleException(AuthenticationException ex, HttpServletRequest request, HttpServletResponse response) {
-        log.info("로그인되지 않은 사용자가 접근함.");
+        log.error("로그인되지 않은 사용자가 접근함.");
+        log.error("ex.getMessage() : " + ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.UNAUTHORIZED), request, response);
     }
 
@@ -201,6 +203,8 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public Result handleException(AccessDeniedException ex, HttpServletRequest request, HttpServletResponse response) {
+        log.error("AccessDeniedException ex.message : {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.FORBIDDEN), request, response);
     }
 

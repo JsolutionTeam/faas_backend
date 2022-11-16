@@ -101,8 +101,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.addFilterBefore(filterSecurityInterceptor(), FilterSecurityInterceptor.class)
                 //.anonymous().disable()
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())//.accessDeniedPage("/page/error.jsp?code=0101")
-                .authenticationEntryPoint(authenticationEntryPoint())
+                    .accessDeniedHandler(accessDeniedHandler())//.accessDeniedPage("/page/error.jsp?code=0101")
+                    .authenticationEntryPoint(authenticationEntryPoint())
                 /*
                 .and()
                     .authorizeRequests()
@@ -110,6 +110,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/content/login").permitAll()
                         .antMatchers("/").permitAll()
                 */
+//                .and().authorizeRequests().anyRequest().permitAll()
 
 //                .and()
 //                .authorizeRequests()

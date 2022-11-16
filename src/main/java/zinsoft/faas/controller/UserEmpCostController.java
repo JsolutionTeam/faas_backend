@@ -45,7 +45,8 @@ public class UserEmpCostController {
     @RequestMapping(value = "/excel", method = RequestMethod.GET)
     public ModelAndView excel(@RequestParam Map<String, Object> search) throws Exception {
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -65,7 +66,8 @@ public class UserEmpCostController {
         String userId = null;
 
         if(!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 
@@ -80,7 +82,8 @@ public class UserEmpCostController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         dto.setUserId(farmerInfo.getUserId());
 
         int yearCnt = userEmpCostService.checkValidYear(dto.getYear(), dto.getUserId());
@@ -97,7 +100,8 @@ public class UserEmpCostController {
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable, HttpSession session) throws Exception {
         if(!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             search.put("userId", farmerInfo.getUserId());
         }
 
@@ -119,7 +123,8 @@ public class UserEmpCostController {
 //        }
 
         if(!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             dto.setUserId(farmerInfo.getUserId());
         }
 
@@ -141,7 +146,8 @@ public class UserEmpCostController {
 //        }
         String userId = null;
         if(!UserInfoUtil.isAdmin()) {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
 

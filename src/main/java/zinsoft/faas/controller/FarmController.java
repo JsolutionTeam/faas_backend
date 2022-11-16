@@ -49,7 +49,8 @@ public class FarmController {
     @RequestMapping(value = "/content/002005005/excel", method = RequestMethod.GET)
     public ModelAndView excel002005005(@RequestParam Map<String, Object> param, HttpServletRequest request, HttpSession session, Model model) throws Exception {
         UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         param.put("userId", farmerInfo.getUserId());
         param.put("orderBy", "DESC");
@@ -80,7 +81,8 @@ public class FarmController {
             return new Result(false, "9998");
         }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         userChemicalService.insert(vo);
@@ -92,7 +94,8 @@ public class FarmController {
     @ResponseBody
     public Object api002005005Page(PagingParam pagingParam, HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) throws Exception {
         UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         Map<String, String> cond = pagingParam.getCond();
         cond.put("userId", farmerInfo.getUserId());
         cond.put("orderBy", "DESC");
@@ -110,7 +113,8 @@ public class FarmController {
     @ResponseBody
     public Object api002005005List(@RequestParam Map<String, Object> param, HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) throws Exception {
         UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         param.put("userId", farmerInfo.getUserId());
         param.put("orderBy", "DESC");
@@ -125,7 +129,8 @@ public class FarmController {
     @RequestMapping(value = "/api/002005005/get", method = RequestMethod.GET)
     @ResponseBody
     public UserChemicalDto api002005005get(@Valid UserChemicalDto vo, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         return userChemicalService.get(vo);
@@ -134,7 +139,8 @@ public class FarmController {
     @RequestMapping(value = "/api/002005005/countUsed", method = RequestMethod.GET)
     @ResponseBody
     public Long api002005005countUsed(@Valid UserChemicalDto vo, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         return userChemicalStockService.countUsed(farmerInfo.getUserId(), vo.getUserChemicalSeq());
@@ -148,7 +154,8 @@ public class FarmController {
             return new Result(false, "9998");
         }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         userChemicalService.update(vo);
@@ -163,7 +170,8 @@ public class FarmController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new Result(false, "9998");
         }
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         int usedCnt = 0;
         /*for (int i = 0, cnt = userChemicalSeqs.length; i < cnt; i++) {
             Long userChemicalSeq = userChemicalSeqs[i];
@@ -182,7 +190,8 @@ public class FarmController {
     @RequestMapping(value = "/content/002005006/excel", method = RequestMethod.GET)
     public ModelAndView excel002005006(@RequestParam Map<String, Object> param, HttpServletRequest request, HttpSession session, Model model) throws Exception {
         UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         param.put("userId", farmerInfo.getUserId());
         param.put("orderBy", "DESC");
@@ -213,7 +222,8 @@ public class FarmController {
             return new Result(false, "9998");
         }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         userManureService.insert(vo);
@@ -225,7 +235,8 @@ public class FarmController {
     @ResponseBody
     public Object api002005006Page(PagingParam pagingParam, HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) throws Exception {
 //        UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 //        Map<String, String> cond = pagingParam.getCond();
 //        cond.put("userId", farmerInfo.getUserId());
 //        cond.put("orderBy", "DESC");
@@ -244,7 +255,8 @@ public class FarmController {
     @ResponseBody
     public Object api002005006List(@RequestParam Map<String, Object> param, HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) throws Exception {
         UserInfoDto userInfo = UserInfoUtil.getUserInfo();
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         param.put("userId", farmerInfo.getUserId());
         param.put("orderBy", "DESC");
@@ -259,7 +271,8 @@ public class FarmController {
     @RequestMapping(value = "/api/002005006/get", method = RequestMethod.GET)
     @ResponseBody
     public UserManureDto api002005006get(@Valid UserManureDto vo, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         return userManureService.get(vo);
@@ -268,7 +281,8 @@ public class FarmController {
     @RequestMapping(value = "/api/002005006/countUsed", method = RequestMethod.GET)
     @ResponseBody
     public Long api002005006countUsed(@Valid UserManureDto vo, HttpServletRequest request, HttpSession session, Model model) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         return userManureStockService.countUsed(farmerInfo.getUserId(), vo.getUserManureSeq());
@@ -282,7 +296,8 @@ public class FarmController {
             return new Result(false, "9998");
         }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         vo.setUserId(farmerInfo.getUserId());
 
         userManureService.update(vo);
@@ -298,7 +313,8 @@ public class FarmController {
             return new Result(false, "9998");
         }
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         int usedCnt = 0;
         /*for (int i = 0, cnt = userManureSeqs.length; i < cnt; i++) {
             Long userManureSeq = userManureSeqs[i];

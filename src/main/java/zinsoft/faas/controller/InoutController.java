@@ -53,7 +53,8 @@ public class InoutController {
 
     @GetMapping(value = "/excel")
     public ModelAndView excel(@RequestParam Map<String, Object> param, @PageableDefault Pageable pageable) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             param.put("userId", farmerInfo.getUserId());
@@ -92,7 +93,8 @@ public class InoutController {
     @ResponseBody
     public Result insert(@Valid UserInoutDto dto) throws Exception {
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMdd");
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (dto.getTrdDt() == null) {
             new CodeMessageException(Result.BAD_REQUEST);
         }
@@ -124,7 +126,8 @@ public class InoutController {
     public Result get(@PathVariable("userInoutSeq") Long userInoutSeq) throws Exception {
         Result result = new Result(true, Result.OK);
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (userInoutSeq == null || userInoutSeq == 0) {
             throw new CodeMessageException(Result.BAD_REQUEST);
@@ -142,10 +145,13 @@ public class InoutController {
     @GetMapping(value = "")
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (UserInfoUtil.isAdmin() || UserInfoUtil.isManager()) {
-            search.put("orderBy", "DESC");
+//            search.put("orderBy", "DESC");
+            // 2022-11-15 
+            // 더아이엠씨 김성원 과장님 요청사항으로 최신순으로 보이도록 변경요청 옴.
         } else {
             search.put("userId", farmerInfo.getUserId());
         }
@@ -163,7 +169,8 @@ public class InoutController {
     @ResponseBody
     public Result update(@PathVariable("userInoutSeq") Long userInoutSeq, @Valid UserInoutDto dto) throws Exception {
 
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
 //            throw new CodeMessageException(Result.FORBIDDEN);
@@ -182,7 +189,8 @@ public class InoutController {
     @ResponseBody
     public Result delete(@PathVariable("userInoutSeq") Long userInoutSeq) throws Exception {
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
 //            throw new CodeMessageException(Result.FORBIDDEN);
@@ -211,7 +219,8 @@ public class InoutController {
 //        }
 
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
             if (StringUtils.isBlank(userId)) {
@@ -228,7 +237,8 @@ public class InoutController {
     @ResponseBody
     public Result countByActNm(String trdDt) throws Exception {
         String userId = null;
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             userId = farmerInfo.getUserId();
@@ -242,7 +252,8 @@ public class InoutController {
     @PutMapping(value = "/r/{userInoutSeq}")
     @ResponseBody
     public Result insertReversing(@PathVariable("userInoutSeq") Long userInoutSeq, UserInoutDto rDto) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
 //            throw new CodeMessageException(Result.FORBIDDEN);
@@ -269,7 +280,8 @@ public class InoutController {
     @DeleteMapping(value = "/r/{userInoutSeq}")
     @ResponseBody
     public Result deleteReversing(@PathVariable("userInoutSeq") Long userInoutSeq) throws Exception {
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         String userId = null;
 
 //        if (UserInfoUtil.isManager()) {

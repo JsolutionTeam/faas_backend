@@ -36,7 +36,8 @@ public class ConsultantQueryRepository extends QuerydslRepositorySupport {
     }
 
     public List<ConsultantResDto> findMyConsultant(){
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if(farmerInfo == null)return null;
 
         String farmCode = farmerInfo.getFarmCode();

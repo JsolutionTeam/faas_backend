@@ -39,7 +39,7 @@ public class ApiAccessLogServiceImpl extends EgovAbstractServiceImpl implements 
     public void insert(String path, String method, String userId, String remoteAddr, String note) {
         path = path.substring(servletContext.getContextPath().length());
         if ((apiPrefix + "/session").equals(path)) {
-            log.info("ApiAccessLogServiceImpl - /session equals!");
+//            log.info("ApiAccessLogServiceImpl - /session equals!");
             return;
         }
 
