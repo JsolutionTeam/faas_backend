@@ -56,9 +56,6 @@ public class AccountServiceImpl extends EgovAbstractServiceImpl implements Accou
     @Override
     public void insert(AccountDto dto) {
         //accountMapper.insert(dto);
-        if(acIdByAcNm != null) {
-            throw new IllegalArgumentException("이미 존재하는 계정과목입니다.");
-        }
         String acId = accountRepository.nextAcId(dto.getUpAcId());
         Long exprSeq = accountRepository.nextExprSeqByUpAcId(dto.getUpAcId());
         String cdTCd = dto.getRootAcId().equals("400") ? "C" : "D";
