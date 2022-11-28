@@ -164,8 +164,7 @@ public class UserDiaryDto {
     private String userNm;
     @ApiModelProperty(notes = "일지/계획코드명")
     private String diaryTCdNm;
-    //    @ApiModelProperty(notes = "품목명")
-//    private String cropNm;
+
     @ApiModelProperty(notes = "날씨코드명")
     private String skyTCdNm;
     @ApiModelProperty(notes = "포장단위구분코드명")
@@ -204,10 +203,10 @@ public class UserDiaryDto {
     private List<UserManureStockDto> manureList;
     @ApiModelProperty(notes = "품목별칭")
     private String userCropAliasNm;
-    @ApiModelProperty(notes = "작업단계차수")
-    private Long inning;
-    @ApiModelProperty(notes = "작업단계카운트")
-    private Long actCnt;
+//    @ApiModelProperty(notes = "작업단계차수")
+//    private Long inning;
+//    @ApiModelProperty(notes = "작업단계카운트")
+//    private Long actCnt;
 
     @ApiModelProperty(notes = "작물재배현황일련번호")
     private Long userCropSeq;

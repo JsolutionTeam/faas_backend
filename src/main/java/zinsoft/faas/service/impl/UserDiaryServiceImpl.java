@@ -130,7 +130,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
             //            Float inputTmx = dto.getTmx();
             //            Long inputReh = dto.getReh();
 
-            // 날짜마다 데이터 추가 ㄷㄷ;;;
             while (actDt.compareTo(actEdDt) <= 0) {
 
                 dto.setActDt(actDt);
@@ -349,8 +348,8 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Override
     public void delete(String userId, Long[] userDiarySeqs) {
         if (UserInfoUtil.isAdmin() && StringUtils.isBlank(userId)) {
-            if(userDiarySeqs != null && userDiarySeqs.length > 0) {
-                for(Long userDiarySeq : userDiarySeqs) {
+            if (userDiarySeqs != null && userDiarySeqs.length > 0) {
+                for (Long userDiarySeq : userDiarySeqs) {
                     UserDiary userDiary = getEntity(userId, userDiarySeq);
                     userId = userDiary.getUserId();
                     delete(userId, userDiarySeq);

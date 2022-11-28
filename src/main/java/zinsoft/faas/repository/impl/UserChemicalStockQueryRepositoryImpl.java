@@ -55,11 +55,11 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
     @PostConstruct
     public void init() {
         List<Expression<?>> fieldList = Arrays.stream(QUserChemicalStock.class.getDeclaredFields())
-                .filter(field->!(Modifier.isStatic(field.getModifiers())
+                .filter(field -> !(Modifier.isStatic(field.getModifiers())
                         || ListPath.class.isAssignableFrom(field.getType())
                         || MapPath.class.isAssignableFrom(field.getType())
                         || ArrayPath.class.isAssignableFrom(field.getType())))
-                .map(field-> {
+                .map(field -> {
                     try {
                         return (Expression<?>) field.get(QUserChemicalStock.userChemicalStock);
                     } catch (final Exception e) {
@@ -75,38 +75,41 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
         fieldList.add(userChemical.chemicalTCd);
         fieldList.add(userInfo.userNm);
 
-        fieldList.remove(userChemicalStock.packTCd);
-        fieldList.add(userChemical.packTCd.coalesce(userChemicalStock.packTCd).as("packTCd"));
+//        fieldList.remove(userChemicalStock.packTCd);
+//        fieldList.add(userChemical.packTCd.coalesce(userChemicalStock.packTCd).as("packTCd"));
         fieldList.add(
                 ExpressionUtils.as(
-                    JPAExpressions.select(code.codeNm)
-                        .from(code)
-                        .where(code.codeId.eq("PACK_T_CD"),
-                               code.codeVal.eq(userChemical.packTCd.coalesce(userChemicalStock.packTCd))),
-                    "packTCdNm"));
-        fieldList.add(
-            ExpressionUtils.as(
-                JPAExpressions.select(code.codeNm)
-                    .from(code)
-                    .where(code.codeId.eq("CHEMICAL_T_CD"),
-                           code.codeVal.eq(userChemical.chemicalTCd)),
-                "chemicalTCdNm"));
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("PACK_T_CD"),
+                                        code.codeVal.eq(
+                                                //userChemical.packTCd.coalesce(userChemicalStock.packTCd)
+                                                userChemicalStock.packTCd
+                                        )),
+                        "packTCdNm"));
         fieldList.add(
                 ExpressionUtils.as(
-                    JPAExpressions.select(code.codeNm)
-                        .from(code)
-                        .where(code.codeId.eq("SUP_INOUT_CD"),
-                               code.codeVal.eq(userChemicalStock.supInoutCd)),
-                    "supInoutCdNm"));
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("CHEMICAL_T_CD"),
+                                        code.codeVal.eq(userChemical.chemicalTCd)),
+                        "chemicalTCdNm"));
+        fieldList.add(
+                ExpressionUtils.as(
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("SUP_INOUT_CD"),
+                                        code.codeVal.eq(userChemicalStock.supInoutCd)),
+                        "supInoutCdNm"));
 
         fieldList.add(
                 ExpressionUtils.as(new CaseBuilder()
-                                  .when(userChemicalStock.userInoutSeq.isNotNull())
-                                  .then(JPAExpressions.select(userInout.inoutTCd)
-                                          .from(userInout)
-                                          .where(userInout.userInoutSeq.eq(userChemicalStock.userInoutSeq))
-                    ).otherwise(""),
-                    "inoutTCd"));
+                                .when(userChemicalStock.userInoutSeq.isNotNull())
+                                .then(JPAExpressions.select(userInout.inoutTCd)
+                                        .from(userInout)
+                                        .where(userInout.userInoutSeq.eq(userChemicalStock.userInoutSeq))
+                                ).otherwise(""),
+                        "inoutTCd"));
 
 //        fieldList.add(
 //                ExpressionUtils.as(SQLExpressions.sum(new CaseBuilder()
@@ -140,15 +143,15 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
     public Page<UserChemicalStockDto> page(Map<String, Object> search, Pageable pageable) {
 
         JPQLQuery<UserChemicalStockDto> jpqQuery = query.select(allFields)
-                                        .from(userChemicalStock)
-                                        .join(userInfo).on(userChemicalStock.userId.eq(userInfo.userId))
-                                        .join(userChemical).on(userChemicalStock.userChemicalSeq.eq(userChemical.userChemicalSeq))
-                                        .where(queryCondition(search))
-                                        .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
+                .from(userChemicalStock)
+                .join(userInfo).on(userChemicalStock.userId.eq(userInfo.userId))
+                .join(userChemical).on(userChemicalStock.userChemicalSeq.eq(userChemical.userChemicalSeq))
+                .where(queryCondition(search))
+                .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         QueryResults<UserChemicalStockDto> result = jpqQuery.offset(pageable.getOffset())
-                                            .limit(pageable.getPageSize())
-                                            .fetchResults();
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
@@ -157,11 +160,11 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
     public List<UserChemicalStockDto> list(Map<String, Object> search) {
 
         JPQLQuery<UserChemicalStockDto> jpqQuery = query.select(allFields)
-                                        .from(userChemicalStock)
-                                        .join(userInfo).on(userChemicalStock.userId.eq(userInfo.userId))
-                                        .join(userChemical).on(userChemicalStock.userChemicalSeq.eq(userChemical.userChemicalSeq))
-                                        .where(queryCondition(search))
-                                        .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
+                .from(userChemicalStock)
+                .join(userInfo).on(userChemicalStock.userId.eq(userInfo.userId))
+                .join(userChemical).on(userChemicalStock.userChemicalSeq.eq(userChemical.userChemicalSeq))
+                .where(queryCondition(search))
+                .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         List<UserChemicalStockDto> result = jpqQuery.fetch();
 
@@ -173,31 +176,31 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
         BooleanExpression condition = userChemicalStock.statusCd.eq(Constants.STATUS_CD_NORMAL)
                 .and(userChemical.userChemicalSeq.eq(userChemicalStock.userChemicalSeq));
 
-        String userId = (String)search.get("userId");
+        String userId = (String) search.get("userId");
         if (StringUtils.isNotBlank(userId)) {
             condition = condition.and(userChemicalStock.userId.eq(userId));
         }
 
-        String stDt = (String)search.get("stDt");
-        String edDt = (String)search.get("edDt");
-        if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
+        String stDt = (String) search.get("stDt");
+        String edDt = (String) search.get("edDt");
+        if (StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
             stDt = stDt.replace("-", "");
             edDt = edDt.replace("-", "");
             condition = condition.and(userChemicalStock.inoutDt.between(stDt, edDt));
         }
 
-        if(search.get("userDiarySeq") != null ) {
-            Long userDiarySeq = (Long)search.get("userDiarySeq");
+        if (search.get("userDiarySeq") != null) {
+            Long userDiarySeq = (Long) search.get("userDiarySeq");
             condition = condition.and(userChemicalStock.userDiarySeq.eq(userDiarySeq));
         }
 
-        if(search.get("userInoutSeq") != null) {
-            Long userInoutSeq = (Long)search.get("userInoutSeq");
+        if (search.get("userInoutSeq") != null) {
+            Long userInoutSeq = (Long) search.get("userInoutSeq");
             condition = condition.and(userChemicalStock.userInoutSeq.eq(userInoutSeq));
         }
 
-        String keyword = (String)search.get("keyword");
-        if(StringUtils.isNoneBlank(keyword)) {
+        String keyword = (String) search.get("keyword");
+        if (StringUtils.isNoneBlank(keyword)) {
             condition = condition.and(userChemical.userChemicalNm.concat(userChemicalStock.remark).contains(keyword));
         }
 

@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @apiNote  영농일지 관리 컨트롤러 
+ * @apiNote 영농일지 관리 컨트롤러
  */
 @Controller
 @RequestMapping("${api.prefix}/user-diary")
@@ -64,7 +64,7 @@ public class DiaryController {
 
     @GetMapping(value = "/excel")
     public ModelAndView excel(@RequestParam Map<String, Object> param, @PageableDefault Pageable pageable) throws Exception {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         View view = null;
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
@@ -74,9 +74,9 @@ public class DiaryController {
         DataTablesResponse<?> dataTablesList = userDiaryService.page(param, pageable);
         List<UserDiaryDto> list = (List<UserDiaryDto>) dataTablesList.getItems();
 
-            view = ((!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager())) ?
-                    new DiarySimpleExcelView() :
-                    new DiarySimpleExcelAdminView();
+        view = ((!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager())) ?
+                new DiarySimpleExcelView() :
+                new DiarySimpleExcelAdminView();
 
 
         ModelAndView mv = new ModelAndView(view);
@@ -94,9 +94,10 @@ public class DiaryController {
 
     /**
      * 영농일지 등록 매핑
-     * @param actDt 영농일지 폼의 시작(왼쪽)일자
+     *
+     * @param actDt   영농일지 폼의 시작(왼쪽)일자
      * @param actEdDt 영농일지 폼의 끝(오른쪽)일자
-     * @param dto DTO
+     * @param dto     DTO
      * @return 결과
      * @throws Exception
      */
@@ -127,8 +128,7 @@ public class DiaryController {
             throw new CodeMessageException(Result.TOO_LONG_TERM);
         }
 
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
         dto.setUserId(farmerInfo.getUserId());
 
         //        if (vo.getUserCropSeq() > 0) {
@@ -155,7 +155,7 @@ public class DiaryController {
         }
 
         if (!UserInfoUtil.isManager() && !UserInfoUtil.isAdmin()) {
-                UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
             userId = farmerInfo.getUserId();
         }
@@ -167,7 +167,8 @@ public class DiaryController {
 
 
     /**
-     *activityTCd=9 해서 뭔갈 가져오는데...
+     * activityTCd=9 해서 뭔갈 가져오는데...
+     *
      * @param search
      * @param pageable
      * @return
@@ -176,7 +177,7 @@ public class DiaryController {
     @GetMapping(value = "")
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (UserInfoUtil.isAdmin() || UserInfoUtil.isManager()) {
@@ -199,7 +200,7 @@ public class DiaryController {
     public Result listYear(String diaryTCd, String year) throws Exception {
         String userId = null;
 
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
             userId = farmerInfo.getUserId();
@@ -212,7 +213,7 @@ public class DiaryController {
     @PutMapping(value = "/{userDiarySeq}")
     @ResponseBody
     public Result update(@PathVariable("userDiarySeq") Long userDiarySeq, @Valid UserDiaryDto dto) throws Exception {
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
@@ -231,7 +232,7 @@ public class DiaryController {
     @ResponseBody
     public Result delete(@PathVariable("userDiarySeq") Long userDiarySeq) throws Exception {
         String userId = null;
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
 //        if (UserInfoUtil.isManager()) {
@@ -260,7 +261,7 @@ public class DiaryController {
 //            throw new CodeMessageException(Result.FORBIDDEN);
 //        }
         String userId = null;
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
@@ -293,7 +294,7 @@ public class DiaryController {
     @ResponseBody
     public Result countByActNm(String actDt) throws Exception {
         String userId = null;
-            UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
+        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
 //        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
         if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {

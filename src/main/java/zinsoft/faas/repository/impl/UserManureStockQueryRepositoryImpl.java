@@ -56,11 +56,11 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
     @PostConstruct
     public void init() {
         List<Expression<?>> fieldList = Arrays.stream(QUserManureStock.class.getDeclaredFields())
-                .filter(field->!(Modifier.isStatic(field.getModifiers())
+                .filter(field -> !(Modifier.isStatic(field.getModifiers())
                         || ListPath.class.isAssignableFrom(field.getType())
                         || MapPath.class.isAssignableFrom(field.getType())
                         || ArrayPath.class.isAssignableFrom(field.getType())))
-                .map(field-> {
+                .map(field -> {
                     try {
                         return (Expression<?>) field.get(QUserManureStock.userManureStock);
                     } catch (final Exception e) {
@@ -77,45 +77,49 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
         fieldList.add(userInfo.userNm);
 
 
-        fieldList.remove(userManureStock.packTCd);
-        fieldList.add(userManure.packTCd.coalesce(userManureStock.packTCd).as("packTCd"));
+//        fieldList.remove(userManureStock.packTCd);
+//        fieldList.add(userManure.packTCd.coalesce(userManureStock.packTCd).as("packTCd"));
         fieldList.add(
                 ExpressionUtils.as(
-                    JPAExpressions.select(code.codeNm)
-                        .from(code)
-                        .where(code.codeId.eq("PACK_T_CD"),
-                               code.codeVal.eq(userManure.packTCd.coalesce(userManureStock.packTCd))),
-                    "packTCdNm"));
-        fieldList.add(
-            ExpressionUtils.as(
-                JPAExpressions.select(code.codeNm)
-                    .from(code)
-                    .where(code.codeId.eq("MANURE_T_CD"),
-                           code.codeVal.eq(userManure.manureTCd)),
-                "manureTCdNm"));
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("PACK_T_CD"),
+                                        code.codeVal.eq(
+                                                // userManure.packTCd.coalesce(userManureStock.packTCd))
+                                                userManureStock.packTCd
+                                        )
+                                ),
+                        "packTCdNm"));
         fieldList.add(
                 ExpressionUtils.as(
-                    JPAExpressions.select(code.codeNm)
-                        .from(code)
-                        .where(code.codeId.eq("SUP_INOUT_CD"),
-                               code.codeVal.eq(userManureStock.supInoutCd)),
-                    "supInoutCdNm"));
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("MANURE_T_CD"),
+                                        code.codeVal.eq(userManure.manureTCd)),
+                        "manureTCdNm"));
         fieldList.add(
                 ExpressionUtils.as(
-                    JPAExpressions.select(code.codeNm)
-                        .from(code)
-                        .where(code.codeId.eq("MANURE_T_CD2"),
-                               code.codeVal.eq(userManure.manureTCd2)),
-                    "manureTCdNm2"));
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("SUP_INOUT_CD"),
+                                        code.codeVal.eq(userManureStock.supInoutCd)),
+                        "supInoutCdNm"));
+        fieldList.add(
+                ExpressionUtils.as(
+                        JPAExpressions.select(code.codeNm)
+                                .from(code)
+                                .where(code.codeId.eq("MANURE_T_CD2"),
+                                        code.codeVal.eq(userManure.manureTCd2)),
+                        "manureTCdNm2"));
 
         fieldList.add(
                 ExpressionUtils.as(new CaseBuilder()
-                                  .when(userManureStock.userInoutSeq.isNotNull())
-                                  .then(JPAExpressions.select(userInout.inoutTCd)
-                                          .from(userInout)
-                                          .where(userInout.userInoutSeq.eq(userManureStock.userInoutSeq))
-                    ).otherwise(""),
-                    "inoutTCd"));
+                                .when(userManureStock.userInoutSeq.isNotNull())
+                                .then(JPAExpressions.select(userInout.inoutTCd)
+                                        .from(userInout)
+                                        .where(userInout.userInoutSeq.eq(userManureStock.userInoutSeq))
+                                ).otherwise(""),
+                        "inoutTCd"));
         // @formatterLon
 
         allFields = Projections.fields(UserManureStockDto.class, fieldList.toArray(new Expression<?>[0]));
@@ -138,15 +142,15 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
     public Page<UserManureStockDto> page(Map<String, Object> search, Pageable pageable) {
 
         JPQLQuery<UserManureStockDto> jpqQuery = query.select(allFields)
-                                        .from(userManureStock)
-                                        .join(userInfo).on(userManureStock.userId.eq(userInfo.userId))
-                                        .join(userManure).on(userManureStock.userManureSeq.eq(userManure.userManureSeq))
-                                        .where(queryCondition(search))
-                                        .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
+                .from(userManureStock)
+                .join(userInfo).on(userManureStock.userId.eq(userInfo.userId))
+                .join(userManure).on(userManureStock.userManureSeq.eq(userManure.userManureSeq))
+                .where(queryCondition(search))
+                .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         QueryResults<UserManureStockDto> result = jpqQuery.offset(pageable.getOffset())
-                                            .limit(pageable.getPageSize())
-                                            .fetchResults();
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
@@ -154,11 +158,11 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
     @Override
     public List<UserManureStockDto> list(Map<String, Object> search) {
         JPQLQuery<UserManureStockDto> jpqQuery = query.select(allFields)
-                                        .from(userManureStock)
-                                        .join(userInfo).on(userManureStock.userId.eq(userInfo.userId))
-                                        .join(userManure).on(userManureStock.userManureSeq.eq(userManure.userManureSeq))
-                                        .where(queryCondition(search))
-                                        .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
+                .from(userManureStock)
+                .join(userInfo).on(userManureStock.userId.eq(userInfo.userId))
+                .join(userManure).on(userManureStock.userManureSeq.eq(userManure.userManureSeq))
+                .where(queryCondition(search))
+                .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         List<UserManureStockDto> result = jpqQuery.fetch();
 
@@ -170,31 +174,31 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
         BooleanExpression condition = userManureStock.statusCd.eq(Constants.STATUS_CD_NORMAL)
                 .and(userManure.userManureSeq.eq(userManureStock.userManureSeq));
 
-        String userId = (String)search.get("userId");
+        String userId = (String) search.get("userId");
         if (StringUtils.isNotBlank(userId)) {
             condition = condition.and(userManureStock.userId.eq(userId));
         }
 
-        String stDt = (String)search.get("stDt");
-        String edDt = (String)search.get("edDt");
-        if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
+        String stDt = (String) search.get("stDt");
+        String edDt = (String) search.get("edDt");
+        if (StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
             stDt = stDt.replace("-", "");
             edDt = edDt.replace("-", "");
             condition = condition.and(userManureStock.inoutDt.between(stDt, edDt));
         }
 
-        if(search.get("userDiarySeq") != null ) {
-            Long userDiarySeq = (Long)search.get("userDiarySeq") ;
+        if (search.get("userDiarySeq") != null) {
+            Long userDiarySeq = (Long) search.get("userDiarySeq");
             condition = condition.and(userManureStock.userDiarySeq.eq(userDiarySeq));
         }
 
-        if(search.get("userInoutSeq") != null) {
-            Long userInoutSeq = (Long)search.get("userInoutSeq");
+        if (search.get("userInoutSeq") != null) {
+            Long userInoutSeq = (Long) search.get("userInoutSeq");
             condition = condition.and(userManureStock.userInoutSeq.eq(userInoutSeq));
         }
 
-        String keyword = (String)search.get("keyword");
-        if(StringUtils.isNoneBlank(keyword)) {
+        String keyword = (String) search.get("keyword");
+        if (StringUtils.isNoneBlank(keyword)) {
             condition = condition.and(userManure.manureNm.concat(userManureStock.remark).contains(keyword));
         }
         return condition;

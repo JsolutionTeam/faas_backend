@@ -61,6 +61,22 @@ public class UserDiaryFileServiceImpl extends EgovAbstractServiceImpl implements
         userDiaryFileRepository.save(userDiaryFile);
     }
 
+    public boolean isImageExtension(String extension) {
+        String[] imageExtensions = {"jpg", "jpeg", "png", "gif", "bmp", "svg", "blob"};
+        for (String imageExtension : imageExtensions) {
+            if (imageExtension.equals(extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Optional<String> getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+    }
+
     @Override
     public void insert(UserDiaryDto userDiaryDto) throws IllegalStateException, IOException {
         UserDiaryFileDto dto = new UserDiaryFileDto(userDiaryDto);
@@ -68,7 +84,26 @@ public class UserDiaryFileServiceImpl extends EgovAbstractServiceImpl implements
         List<MultipartFile> mfList = userDiaryDto.getWorking();
 
         if (mfList != null && mfList.size() > 0) {
-            List<Long> fileSeqList = fileInfoService.insert(userId, mfList);
+
+            List<MultipartFile> imageFiles = mfList.stream().filter(mf -> {
+                try {
+                    // 파일 확장자 추출
+                    Optional<String> extension = getExtensionByStringHandling(mf.getOriginalFilename());
+
+                    // 파일 확장자가 있다면,
+                    if (extension.isPresent()) {
+                        String ext = extension.get();
+                        // 확장자가 이미지 확장자인지 확인
+                        if (isImageExtension(ext)) {
+                            return true;
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+                return false;
+            }).collect(Collectors.toList());
+
+            List<Long> fileSeqList = fileInfoService.insert(userId, imageFiles);
             dto.setFileKCd(UserDiaryFileDto.FILE_K_CD_WORKING);
             for (Long fileSeq : fileSeqList) {
                 dto.setFileSeq(fileSeq);
@@ -136,7 +171,7 @@ public class UserDiaryFileServiceImpl extends EgovAbstractServiceImpl implements
 
     @Override
     public void deleteByUserId(String userId) {
-       // List<Long> fileSeqList = userDiaryFileMapper.listFileSeqByUserId(userId);
+        // List<Long> fileSeqList = userDiaryFileMapper.listFileSeqByUserId(userId);
 
         Map<String, Object> search = new HashMap<>();
         search.put("userId", userId);

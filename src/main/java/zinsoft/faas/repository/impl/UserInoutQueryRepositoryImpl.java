@@ -217,23 +217,28 @@ public class UserInoutQueryRepositoryImpl implements UserInoutQueryRepository {
             condition = condition.and(userInout.inoutCd.eq(inoutCd));
         }
 
-        if (search.get("cropSeq") != null) {
-            Long cropSeq = Long.valueOf((String) search.get("cropSeq"));
-            if (cropSeq > 0) {
-                condition = condition.and(userInout.cropSeq.eq(cropSeq));
-            }
-        }
-
-        if (search.get("userCropSeq") != null) {
-            Long userCropSeq = Long.valueOf((String) search.get("userCropSeq"));
-            if (userCropSeq > 0) {
-                condition = condition.and(userInout.userCropSeq.eq(userCropSeq));
-            }
-        }
+//        if (search.get("cropSeq") != null) {
+//            Long cropSeq = Long.valueOf((String) search.get("cropSeq"));
+//            if (cropSeq > 0) {
+//                condition = condition.and(userInout.cropSeq.eq(cropSeq));
+//            }
+//        }
+//
+//        if (search.get("userCropSeq") != null) {
+//            Long userCropSeq = Long.valueOf((String) search.get("userCropSeq"));
+//            if (userCropSeq > 0) {
+//                condition = condition.and(userInout.userCropSeq.eq(userCropSeq));
+//            }
+//        }
 
         String inoutTCd = (String) search.get("inoutTCd");
         if (StringUtils.isNotBlank(inoutTCd)) {
             condition = condition.and(userInout.inoutTCd.eq(inoutTCd));
+        }
+
+        String acId = (String) search.get("acId");
+        if (StringUtils.isNotBlank(acId)) {
+            condition = condition.and(userInout.acId.eq(acId));
         }
 
         String costTCd = (String) search.get("costTCd");

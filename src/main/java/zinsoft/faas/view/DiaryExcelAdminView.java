@@ -37,9 +37,15 @@ public class DiaryExcelAdminView extends AbstractExcelView {
         sheet.setColumnWidth(col++, (9 * 256)); // 이름
         sheet.setColumnWidth(col++, (11 * 256)); // 일
         sheet.setColumnWidth(col++, (5 * 256)); // 일지/계획
-        sheet.setColumnWidth(col++, (20 * 256)); // 품목
-        sheet.setColumnWidth(col++, (20 * 256)); // 작업단계
-        sheet.setColumnWidth(col++, (30 * 256)); // 작업내역
+
+        // 2022 작업단계 분리하면서 생긴 변경사항
+        sheet.setColumnWidth(col++, (10 * 256)); //작기명
+        sheet.setColumnWidth(col++, (10 * 256)); //작업 대분류
+        sheet.setColumnWidth(col++, (10 * 256)); //작업 중분류
+        sheet.setColumnWidth(col++, (30 * 256)); //실작업
+//        sheet.setColumnWidth(col++, (25 * 256)); //작업단계
+//        sheet.setColumnWidth(col++, (30 * 256)); //작업내용
+
         sheet.setColumnWidth(col++, (15 * 256)); // 날씨
         sheet.setColumnWidth(col++, (7 * 256)); // 최저온도
         sheet.setColumnWidth(col++, (7 * 256)); // 최고온도
@@ -71,8 +77,8 @@ public class DiaryExcelAdminView extends AbstractExcelView {
         }
 
         String actNm = cond.get("actNm");
-        if(StringUtils.isEmpty(actNm) == false) {
-            setText(row++, 0, "작업단계 : "+actNm, summaryStyle);
+        if (StringUtils.isEmpty(actNm) == false) {
+            setText(row++, 0, "작업단계 : " + actNm, summaryStyle);
         }
 
         //   setText(row++, 0, "일지/계획 : " + cond.get("diaryTCdNm"), summaryStyle);
@@ -107,12 +113,23 @@ public class DiaryExcelAdminView extends AbstractExcelView {
         setText(row, col++, "일자", headerStyle);
         sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
         setText(row, col++, "일지\n계획", headerStyle);
+
+        // 2022 작업단계 분리하면서 생긴 변경사항
         sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
-        setText(row, col++, "품목", headerStyle);
+        setText(row, col++, "작기명", headerStyle);
         sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
-        setText(row, col++, "작업단계", headerStyle);
+        setText(row, col++, "작업 대분류", headerStyle);
         sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
-        setText(row, col++, "작업내역", headerStyle);
+        setText(row, col++, "작업 중분류", headerStyle);
+        sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
+        setText(row, col++, "실작업", headerStyle);
+
+//        sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
+//        setText(row, col++, "작업단계", headerStyle);
+//        sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
+//        setText(row, col++, "작업내역", headerStyle);
+
+
         sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
         setText(row, col++, "날씨", headerStyle);
         sheet.addMergedRegion(new CellRangeAddress(row, row + 1, col, col));
@@ -169,9 +186,13 @@ public class DiaryExcelAdminView extends AbstractExcelView {
                 setText(row, col++, vo.getUserNm(), dataCStyle);
                 setText(row, col++, getFullDate(vo.getActDt()), dataCStyle);
                 setText(row, col++, vo.getDiaryTCdNm(), dataCStyle);
-                setText(row, col++, vo.getCropCdNm(), dataLStyle);
-                setText(row, col++, vo.getFmwrkCdNm(), dataLStyle);
+
+                // 작업단계 분리하면서 생긴 변경사항
+                setText(row, col++, vo.getCropCdNm(), dataCStyle); // 작기명
+                setText(row, col++, vo.getGrowStepNm(), dataCStyle); // 작업 중분류
+                setText(row, col++, vo.getFmwrkCdNm(), dataCStyle); // 작업 중분류
                 setText(row, col++, vo.getRemark(), dataLStyle);
+
                 setText(row, col++, vo.getSkyTCdNm(), dataLStyle);
                 setNumber(row, col++, vo.getTmn());
                 setNumber(row, col++, vo.getTmx());

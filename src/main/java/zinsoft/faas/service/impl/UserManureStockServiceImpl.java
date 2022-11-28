@@ -161,7 +161,6 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
 
     @Override
     public DataTablesResponse<UserManureStockDto> page(Map<String, Object> search, Pageable pageable) {
-        Page<UserManureStockDto> page = null;
         String stDt = (String)search.get("stDt");
         String edDt = (String)search.get("edDt");
         if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
