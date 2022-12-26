@@ -187,7 +187,7 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Override
     public DataTablesResponse<UserDiaryDto> page(Map<String, Object> search, Pageable pageable) {
         // 결과 반환 용 변수
-        Page<UserDiaryDto> page = null;
+        DataTablesResponse<UserDiaryDto> page = null;
 
 
         SimpleDateFormat fm = new SimpleDateFormat("yyyyMMdd");
@@ -230,28 +230,29 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
             search.put("eActDt", eActDt);
         }
 
-        // Page<UserDiaryDto> dtoPage = userDiaryRepository.page(search, pageable);
-        // page = DataTablesResponse.of(dtoPage);
-        // List<UserDiaryDto> list = dtoPage.getContent();
-        // if (list != null && list.size() > 0) {
-        //     setFiles(dtoPage.getContent());
-        //     setUsedChemicalStock(list);
-        //     setUsedManureStock(list);
-        // }
-        // return page;
+         Page<UserDiaryDto> dtoPage = userDiaryRepository.page(search, pageable);
+         page = DataTablesResponse.of(dtoPage);
+         List<UserDiaryDto> list = dtoPage.getContent();
+         if (list != null && list.size() > 0) {
+             setFiles(dtoPage.getContent());
+             setUsedChemicalStock(list);
+             setUsedManureStock(list);
+         }
+         return page;
 
-        List<UserDiaryDto> list = null;
-        try {
-            //
-            page = userDiaryRepository.page(search, pageable);
-//                list = userDiaryMapper.pageData(search, pageable);
-            if (list != null && list.size() > 0) {
-                setFiles(list);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return DataTablesResponse.of(page);
+//        List<UserDiaryDto> list = null;
+//        try {
+//            //
+//            page = userDiaryRepository.page(search, pageable);
+//            list = page.getContent();
+////                list = userDiaryMapper.pageData(search, pageable);
+//            if (list != null && list.size() > 0) {
+//                setFiles(list);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return DataTablesResponse.of(page);
 
     }
 

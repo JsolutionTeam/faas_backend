@@ -1,12 +1,6 @@
 package zinsoft.web.common.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -14,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -217,8 +212,11 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
     public void login(String userId, HttpSession session, String remoteAddr) {
         UserInfo userInfo = getEntity(userId);
 
+        // 최종 로그인 시간 업데이트
         userInfo.setLastLoginDtm(new Date());
         userInfoRepository.save(userInfo);
+
+        // 로그인 로그 추가
         userAccessLogService.login(userId);
 
         UserInfoDto dto = modelMapper.map(userInfo, UserInfoDto.class);
@@ -399,13 +397,20 @@ public class UserInfoServiceImpl extends EgovAbstractServiceImpl implements User
     }
 
     private UserInfo getEntity(String userId) {
-        Optional<UserInfo> data = userInfoRepository.findById(userId);
+        // 더아이엠씨 성영주 본부장님의
+        // vf_user_info view 테이블에서 결과가 여러개 나올 수 있다는 답변이 있었음.
+        List<UserInfo> data = userInfoRepository.findAllById(Collections.singletonList(userId));
 
-        if (!data.isPresent()) {
+        if (data.isEmpty()) {
             throw new CodeMessageException(Result.NO_DATA);
         }
+//        Optional<UserInfo> data = userInfoRepository.findById(userId);
 
-        return data.get();
+//        if (!data.isPresent()) {
+//            throw new CodeMessageException(Result.NO_DATA);
+//        }
+
+        return data.get(0);
     }
 
 }
