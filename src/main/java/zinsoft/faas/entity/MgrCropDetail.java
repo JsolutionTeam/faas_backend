@@ -7,6 +7,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+// 작기명(품목) 조회를 위해 사용
 @Entity
 @Table(name="comtccmmndetailcode", catalog = "mgr")
 @Getter

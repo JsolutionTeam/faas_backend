@@ -34,61 +34,6 @@
         <result column="ALIAS_NM" property="aliasNm" jdbcType="VARCHAR" />
     </resultMap>
 
-    <insert id="insert" parameterType="zinsoft.faas.dto.UserCropDto">
-        <selectKey resultType="Long" keyProperty="userCropSeq" order="BEFORE">
-            SELECT seq_user_crop_seq.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO tf_user_crop
-        (user_crop_seq,
-        user_id,
-        year,
-        reg_dtm,
-        update_dtm,
-        status_cd,
-        crop_seq,
-        area,
-        main_kind,
-        crop_s_cd,
-        st_crop,
-        ed_crop,
-        plant_year,
-        plant_num,
-        remark,
-        mother,
-        young,
-        zipcode,
-        addr1,
-        addr2,
-        part_t_cd,
-        expr_yn,
-        alias_nm,
-        update_mem_prdlst)
-        VALUES (#{userCropSeq},
-        #{userId},
-        #{year},
-        SYSDATE,
-        SYSDATE,
-        'N',
-        #{cropSeq},
-        #{area, jdbcType=NUMERIC},
-        #{mainKind, jdbcType=VARCHAR},
-        #{cropSCd, jdbcType=CHAR},
-        #{stCrop, jdbcType=CHAR},
-        #{edCrop, jdbcType=CHAR},
-        #{plantYear, jdbcType=CHAR},
-        #{plantNum, jdbcType=NUMERIC},
-        #{remark, jdbcType=VARCHAR},
-        #{mother, jdbcType=NUMERIC},
-        #{young, jdbcType=NUMERIC},
-        xdb_enc('normal', #{zipcode, jdbcType=VARCHAR}),
-        xdb_enc('normal', #{addr1, jdbcType=VARCHAR}),
-        xdb_enc('normal', #{addr2, jdbcType=VARCHAR}),
-        #{partTCd, jdbcType=CHAR},
-        #{exprYN, jdbcType=CHAR},
-        #{aliasNm, jdbcType=VARCHAR},
-        'Y')
-    </insert>
-
     <insert id="copy" parameterType="String">
         INSERT INTO tf_user_crop
         (user_crop_seq,
@@ -142,52 +87,6 @@
         AND year = TO_CHAR (ADD_MONTHS (SYSDATE, -12), 'yyyy')
         AND status_cd = 'N'
     </insert>
-
-    <select id="get" parameterType="zinsoft.faas.dto.UserCropDto" resultMap="BaseResultMap">
-        SELECT a.user_crop_seq,
-        a.user_id,
-        a.year,
-        a.reg_dtm,
-        a.update_dtm,
-        a.status_cd,
-        a.crop_seq,
-        a.area,
-        a.main_kind,
-        a.crop_s_cd,
-        a.st_crop,
-        a.ed_crop,
-        a.plant_year,
-        a.plant_num,
-        a.remark,
-        a.mother,
-        a.young,
-        xdb_dec('normal', a.zipcode) zipcode,
-        xdb_dec('normal', a.addr1) addr1,
-        xdb_dec('normal', a.addr2) addr2,
-        b.expr_nm crop_nm,
-        c.code_nm crop_s_cd_nm,
-        a.part_t_cd,
-        (SELECT x.code_nm
-        FROM tf_code x
-        WHERE x.code_id = 'PART_T_CD' AND x.code_val = a.part_t_cd) part_t_cd_nm,
-        a.expr_yn,
-        a.alias_nm
-        FROM tf_user_crop a, tf_crop b, tf_code c
-        WHERE a.crop_seq = b.crop_seq
-        AND a.crop_s_cd = c.code_val(+)
-        AND a.status_cd = 'N'
-        AND c.code_id(+) = 'CROP_S_CD'
-        <if test="userCropSeq != null and userCropSeq > 0">
-            AND a.user_crop_seq = #{userCropSeq}
-        </if>
-        <if test="userId != null and userId != ''">
-            AND a.user_id = #{userId}
-        </if>
-        <if test="cropSeq != null and cropSeq > 0">
-            AND a.crop_seq = #{cropSeq}
-        </if>
-        AND ROWNUM = 1
-    </select>
 
     <select id="getCropSeqByCropNm" resultType="long">
         SELECT MAX (a.crop_seq)
@@ -433,178 +332,6 @@
         </choose>
     </select>
 
-    <select id="listCrop" parameterType="Map" resultMap="BaseResultMap">
-        SELECT a.crop_seq,
-        SUM(a.area) area,
-        LOWER (TRIM (b.expr_nm)) crop_nm
-        FROM tf_user_crop a, tf_crop b
-        WHERE a.crop_seq = b.crop_seq
-        AND a.status_cd = 'N'
-        AND b.status_cd = 'N'
-        <if test="userId != null and userId != ''">
-            AND a.user_id = #{userId}
-        </if>
-        GROUP BY a.crop_seq, b.expr_nm
-    </select>
-
-    <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
-        SELECT *
-        FROM (SELECT ROWNUM AS RNUM, z.*
-        FROM (SELECT a.user_crop_seq,
-        a.user_id,
-        d.user_nm,
-        a.year,
-        a.reg_dtm,
-        a.update_dtm,
-        a.status_cd,
-        a.crop_seq,
-        a.area,
-        a.main_kind,
-        a.crop_s_cd,
-        a.st_crop,
-        a.ed_crop,
-        a.plant_year,
-        a.plant_num,
-        a.remark,
-        a.mother,
-        a.young,
-        xdb_dec('normal', a.zipcode) zipcode,
-        xdb_dec('normal', a.addr1) addr1,
-        xdb_dec('normal', a.addr2) addr2,
-        b.expr_nm crop_nm,
-        c.code_nm crop_s_cd_nm,
-        b.crop_a_cd,
-        a.part_t_cd,
-        (SELECT x.code_nm
-        FROM tf_code x
-        WHERE x.code_id = 'PART_T_CD' AND x.code_val = a.part_t_cd) part_t_cd_nm,
-        a.expr_yn,
-        a.alias_nm
-        FROM tf_user_crop a, tf_crop b, tf_code c, vf_user_info d, tf_code e
-        WHERE a.crop_seq = b.crop_seq
-        AND a.crop_s_cd = c.code_val(+)
-        AND a.status_cd = 'N'
-        AND c.code_id(+) = 'CROP_S_CD'
-        AND a.user_id = d.user_id
-        AND b.crop_a_cd = e.code_val(+)
-        AND e.code_id (+ ) = 'CROP_A_CD'
-        <if test="cond.exprYN != null">
-            AND a.expr_yn = #{cond.exprYN}
-        </if>
-        <if test="cond.cropCd != null">
-            <choose>
-                <when test="cond.cropCd == '2'.toString()">
-                               <![CDATA[
-                               AND a.crop_seq >= '600000'
-                               AND a.crop_seq <= '899999'
-                               ]]>
-                </when>
-                <otherwise>
-                               <![CDATA[
-                               AND (a.crop_seq < '600000' OR a.crop_seq > '899999')
-                               ]]>
-                </otherwise>
-            </choose>
-        </if>
-        <if test="cond.userId != null and cond.userId != ''">
-            AND a.user_id = #{cond.userId}
-        </if>
-        <if test="cond.keyword != null and cond.keyword != ''">
-            <if test='cond.field == "userNm"'>
-                AND d.user_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "userId"'>
-                AND a.user_id LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "cropNm"'>
-                AND b.expr_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "mainKind"'>
-                AND a.main_kind LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "cropSCdNm"'>
-                AND c.code_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "cropACdNm"'>
-                AND e.code_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-        </if>
-        ORDER BY
-        <choose>
-            <when test="cond.orderBy != null and cond.orderBy == 'ASC'">
-                a.user_crop_seq
-            </when>
-            <otherwise>
-                a.user_crop_seq DESC
-            </otherwise>
-        </choose>
-        ) z
-        <choose>
-            <when test="limit != null and limit > 0">
-                <![CDATA[
-                         WHERE ROWNUM <= (#{start} + #{limit}))
-                 WHERE RNUM > #{start}
-                ]]>
-            </when>
-            <otherwise>
-                )
-            </otherwise>
-        </choose>
-    </select>
-
-    <select id="count" parameterType="PagingParam" resultType="int">
-        SELECT COUNT(*)
-        FROM tf_user_crop a, tf_crop b, tf_code c, vf_user_info d, tf_code e
-        WHERE a.crop_seq = b.crop_seq
-        AND a.crop_s_cd = c.code_val(+)
-        AND a.status_cd = 'N'
-        AND c.code_id(+) = 'CROP_S_CD'
-        AND a.user_id = d.user_id
-        AND b.crop_a_cd = e.code_val(+)
-        AND e.code_id (+ ) = 'CROP_A_CD'
-        <if test="cond.exprYN != null">
-            AND a.expr_yn = #{cond.exprYN}
-        </if>
-        <if test="cond.cropCd != null">
-            <choose>
-                <when test="cond.cropCd == '2'.toString()">
-               <![CDATA[
-               AND a.crop_seq >= '600000'
-               AND a.crop_seq <= '899999'
-               ]]>
-                </when>
-                <otherwise>
-               <![CDATA[
-               AND (a.crop_seq < '600000' OR a.crop_seq > '899999')
-               ]]>
-                </otherwise>
-            </choose>
-        </if>
-        <if test="cond.userId != null and cond.userId != ''">
-            AND a.user_id = #{cond.userId}
-        </if>
-        <if test="cond.keyword != null and cond.keyword != ''">
-            <if test='cond.field == "userNm"'>
-                AND d.user_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "userId"'>
-                AND a.user_id LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "cropNm"'>
-                AND b.expr_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "mainKind"'>
-                AND a.main_kind LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "cropSCdNm"'>
-                AND c.code_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-            <if test='cond.field == "cropACdNm"'>
-                AND e.code_nm LIKE '%' || #{cond.keyword} || '%'
-            </if>
-        </if>
-    </select>
-
     <select id="countByAliasNm" resultType="int">
         SELECT COUNT(*)
         FROM tf_user_crop a
@@ -615,31 +342,6 @@
             AND user_crop_seq != #{userCropSeq}
         </if>
     </select>
-
-    <update id="update" parameterType="zinsoft.faas.dto.UserCropDto">
-        UPDATE tf_user_crop
-        SET update_dtm = SYSDATE,
-        year = #{year},
-        crop_seq = #{cropSeq},
-        area = #{area, jdbcType=NUMERIC},
-        main_kind = #{mainKind, jdbcType=VARCHAR},
-        crop_s_cd = #{cropSCd, jdbcType=CHAR},
-        st_crop = #{stCrop, jdbcType=CHAR},
-        ed_crop = #{edCrop, jdbcType=CHAR},
-        plant_year = #{plantYear, jdbcType=CHAR},
-        plant_num = #{plantNum, jdbcType=BIGINT},
-        remark = #{remark, jdbcType=VARCHAR},
-        mother = #{mother, jdbcType=NUMERIC},
-        young = #{young, jdbcType=NUMERIC},
-        zipcode = xdb_enc('normal', #{zipcode, jdbcType=VARCHAR}),
-        addr1 = xdb_enc('normal', #{addr1, jdbcType=VARCHAR}),
-        addr2 = xdb_enc('normal', #{addr2, jdbcType=VARCHAR}),
-        part_t_cd = #{partTCd, jdbcType=CHAR},
-        expr_yn = #{exprYN, jdbcType=CHAR},
-        alias_nm = #{aliasNm, jdbcType=VARCHAR},
-        update_mem_prdlst = 'Y'
-        WHERE user_crop_seq = #{userCropSeq}
-    </update>
 
     <update id="updateExpr" parameterType="zinsoft.faas.dto.UserCropDto">
         UPDATE tf_user_crop
@@ -658,13 +360,5 @@
         WHERE status_cd = 'N'
         AND user_crop_seq = #{userCropSeq}
         AND user_id = #{userId}
-    </update>
-
-    <update id="deleteByUserId" parameterType="String">
-        UPDATE tf_user_crop
-        SET update_dtm = SYSDATE,
-        status_cd = 'D',
-        update_mem_prdlst = 'Y'
-        WHERE user_id = #{userId}
     </update>
 </mapper>

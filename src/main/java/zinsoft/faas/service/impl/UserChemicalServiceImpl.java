@@ -68,7 +68,6 @@ public class UserChemicalServiceImpl extends EgovAbstractServiceImpl implements 
 
     @Override
     public void insert(UserChemicalDto dto) {
-        //userChemicalMapper.insert(dto);
         UserChemical userChemical = modelMapper.map(dto, UserChemical.class);
         userChemicalRepository.save(userChemical);
         dto.setUserChemicalSeq(userChemical.getUserChemicalSeq());
@@ -106,7 +105,6 @@ public class UserChemicalServiceImpl extends EgovAbstractServiceImpl implements 
 
     @Override
     public void update(UserChemicalDto dto) {
-        //userChemicalMapper.update(dto);
 
         UserChemical userChemical = getEntity(dto.getUserId(), dto.getUserChemicalSeq());
         dto.setUpdateDtm(new Date());
@@ -117,7 +115,6 @@ public class UserChemicalServiceImpl extends EgovAbstractServiceImpl implements 
 
     @Override
     public void delete(UserChemicalDto dto) {
-        //userChemicalStockService.deleteByUserChemicalSeq(dto.getUserId(), dto.getUserChemicalSeq());
         userChemicalMapper.delete(dto);
     }
 

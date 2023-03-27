@@ -13,6 +13,10 @@ import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
 
+/**
+ * 사용중인 API입니다.
+ */
+
 @Controller
 @RequestMapping("${api.prefix}/weather")
 public class WeatherController {

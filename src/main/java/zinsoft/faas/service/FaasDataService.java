@@ -1,26 +1,23 @@
 package zinsoft.faas.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import zinsoft.faas.dao.mapper.FaasDataMapper;
-import zinsoft.faas.dao.mapper.FaasDataRepository;
+import zinsoft.faas.repository.FaasDataRepository;
 import zinsoft.faas.dto.AccountDto;
 import zinsoft.faas.dto.CropDto;
 import zinsoft.faas.dto.UserCropDto;
 import zinsoft.faas.vo.UserActivity;
 import zinsoft.web.common.dto.CodeDto;
-import zinsoft.web.common.service.AppPropertiesService;
 import zinsoft.web.common.service.CodeService;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +30,6 @@ public class FaasDataService {
 
     @Resource
     FaasDataMapper faasDataMapper;
-
-
-    @Resource
-    AppPropertiesService appPropertiesService;
 
     @Resource
     CodeService codeService;
@@ -52,9 +45,6 @@ public class FaasDataService {
 
     @Resource
     UserActivityService userActivityService;
-
-    @Resource
-    UserInoutDetailService userInoutDetailService;
 
     public Object getBasicData(String[] data, String acId, String upAcId, String acNm, String cropNm, String cropACd, String inputYn) {
         Map<String, Object> ret = new HashMap<String, Object>();
@@ -153,61 +143,6 @@ public class FaasDataService {
                 }
             }
         }
-
-        // 수입지출 상세항목
-        /*if (all || ArrayUtils.contains(data, "userInoutDetailList")) {
-            if (cropSeq != null && inoutCd != null) {
-                List<UserInoutDetail> list = userInoutDetailService.list(userId, cropSeq, inoutCd, detail);
-                if (cnt == 1) {
-                    return list;
-                } else {
-                    ret.put("userInoutDetailList", list);
-                }
-            } else if (cropSeq != null && inoutCd == null) {
-                Map<String, List<UserInoutDetail>> iomap = new HashMap<String, List<UserInoutDetail>>();
-                List<UserInoutDetail> ilist = userInoutDetailService.list(userId, cropSeq, "I", detail);
-                List<UserInoutDetail> olist = userInoutDetailService.list(userId, cropSeq, "O", detail);
-                if (ilist != null && !ilist.isEmpty()) {
-                    iomap.put("I", ilist);
-                }
-                if (olist != null && !olist.isEmpty()) {
-                    iomap.put("O", olist);
-                }
-                if (cnt == 1) {
-                    return iomap;
-                } else {
-                    ret.put("userInoutDetailList", iomap);
-                }
-            } else {
-                Map<Long, Map<String, List<UserInoutDetail>>> map = new HashMap<Long, Map<String, List<UserInoutDetail>>>();
-                List<UserCrop> userCropList = userCropService.list(userId, null);
-                List<UserInoutDetail> ilist = null;
-                List<UserInoutDetail> olist = null;
-
-                for (UserCrop vo : userCropList) {
-                    Map<String, List<UserInoutDetail>> iomap = new HashMap<String, List<UserInoutDetail>>();
-                    Long cseq = vo.getCropSeq();
-                    ilist = userInoutDetailService.list(userId, cseq, "I", detail);
-                    olist = userInoutDetailService.list(userId, cseq, "O", detail);
-                    if (ilist != null && !ilist.isEmpty()) {
-                        iomap.put("I", ilist);
-                    }
-                    if (olist != null && !olist.isEmpty()) {
-                        iomap.put("O", olist);
-                    }
-                    if (!iomap.isEmpty()) {
-                        map.put(cseq, iomap);
-                    }
-                }
-
-                if (cnt == 1) {
-                    return map;
-                } else {
-                    ret.put("userInoutDetailList", map);
-                }
-            }
-        }*/
-
         return ret;
     }
 
@@ -217,7 +152,6 @@ public class FaasDataService {
 
     public List<Map<String, Object>> getCalendarData(String userId, String startDt, String endDt) {
         return faasDataRepository.getCalendarData(userId, startDt, endDt);
-//        return faasDataMapper.getCalendarData(userId, startDt, endDt);
     }
 
     public List<Map<String, Object>> getFarmingStatus(String userId) {

@@ -146,6 +146,11 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
                 .join(userInfo).on(userManureStock.userId.eq(userInfo.userId))
                 .join(userManure).on(userManureStock.userManureSeq.eq(userManure.userManureSeq))
                 .where(queryCondition(search))
+                .groupBy(
+                        userInfo.userId,
+                        userManureStock.inoutDt, // orderBy 내용이 바뀌면 변경되어야 함
+                        userManureStock.userManureStockSeq // orderBy 내용이 바뀌면 변경되어야 함
+                )
                 .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         QueryResults<UserManureStockDto> result = jpqQuery.offset(pageable.getOffset())
@@ -162,6 +167,11 @@ public class UserManureStockQueryRepositoryImpl implements UserManureStockQueryR
                 .join(userInfo).on(userManureStock.userId.eq(userInfo.userId))
                 .join(userManure).on(userManureStock.userManureSeq.eq(userManure.userManureSeq))
                 .where(queryCondition(search))
+                .groupBy(
+                        userInfo.userId,
+                        userManureStock.inoutDt, // orderBy 내용이 바뀌면 변경되어야 함
+                        userManureStock.userManureStockSeq // orderBy 내용이 바뀌면 변경되어야 함
+                )
                 .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         List<UserManureStockDto> result = jpqQuery.fetch();

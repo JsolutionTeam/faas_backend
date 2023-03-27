@@ -72,17 +72,13 @@ public class BasicController {
 
     @GetMapping("/session")
     public Result session(String menuId, boolean withMenu) {
-//        log.info("request /session, menuId : {}, withMenu : {}", menuId, withMenu);
         UserInfoDto userInfo = UserInfoUtil.getFarmerInfo();
-//        log.info("/session - userInfo : {}", userInfo);
         if (StringUtils.isNotBlank(menuId)) {
             String userId = userInfo != null ? userInfo.getUserId() : null;
-//            log.info("/session - userId : {}", userId);
             menuAccessLogService.insert(menuId, userId, null);
         }
 
         // 권한관리에서 메뉴 권한이 수정될 수 있으므로 실제로 세션에 데이터를 넣으면 안됨
-
         String roleId = UserInfoUtil.getMainRoleId(userInfo);
         log.info("/session - roleId : {}", roleId);
         Map<String, Object> ret = new HashMap<>();

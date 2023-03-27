@@ -1,24 +1,12 @@
 package zinsoft.faas.service.impl;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.UserChemicalStockMapper;
 import zinsoft.faas.dto.UserChemicalStockDto;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.dto.UserInoutDto;
@@ -29,6 +17,10 @@ import zinsoft.faas.service.UserInoutService;
 import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.web.exception.CodeMessageException;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implements UserChemicalStockService {
@@ -41,20 +33,6 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
 
     @Autowired
     ModelMapper modelMapper;
-
-    @Autowired
-    UserChemicalStockMapper userChemicalStockMapper;
-
-    //사용되지 않음. 추후 필요할때위해 남김
-//    private UserChemicalStock getEntity(Long id) {
-//        Optional<UserChemicalStock> data = userChemicalStockRepository.findById(id);
-//
-//        if (!data.isPresent()) {
-//            throw new CodeMessageException(Result.NO_DATA);
-//        }
-//
-//        return data.get();
-//    }
 
     private UserChemicalStock getEntity(Long userChemicalStockSeq) {
         Optional<UserChemicalStock> data = userChemicalStockRepository.findById(userChemicalStockSeq);
@@ -111,9 +89,10 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
                 dto.setDeleteYn("N");
                 dto.setUpdateYn("N");
                 Long cropCd = null;
-                try{
+                try {
                     cropCd = Long.parseLong(diaryDto.getCropCd());
-                }catch (Exception ignore){}
+                } catch (Exception ignore) {
+                }
                 dto.setCropSeq(cropCd);
                 dto.setUserCropSeq(diaryDto.getUserCropSeq());
                 dto.setRemark("영농일지 입력");
@@ -160,24 +139,23 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
 
     @Override
     public List<UserChemicalStockDto> list(Map<String, Object> param) {
-        String stDt = (String)param.get("stDt");
-        String edDt = (String)param.get("edDt");
-        if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
+        String stDt = (String) param.get("stDt");
+        String edDt = (String) param.get("edDt");
+        if (StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
             stDt = stDt.replace("-", "");
             edDt = edDt.replace("-", "");
             param.put("stDt", stDt);
             param.put("edDt", edDt);
         }
-//        return userChemicalStockMapper.list(param);
         return userChemicalStockRepository.list(param);
     }
 
     @Override
     public DataTablesResponse<UserChemicalStockDto> page(Map<String, Object> search, Pageable pageable) {
         Page<UserChemicalStockDto> page = null;
-        String stDt = (String)search.get("stDt");
-        String edDt = (String)search.get("edDt");
-        if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
+        String stDt = (String) search.get("stDt");
+        String edDt = (String) search.get("edDt");
+        if (StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
             stDt = stDt.replace("-", "");
             edDt = edDt.replace("-", "");
             search.put("stDt", stDt);
@@ -186,12 +164,6 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
 
         return DataTablesResponse.of(userChemicalStockRepository.page(search, pageable));
     }
-
-//    @Override
-//    public DataTablesResponse<UserChemicalStockDto> page(Map<String, Object> search, Pageable pageable) {
-//        org.springframework.data.domain.Page<UserChemicalStockDto> dtoPage = userChemicalStockRepository.page(search, pageable);
-//        return DataTablesResponse.of(dtoPage);
-//    }
 
     @Override
     public List<UserChemicalStockDto> listByUserDiarySeq(String userId, Long userDiarySeq) {
@@ -232,7 +204,7 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
         if (dto.getUserInoutSeq() != null) {
             if ("O".equals(dto.getSupInoutCd())) {
                 userInoutService.deleteBy(dto.getUserId(), dto.getUserInoutSeq());
-                dto.setUserInoutSeq(new Long(0));
+                dto.setUserInoutSeq(0L);
             } else {
                 userInoutService.update(dto);
             }
@@ -254,9 +226,10 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
                     dto.setUserId(diaryDto.getUserId());
                     dto.setInoutDt(diaryDto.getActDt());
                     Long cropCd = null;
-                    try{
+                    try {
                         cropCd = Long.parseLong(diaryDto.getCropCd());
-                    }catch(Exception ignore){}
+                    } catch (Exception ignore) {
+                    }
                     dto.setCropSeq(cropCd);
                     dto.setUserCropSeq(diaryDto.getUserCropSeq());
                     dto.setSupInoutCd("O");
@@ -266,7 +239,6 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
                         if (dto.getUserChemicalSeq() == null) {
                             delete(dto.getUserId(), dto.getUserChemicalStockSeq());
                         } else {
-                            //userChemicalStockMapper.updateBy(dto);
                             update(dto);
                         }
                     } else {
@@ -302,7 +274,6 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
                         if (dto.getUserChemicalSeq() == null) {
                             delete(dto.getUserId(), dto.getUserChemicalStockSeq());
                         } else {
-                            //userChemicalStockMapper.updateBy(dto);
                             update(dto);
                         }
                     } else {
@@ -341,17 +312,6 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
         userChemicalStockRepository.save(userChemicalStock);
     }
 
-    //    public void deleteWith(String userId, Long userChemicalStockSeq) {
-    //        UserChemicalStock old = get(userId, userChemicalStockSeq);
-    //        if (old.getSlipSeq() != null) {
-    //            Slip slip = new Slip();
-    //            slip.setUserId(userId);
-    //            slip.setSlipSeq(old.getSlipSeq());
-    //            slipService.deleteByStock(slip);
-    //        }
-    //        userChemicalStockMapper.delete(userId, userChemicalStockSeq);
-    //    }
-
     @Override
     public void delete(String userId, Long[] userChemicalStockSeqs) {
         for (Long userChemicalStockSeq : userChemicalStockSeqs) {
@@ -367,7 +327,7 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
     @Override
     public void deleteByUserDiarySeq(String userId, Long userDiarySeq) {
 
-        userChemicalStockRepository.deleteByUserDiarySeq(userId, new Long[] { userDiarySeq });
+        userChemicalStockRepository.deleteByUserDiarySeq(userId, new Long[]{userDiarySeq});
     }
 
     @Override
@@ -377,7 +337,7 @@ public class UserChemicalStockServiceImpl extends EgovAbstractServiceImpl implem
 
     @Override
     public void deleteByUserInoutSeq(String userId, Long userInoutSeq) {
-        userChemicalStockRepository.deleteByUserInoutSeq(userId, new Long[] { userInoutSeq });
+        userChemicalStockRepository.deleteByUserInoutSeq(userId, new Long[]{userInoutSeq});
     }
 
     @Override

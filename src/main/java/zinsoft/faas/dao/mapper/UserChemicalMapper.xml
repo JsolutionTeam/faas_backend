@@ -14,97 +14,6 @@
         <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
     </resultMap>
 
-    <insert id="insert" parameterType="zinsoft.faas.dto.UserChemicalDto">
-        <selectKey resultType="Long" keyProperty="userChemicalSeq" order="BEFORE">
-            SELECT seq_user_chemical_seq.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO tf_user_chemical
-        (user_chemical_seq,
-        user_id,
-        reg_dtm,
-        update_dtm,
-        status_cd,
-        chemical_nm,
-        maker_nm,
-        chemical_t_cd,
-        remark)
-        VALUES (#{userChemicalSeq},
-        #{userId},
-        SYSDATE,
-        SYSDATE,
-        'N',
-        #{chemicalNm, jdbcType=VARCHAR},
-        #{makerNm, jdbcType=VARCHAR},
-        #{chemicalTCd, jdbcType=CHAR},
-        #{remark, jdbcType=VARCHAR})
-    </insert>
-
-    <select id="get" parameterType="zinsoft.faas.dto.UserChemicalDto" resultMap="BaseResultMap">
-        SELECT a.user_chemical_seq,
-               a.user_id,
-               a.reg_dtm,
-               a.update_dtm,
-               a.status_cd,
-               a.chemical_nm,
-               a.maker_nm,
-               a.chemical_t_cd,
-               (SELECT z.code_nm
-                FROM tf_code z
-                WHERE z.code_id = 'CHEMICAL_T_CD'
-                  AND z.code_val = a.chemical_t_cd)
-                   chemical_t_cd_nm,
-               a.remark
-        FROM tf_user_chemical a
-        WHERE a.status_cd = 'N'
-          AND a.user_id = #{userId}
-          AND a.user_chemical_seq = #{userChemicalSeq}
-    </select>
-
-    <select id="list" parameterType="Map" resultMap="BaseResultMap">
-        SELECT a.user_chemical_seq,
-        a.user_id,
-        a.reg_dtm,
-        a.update_dtm,
-        a.status_cd,
-        a.chemical_nm,
-        a.maker_nm,
-        a.chemical_t_cd,
-        (SELECT z.code_nm
-        FROM tf_code z
-        WHERE z.code_id = 'CHEMICAL_T_CD' AND z.code_val = a.chemical_t_cd)
-        chemical_t_cd_nm,
-        a.remark
-        FROM tf_user_chemical a, vf_user_info b
-        WHERE a.status_cd = 'N'
-        AND a.user_id = b.user_id
-        <if test="userId != null and userId != ''">
-            AND a.user_id = #{userId}
-        </if>
-        <if test="keyword != null and keyword != ''">
-            <if test='field == "userNm"'>
-                AND b.user_nm LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test='field == "userId"'>
-                AND a.user_id LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test='field == "chemicalNm"'>
-                AND a.chemical_nm LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test='field == "makerNm"'>
-                AND a.maker_nm LIKE '%' || #{keyword} || '%'
-            </if>
-        </if>
-        ORDER BY
-        <choose>
-            <when test="orderBy != null and orderBy == 'ASC'">
-                a.user_chemical_seq
-            </when>
-            <otherwise>
-                a.user_chemical_seq DESC
-            </otherwise>
-        </choose>
-    </select>
-
     <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
         SELECT *
         FROM (SELECT ROWNUM AS RNUM, z.*
@@ -181,17 +90,6 @@
         </if>
     </select>
 
-    <update id="update" parameterType="zinsoft.faas.dto.UserChemicalDto">
-        UPDATE tf_user_chemical
-        SET update_dtm    = SYSDATE,
-            chemical_nm   = #{chemicalNm, jdbcType=VARCHAR},
-            maker_nm      = #{makerNm, jdbcType=VARCHAR},
-            chemical_t_cd = #{chemicalTCd, jdbcType=CHAR},
-            remark        = #{remark, jdbcType=VARCHAR}
-        WHERE user_chemical_seq = #{userChemicalSeq}
-          AND user_id = #{userId}
-    </update>
-
     <update id="delete" parameterType="zinsoft.faas.dto.UserChemicalDto">
         UPDATE tf_user_chemical
         SET update_dtm = SYSDATE,
@@ -199,12 +97,4 @@
         WHERE user_chemical_seq = #{userChemicalSeq}
           AND user_id = #{userId}
     </update>
-
-    <update id="deleteByUserId" parameterType="String">
-        UPDATE tf_user_chemical
-        SET update_dtm = SYSDATE,
-            status_cd  = 'D'
-        WHERE user_id = #{userId}
-    </update>
-
 </mapper>

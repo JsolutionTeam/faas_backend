@@ -115,48 +115,6 @@
       ORDER BY a.reg_dtm DESC, a.expr_seq DESC
     </select>
 
-    <select id="page" parameterType="PagingParam" resultMap="BaseResultMap">
-        SELECT *
-            FROM (SELECT ROWNUM AS RNUM, z.*
-                   FROM (SELECT 
-                              a.activity_seq,
-                              a.reg_dtm,
-                              a.update_dtm,
-                              a.status_cd,
-                              a.crop_a_cd,
-                              a.act_nm,
-                              a.expr_yn,
-                              a.expr_seq,
-                              a.mark_t_cd,
-                              (SELECT   x.code_nm
-                                 FROM   tf_code x
-                                WHERE   x.code_id = 'MARK_T_CD' AND x.code_val = a.mark_t_cd)
-                               mark_t_cd_nm
-                         FROM tf_activity a
-                        WHERE a.status_cd = 'N'
-                              <if test="cond.keyword != null and cond.keyword != ''">
-                                   <if test='cond.field == "actNm"'>
-                                       and a.act_nm LIKE '%' || #{cond.keyword} || '%'
-                                   </if>
-                              </if>
-                     ORDER BY a.reg_dtm DESC, a.expr_seq DESC)
-         <![CDATA[
-                 WHERE ROWNUM <= (#{start} + #{limit}))
-         WHERE RNUM > #{start}
-         ]]>
-    </select>
-
-    <select id="count" parameterType="PagingParam" resultType="int">
-        SELECT COUNT(*)
-          FROM tf_activity a
-         WHERE a.status_cd = 'N'
-          <if test="cond.keyword != null and cond.keyword != ''">
-               <if test='cond.field == "actNm"'>
-                   and a.act_nm LIKE '%' || #{cond.keyword} || '%'
-               </if>
-          </if>
-    </select>
-
     <select id="listByCropSeq" resultMap="BaseResultMap">
           SELECT a.activity_seq,
                  a.reg_dtm,

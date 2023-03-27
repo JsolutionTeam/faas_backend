@@ -15,6 +15,10 @@ import zinsoft.util.Result;
 import zinsoft.web.common.dto.CodeDto;
 import zinsoft.web.common.service.CodeService;
 
+/**
+ * 사용중인 API입니다.
+ */
+
 @RestController
 @RequestMapping("${api.prefix}")
 public class CodeController {

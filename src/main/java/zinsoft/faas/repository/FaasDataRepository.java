@@ -1,4 +1,4 @@
-package zinsoft.faas.dao.mapper;
+package zinsoft.faas.repository;
 
 
 import org.apache.ibatis.annotations.Param;

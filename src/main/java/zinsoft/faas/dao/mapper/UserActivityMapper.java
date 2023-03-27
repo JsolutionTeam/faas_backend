@@ -18,5 +18,4 @@ public interface UserActivityMapper {
     void delete(UserActivity vo);
 
     void deleteByUserId(String userId);
-
 }

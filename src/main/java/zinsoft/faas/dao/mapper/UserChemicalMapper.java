@@ -10,20 +10,9 @@ import zinsoft.faas.vo.PagingParam;
 @Mapper
 public interface UserChemicalMapper {
 
-    void insert(UserChemicalDto vo);
-
-    UserChemicalDto get(UserChemicalDto vo);
-
-    List<UserChemicalDto> list(Map<String, Object> param);
-
     List<UserChemicalDto> page(PagingParam pagingParam);
 
     int count(PagingParam pagingParam);
 
-    void update(UserChemicalDto vo);
-
     void delete(UserChemicalDto vo);
-
-    void deleteByUserId(String userId);
-
 }

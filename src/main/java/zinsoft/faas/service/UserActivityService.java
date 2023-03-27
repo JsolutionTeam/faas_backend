@@ -1,18 +1,16 @@
 package zinsoft.faas.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
 import zinsoft.faas.dao.mapper.UserActivityMapper;
 import zinsoft.faas.dto.ActivityDto;
 import zinsoft.faas.dto.UserCropDto;
 import zinsoft.faas.vo.UserActivity;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserActivityService extends EgovAbstractServiceImpl {
@@ -32,10 +30,7 @@ public class UserActivityService extends EgovAbstractServiceImpl {
         if (userCrop != null) {
             UserActivity userActivity = userActivityMapper.get(vo);
             if (userActivity == null) {
-                //Activity activity = activityService.get(vo.getActivitySeq(), vo.getCropSeq());
-                //if (activity != null) {
-                    userActivityMapper.insert(vo);
-                //}
+                userActivityMapper.insert(vo);
             }
         }
     }
@@ -66,7 +61,7 @@ public class UserActivityService extends EgovAbstractServiceImpl {
             UserCropDto userCrop = userCropService.get(userId, cropSeq, userCropSeq);
             if (userCrop != null) {
                 List<ActivityDto> activityList = null;
-                if("1".equals(userCrop.getPartTCd())) { // 사업유형 - 생산
+                if ("1".equals(userCrop.getPartTCd())) { // 사업유형 - 생산
                     activityList = activityService.listByCropSeq(cropSeq, "seq");
                 } else {
                     activityList = activityService.listByPartTCd(userCrop.getPartTCd());

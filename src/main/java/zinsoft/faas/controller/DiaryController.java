@@ -12,7 +12,6 @@ import org.springframework.web.servlet.View;
 import zinsoft.faas.dto.CropActivityDto;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.service.UserDiaryService;
-import zinsoft.faas.service.UserInoutService;
 import zinsoft.faas.service.impl.CropActivityServiceImpl;
 import zinsoft.faas.view.DiarySimpleExcelAdminView;
 import zinsoft.faas.view.DiarySimpleExcelView;
@@ -20,7 +19,6 @@ import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
-import zinsoft.web.common.service.FileInfoService;
 import zinsoft.web.exception.CodeMessageException;
 
 import javax.annotation.Resource;
@@ -49,16 +47,6 @@ public class DiaryController {
     // 임플 파일 => UserDiaryServiceImpl
     @Resource
     UserDiaryService userDiaryService;
-
-    @Resource
-    UserInoutService userInoutService;
-
-    //    @Resource
-    //    UserCropService userCropService;
-
-    @Resource
-    FileInfoService fileInfoService;
-
     @Autowired
     CropActivityServiceImpl cropActivityService;
 
@@ -116,14 +104,14 @@ public class DiaryController {
         Date actSt = null;
         Date actEd = null;
         try {
-            // String(20220830) -> Date(2022-08-30...)로 변경
+            // 예시) String(20220830) -> Date(2022-08-30...)로 변경
             actSt = transFormat.parse(actDt);
             actEd = transFormat.parse(actEdDt);
         } catch (ParseException e) {
             throw new CodeMessageException(Result.BAD_REQUEST, "날짜 오류");
         }
 
-        // 일자 기간 설정이 2주 이상 차이나면 안됨
+        // 요청일자의 시작~종료 사이 기간이 2주 이상 차이나면 안됨
         if ((actEd.getTime() - actSt.getTime()) > 14 * 24 * 60 * 60 * 1000) { // 2주
             throw new CodeMessageException(Result.TOO_LONG_TERM);
         }
@@ -167,7 +155,8 @@ public class DiaryController {
 
 
     /**
-     * activityTCd=9 해서 뭔갈 가져오는데...
+     * 사용자의 영농일지 리스트 조회
+     * 관리자라면 id name 등도 같이 포함되어 반환된다.
      *
      * @param search
      * @param pageable
@@ -178,14 +167,16 @@ public class DiaryController {
     @ResponseBody
     public Result page(@RequestParam Map<String, Object> search, @PageableDefault Pageable pageable) throws Exception {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
 
+        // 관리자라면 모든 영농일지를 조회(사용자 id 필터링 제외)이면서 최신순으로 정렬
         if (UserInfoUtil.isAdmin() || UserInfoUtil.isManager()) {
             search.put("orderBy", "DESC");
         } else {
+            // 일반 사용자라면, 자기 자신의 영농일지만 조회한다.
             search.put("userId", farmerInfo.getUserId());
         }
 
+        // 결과 조회
         DataTablesResponse<UserDiaryDto> page = userDiaryService.page(search, pageable);
 
         if (search.get(pageSizeParameter) != null) {
@@ -195,30 +186,10 @@ public class DiaryController {
         }
     }
 
-    @GetMapping(value = "/list-year")
-    @ResponseBody
-    public Result listYear(String diaryTCd, String year) throws Exception {
-        String userId = null;
-
-        UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
-        if (!UserInfoUtil.isAdmin() && !UserInfoUtil.isManager()) {
-            userId = farmerInfo.getUserId();
-        }
-        List<String> list = userDiaryService.listYear(userId, diaryTCd, year);
-
-        return new Result(true, Result.OK, list);
-    }
-
     @PutMapping(value = "/{userDiarySeq}")
     @ResponseBody
     public Result update(@PathVariable("userDiarySeq") Long userDiarySeq, @Valid UserDiaryDto dto) throws Exception {
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
-
-//        if (UserInfoUtil.isManager()) {
-//            throw new CodeMessageException(Result.FORBIDDEN);
-//        }
 
         if (!UserInfoUtil.isAdmin()) {
             dto.setUserId(farmerInfo.getUserId());
@@ -233,11 +204,6 @@ public class DiaryController {
     public Result delete(@PathVariable("userDiarySeq") Long userDiarySeq) throws Exception {
         String userId = null;
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
-
-//        if (UserInfoUtil.isManager()) {
-//            throw new CodeMessageException(Result.FORBIDDEN);
-//        }
 
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
@@ -257,12 +223,9 @@ public class DiaryController {
             throw new CodeMessageException(Result.BAD_REQUEST);
         }
 
-//        if (UserInfoUtil.isManager()) {
-//            throw new CodeMessageException(Result.FORBIDDEN);
-//        }
         String userId = null;
         UserInfoDto farmerInfo = UserInfoUtil.getFarmerInfo();
-//        UserInfoDto farmerInfo = UserInfoUtil.getUserInfo();
+
         if (!UserInfoUtil.isAdmin()) {
             userId = farmerInfo.getUserId();
             if (StringUtils.isBlank(userId)) {

@@ -61,15 +61,6 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
     @Resource
     UserProductionService userProductionService;
 
-    @Resource
-    CodeService codeService;
-
-    @Resource
-    UserCropService userCropService;
-
-    @Resource
-    ActivityService activityService;
-
     @Value("${spring.data.web.pageable.size-parameter:}")
     String pageSizeParameter;
 
@@ -174,6 +165,7 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     @Override
     public UserDiaryDto get(String userId, Long userDiarySeq) {
+        egovLogger.info("get user diary by userDiarySeq : {}", userDiarySeq);
         UserDiaryDto dto = userDiaryRepository.get(new UserDiaryDto(userDiarySeq, userId));
 
         if (dto != null) {
@@ -189,13 +181,15 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         // 결과 반환 용 변수
         DataTablesResponse<UserDiaryDto> page = null;
 
-
+        // 날짜 포맷 생성 = yyyyMMdd   ex) 20230102
         SimpleDateFormat fm = new SimpleDateFormat("yyyyMMdd");
 
+        // 날짜 검색 조건이 없으면 오류 => 잘못된 요청임
         if ((search.get("sActDt") == null || search.get("eActDt") == null) && search.get("actDt") == null) {
             new CodeMessageException(Result.BAD_REQUEST);
         }
 
+        // actDt가 있으면 조회 조건에 actDt 설정 => 단일 조회
         if (search.get("actDt") != null) {
             String actDt = (String) search.get("actDt");
             actDt = actDt.replaceAll("[^0-9]", "");
@@ -207,21 +201,19 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
             }
 
             search.put("actDt", actDt);
-        } else {
-            String sActDt = (String) search.get("sActDt");
-            String eActDt = (String) search.get("eActDt");
-
-            System.out.println("sActDt = " + sActDt);
-            System.out.println("eActDt = " + eActDt);
+        }
+        // actDt가 없으면 sActDt, eActDt 설정 => 기간 조회
+        else {
+            String sActDt = (String) search.get("sActDt"); // 조회 시작 날짜
+            String eActDt = (String) search.get("eActDt"); // 조회 종료 날짜
 
             sActDt = sActDt.replaceAll("[^0-9]", "");
             eActDt = eActDt.replaceAll("[^0-9]", "");
 
-            Date sDate = null;
-            Date eDate = null;
             try {
-                sDate = fm.parse(sActDt);
-                eDate = fm.parse(eActDt);
+                // 날짜 형태로 변경하면서 오류가 발생하면 오류 반환
+                fm.parse(sActDt);
+                fm.parse(eActDt);
             } catch (ParseException e) {
                 new CodeMessageException(Result.BAD_REQUEST, "조회날짜 오류");
             }
@@ -233,9 +225,16 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
          Page<UserDiaryDto> dtoPage = userDiaryRepository.page(search, pageable);
          page = DataTablesResponse.of(dtoPage);
          List<UserDiaryDto> list = dtoPage.getContent();
+
+         // 결과가 있다면
          if (list != null && list.size() > 0) {
+             // 영농일지 파일을 조회
              setFiles(dtoPage.getContent());
+
+             // 사용자 농약 조회
              setUsedChemicalStock(list);
+
+             // 사용자 비료 조회
              setUsedManureStock(list);
          }
          return page;
@@ -270,7 +269,10 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
         if (dto.getUserId() == null) {
             dto.setUserId(userDiary.getUserId());
         }
+
+        // 기본적으로 dto값을 복사한다.
         modelMapper.map(dto, userDiary);
+
         // 숫자이고 값이 null인 경우 map이 복사가 안됨. 수동 복사
         userDiary.setManSelf(dto.getManSelf());
         userDiary.setManSelfTm(dto.getManSelfTm());
@@ -403,12 +405,14 @@ public class UserDiaryServiceImpl extends EgovAbstractServiceImpl implements Use
 
     private void setUsedChemicalStock(List<UserDiaryDto> list) {
         for (UserDiaryDto dto : list) {
+            egovLogger.info("setUsedChemicalStock : " + dto.getUserDiarySeq());
             dto.setChemicalList(userChemicalStockService.listByUserDiarySeq(dto.getUserId(), dto.getUserDiarySeq()));
         }
     }
 
     private void setUsedManureStock(List<UserDiaryDto> list) {
         for (UserDiaryDto dto : list) {
+            egovLogger.info("setUsedManureStock : " + dto.getUserDiarySeq());
             dto.setManureList(userManureStockService.listByUserDiarySeq(dto.getUserId(), dto.getUserDiarySeq()));
         }
     }

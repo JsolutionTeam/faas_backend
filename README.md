@@ -22,3 +22,8 @@
 	```
 
 pom.xml 우클릭 > Maven > Generate Sources and Update Folders 클릭
+
+
+### 배포 war 생성
+application.properties의 각 프로젝트에 맞는 주석을 해제하여 설정 후 mvn package 혹은 maven 도구를 활용하여 package 실행.
+생성된 war를 배포 담당자에게 전달하면 됩니다.

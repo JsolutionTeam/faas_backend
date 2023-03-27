@@ -33,6 +33,10 @@ import zinsoft.util.UserInfoUtil;
 import zinsoft.web.common.dto.UserInfoDto;
 import zinsoft.web.exception.CodeMessageException;
 
+/**
+ * 사용중인 API입니다.
+ */
+
 @Controller
 @RequestMapping("${api.prefix}/user-stock")
 public class UserStockController {

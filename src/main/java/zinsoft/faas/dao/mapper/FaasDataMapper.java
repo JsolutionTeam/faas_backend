@@ -12,12 +12,9 @@ public interface FaasDataMapper {
 
     List<Map<String, Object>> getDataCount(@Param("userId") String userId, @Param("startDt") String startDt, @Param("endDt") String endDt);
 
-    List<Map<String, Object>> getCalendarData(@Param("userId") String userId, @Param("startDt") String startDt, @Param("endDt") String endDt);
-
     List<Map<String, Object>> getFarmingStatus(String userId);
 
     List<Map<String, Object>> getInoutStatus(String userId);
 
     List<Map<String, Object>> getInout(String userId);
-
 }

@@ -1,21 +1,11 @@
 package zinsoft.faas.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.SelfLaborCostMapper;
 import zinsoft.faas.dto.SelfLaborCostDto;
 import zinsoft.faas.entity.SelfLaborCost;
 import zinsoft.faas.repository.SelfLaborCostRepository;
@@ -26,11 +16,10 @@ import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.web.exception.CodeMessageException;
 
+import java.util.*;
+
 @Service
 public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements SelfLaborCostService {
-
-    @Resource
-    SelfLaborCostMapper selfLaborCostMapper;
 
     @Autowired
     SelfLaborCostRepository selfLaborCostRepository;
@@ -58,7 +47,7 @@ public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements
     public SelfLaborCostDto get(Long selfLaborSeq) {
         SelfLaborCost selfLaborCost = null;
         selfLaborCost = selfLaborCostRepository.findBySelfLaborSeqAndStatusCd(selfLaborSeq, "N");
-        if(selfLaborCost == null)
+        if (selfLaborCost == null)
             return null;
 
         return modelMapper.map(selfLaborCost, SelfLaborCostDto.class);
@@ -68,12 +57,12 @@ public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements
     public SelfLaborCostDto getByYear(String year) {
         SelfLaborCost selfLaborCost = null;
 
-        if(StringUtils.isBlank(year)) {
+        if (StringUtils.isBlank(year)) {
             Date now = new Date();
-            year = now.getYear()+"";
+            year = now.getYear() + "";
         }
-        selfLaborCost = selfLaborCostRepository.findByYearAndStatusCd(year, "N" );
-        if(selfLaborCost == null)
+        selfLaborCost = selfLaborCostRepository.findByYearAndStatusCd(year, "N");
+        if (selfLaborCost == null)
             return null;
 
         return modelMapper.map(selfLaborCost, SelfLaborCostDto.class);
@@ -91,11 +80,6 @@ public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements
         return cnt.intValue();
     }
 
-//    @Override
-//    public List<SelfLaborCostDto> list(PagingParam pagingParam) {
-//        return selfLaborCostMapper.page(pagingParam);
-//    }
-
     @Override
     public List<SelfLaborCostDto> list(Map<String, Object> map) {
         return selfLaborCostRepository.list(map);
@@ -104,14 +88,6 @@ public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements
     @Override
     public Page<SelfLaborCostDto> page(PagingParam pagingParam) {
         Page<SelfLaborCostDto> page = new Page<SelfLaborCostDto>();
-//        List<SelfLaborCostDto> list = selfLaborCostMapper.page(pagingParam);
-//        int count = selfLaborCostMapper.count(pagingParam);
-//
-//        page.setItems(list);
-//        page.setTotalPages((int) Math.ceil(count / (double) pagingParam.getLimit()));
-//        page.setCurrPage(pagingParam.getPage());
-//        page.setCount(count);
-
         return page;
     }
 
@@ -131,13 +107,11 @@ public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements
 
     @Override
     public void delete(Long selfLaborSeq) {
-
-        selfLaborCostRepository.deleteBySelfLaborSeqs(new Long[] {selfLaborSeq});
+        selfLaborCostRepository.deleteBySelfLaborSeqs(new Long[]{selfLaborSeq});
     }
 
     @Override
     public void delete(Long[] selfLaborSeqs) {
-
         selfLaborCostRepository.deleteBySelfLaborSeqs(selfLaborSeqs);
     }
 
@@ -149,21 +123,21 @@ public class SelfLaborCostServiceImpl extends EgovAbstractServiceImpl implements
         int min = 0;
         int max = 0;
 
-        if(Integer.parseInt(yearList.get(0)) < Integer.parseInt(yearList.get(1))) {
+        if (Integer.parseInt(yearList.get(0)) < Integer.parseInt(yearList.get(1))) {
             min = Integer.parseInt(yearList.get(0));
             max = Integer.parseInt(yearList.get(1));
-        }else {
+        } else {
             min = Integer.parseInt(yearList.get(1));
             max = Integer.parseInt(yearList.get(0));
         }
 
         int size = (max - min) + 1;
-        for(int i = 0; i < size; i++) {
-            if(i == 0) {
+        for (int i = 0; i < size; i++) {
+            if (i == 0) {
                 result.add(min);
-            }else if(i == (size - 1)) {
+            } else if (i == (size - 1)) {
                 result.add(max);
-            }else {
+            } else {
                 result.add(min + i);
             }
         }

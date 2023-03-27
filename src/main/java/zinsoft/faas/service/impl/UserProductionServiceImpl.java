@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,11 +147,20 @@ public class UserProductionServiceImpl extends EgovAbstractServiceImpl implement
 
             if (item2.getPlanTCd().startsWith(UserProductionDto.PLAN_T_CD_ACTUAL)) {//실적
                 // x = 100*생산량/계획량
-                Double bQuan = (item1.getQuan() == 0) ? 1 : item1.getQuan();//계획
-                Double aQuan = item2.getQuan();//실적
-                Double prdRate = aQuan * 100.0 / bQuan;
-                prdRate = Math.round(prdRate * 100) / 100.0;
-                item2.setPrdRate(prdRate);
+
+                Double bQuan = item1.getQuan();//b : 계획
+                Double aQuan = item2.getQuan();//a : 실적
+
+                if(bQuan > 0){ // 생산 계획이 없을 때 생산율이 나오지 않아야 한다.
+                    // 기존 코드대로 하면 계획이 없을때 생산율이 100% 초과 값이 나온다
+                    Double prdRate = aQuan * 100.0 / bQuan;
+                    prdRate = Math.round(prdRate * 100) / 100.0;
+                    item2.setPrdRate(prdRate);
+                }else{
+                    item2.setPrdRate(0.0);
+                }
+
+
             }
             list.add(0, item1);
             list.add(1, item2);

@@ -48,35 +48,17 @@ public class UserCropServiceImpl extends EgovAbstractServiceImpl implements User
 
     @Override
     public void insert(UserCropDto dto) {
-        /* if (dto.getYear() == null || dto.getYear().isEmpty()) {
-            dto.setYear("1900");
-        }
-
-        // default value
-        if (dto.getExprYN() == null || dto.getExprYN().isEmpty()) {
-            dto.setExprYN("Y");
-        }
-
-        userCropMapper.insert(dto);*/
         UserCrop userCrop = modelMapper.map(dto, UserCrop.class);
         userCropRepository.save(userCrop);
     }
 
     @Override
     public int insertCopy(String workerId, String userId) {
-        int cnt = userCropMapper.copy(userId);
-
-        //if (cnt > 0) {
-        //    userCropHistMapper.copy(workerId, Code.WORK_CD_INSERT, userId);
-        //}
-
-        return cnt;
+        return userCropMapper.copy(userId);
     }
 
     @Override
     public UserCropDto get(UserCropDto dto) {
-        /*UserCrop res = getEntity(dto.getUserCropSeq());
-        return modelMapper.map(res, UserCropDto.class);*/
         return userCropRepository.get(dto);
     }
 
@@ -120,7 +102,6 @@ public class UserCropServiceImpl extends EgovAbstractServiceImpl implements User
 
     @Override
     public List<UserCropDto> list(Map<String, Object> param) {
-        //return userCropMapper.list(param);
         return userCropRepository.list(param);
     }
 
@@ -149,20 +130,6 @@ public class UserCropServiceImpl extends EgovAbstractServiceImpl implements User
         return userCropMapper.list(param);
     }
 
-//    @Override
-//    public Page<UserCropDto> page(PagingParam pagingParam) {
-//        Page<UserCropDto> page = new Page<UserCropDto>();
-//        List<UserCropDto> list = userCropMapper.page(pagingParam);
-//        int count = userCropMapper.count(pagingParam);
-//
-//        page.setItems(list);
-//        page.setTotalPages((int) Math.ceil(count / (double) pagingParam.getLimit()));
-//        page.setCurrPage(pagingParam.getPage());
-//        page.setCount(count);
-//
-//        return page;
-//    }
-
     @Override
     public DataTablesResponse<UserCropDto> page(Map<String, Object> search, Pageable pageable) {
         Page<UserCropDto> dtoPage = userCropRepository.page(search, pageable);
@@ -174,7 +141,6 @@ public class UserCropServiceImpl extends EgovAbstractServiceImpl implements User
         if (dto.getYear() == null || dto.getYear().isEmpty()) {
             dto.setYear("1900");
         }
-        //userCropMapper.update(dto);
         UserCrop userCrop = getEntity(dto.getUserCropSeq());
         dto.setUpdateDtm(new Date());
 
@@ -189,8 +155,7 @@ public class UserCropServiceImpl extends EgovAbstractServiceImpl implements User
 
     @Override
     public int delete(UserCropDto dto) {
-        int cnt = userCropMapper.delete(dto);
-        return cnt;
+        return userCropMapper.delete(dto);
     }
 
     @Override
@@ -222,7 +187,6 @@ public class UserCropServiceImpl extends EgovAbstractServiceImpl implements User
 
     @Override
     public void deleteByUserId(String userId) {
-        //int cnt = userCropMapper.deleteByUserId(userId);
         userCropRepository.deleteByUserId(userId);
     }
 

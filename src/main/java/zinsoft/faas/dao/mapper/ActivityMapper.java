@@ -21,10 +21,6 @@ public interface ActivityMapper {
 
     List<ActivityDto> list(PagingParam pagingParam);
 
-    List<ActivityDto> page(PagingParam param);
-
-    int count(PagingParam pagingParam);
-
     List<ActivityDto> listByCropSeq(@Param("cropSeq") Long cropSeq, @Param("orderBy") String orderBy);
 
     List<ActivityDto> listByUserIdCropSeq(@Param("userId") String userId, @Param("cropSeq") Long cropSeq, @Param("userCropSeq") Long userCropSeq);

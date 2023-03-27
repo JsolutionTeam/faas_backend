@@ -160,7 +160,7 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
             condition = condition.and(userDiary.userDiarySeq.eq(userDiarySeq));
         }
 
-        return query.select(allFields)
+        return query.selectDistinct(allFields)
                 .from(userDiary)
 //                .leftJoin(activity)
 //                .on(activity.activitySeq.eq(userDiary.activitySeq))
@@ -196,7 +196,7 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
     @Override
     public Page<UserDiaryDto> page(Map<String, Object> search, Pageable pageable) {
         // @formatter:off
-        JPQLQuery<UserDiaryDto> jpqQuery = query.select(allFields)
+        JPQLQuery<UserDiaryDto> jpqQuery = query.selectDistinct(allFields)
                                             .from(userDiary)
                 .leftJoin(mgrCropDetail).on(userDiary.cropCd.eq(mgrCropDetail.id.code)).fetchJoin()
                 .leftJoin(mgrCropDetail).on(userDiary.growStep.eq(mgrCropDetail.id.code)).fetchJoin()
@@ -250,6 +250,13 @@ public class UserDiaryQueryRepositoryImpl implements UserDiaryQueryRepository {
             String cropCd = (String) search.get("cropCd");
             if (StringUtils.isNotBlank(cropCd)) {
                 condition = condition.and(userDiary.cropCd.eq(cropCd));
+            }
+        }
+
+        if (search.get("cropKind") != null) {
+            String cropKind = (String) search.get("cropKind");
+            if (StringUtils.isNotBlank(cropKind)) {
+                condition = condition.and(userDiary.cropKind.eq(cropKind));
             }
         }
 

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,7 @@ import zinsoft.web.entity.QCode;
 import zinsoft.web.entity.QUserInfo;
 
 @RequiredArgsConstructor
+@Slf4j
 public class UserProductionQueryRepositoryImpl implements UserProductionQueryRepository {
 
     private final JPAQueryFactory query;
@@ -124,24 +126,26 @@ public class UserProductionQueryRepositoryImpl implements UserProductionQueryRep
 
     @Override
     public Page<UserProductionDto> page(Map<String, Object> search, Pageable pageable) {
-
-        JPQLQuery<UserProductionDto> jpqQuery = query.select(allFields)
+        log.info("생산량관리 - PAGE 쿼리(QueryDsl) 조회");
+        JPQLQuery<UserProductionDto> jpqQuery = query.select(allFields).distinct()
                                         .from(userProduction)
-                                        .join(userInfo)
+                                        .innerJoin(userInfo)
                                             .on(userProduction.userId.eq(userInfo.userId))
                                         .where(pageCondition(search));
 
         QueryResults<UserProductionDto> result = null;
 
+        JPQLQuery<UserProductionDto> query = jpqQuery
+//                .groupBy(userInfo)
+                .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
+
         if (search.get(pageSizeParameter) != null) {
-            result = jpqQuery.orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new))
+            query = query
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetchResults();
-        } else {
-            result = jpqQuery.orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new))
-                    .fetchResults();
+                    .limit(pageable.getPageSize());
         }
+
+        result = query.fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }

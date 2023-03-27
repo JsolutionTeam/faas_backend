@@ -1,22 +1,11 @@
 package zinsoft.faas.service.impl;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.UserManureStockMapper;
 import zinsoft.faas.dto.UserDiaryDto;
 import zinsoft.faas.dto.UserInoutDto;
 import zinsoft.faas.dto.UserManureStockDto;
@@ -27,6 +16,9 @@ import zinsoft.faas.service.UserManureStockService;
 import zinsoft.util.DataTablesResponse;
 import zinsoft.util.Result;
 import zinsoft.web.exception.CodeMessageException;
+
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implements UserManureStockService {
@@ -39,9 +31,6 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
 
     @Autowired
     ModelMapper modelMapper;
-
-    @Autowired
-    UserManureStockMapper userManureStockMapper;
 
     private UserManureStock getEntity(Long userManureStockSeq) {
         Optional<UserManureStock> data = userManureStockRepository.findById(userManureStockSeq);
@@ -86,8 +75,8 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
         List<UserManureStockDto> list = diaryDto.getManureList();
         Long userDiarySeq = diaryDto.getUserDiarySeq();
 
-        if (list != null && list.isEmpty() == false ) {
-            for(UserManureStockDto dto : list) {
+        if (list != null && list.isEmpty() == false) {
+            for (UserManureStockDto dto : list) {
                 if (dto.getUserManureSeq() == null)
                     continue;
 
@@ -96,9 +85,10 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
                 dto.setInoutDt(diaryDto.getActDt());
                 dto.setSupInoutCd("O");
                 Long cropCd = null;
-                try{
+                try {
                     cropCd = Long.parseLong(diaryDto.getCropCd());
-                }catch(Exception ignore){}
+                } catch (Exception ignore) {
+                }
                 dto.setCropSeq(cropCd);
                 dto.setUserCropSeq(diaryDto.getUserCropSeq());
                 dto.setRemark("영농일지 입력");
@@ -113,8 +103,8 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
     public void insert(UserInoutDto inoutDto) {
         List<UserManureStockDto> list = inoutDto.getManureList();
 
-        if (list != null && list.isEmpty() == false ) {
-            for(UserManureStockDto dto : list) {
+        if (list != null && list.isEmpty() == false) {
+            for (UserManureStockDto dto : list) {
                 if (dto.getUserManureSeq() == null)
                     continue;
 
@@ -147,23 +137,22 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
 
     @Override
     public List<UserManureStockDto> list(Map<String, Object> param) {
-        String stDt = (String)param.get("stDt");
-        String edDt = (String)param.get("edDt");
-        if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
+        String stDt = (String) param.get("stDt");
+        String edDt = (String) param.get("edDt");
+        if (StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
             stDt = stDt.replace("-", "");
             edDt = edDt.replace("-", "");
             param.put("stDt", stDt);
             param.put("edDt", edDt);
         }
-//        return userManureStockMapper.list(param);
         return userManureStockRepository.list(param);
     }
 
     @Override
     public DataTablesResponse<UserManureStockDto> page(Map<String, Object> search, Pageable pageable) {
-        String stDt = (String)search.get("stDt");
-        String edDt = (String)search.get("edDt");
-        if(StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
+        String stDt = (String) search.get("stDt");
+        String edDt = (String) search.get("edDt");
+        if (StringUtils.isNotBlank(stDt) && StringUtils.isNotBlank(edDt)) {
             stDt = stDt.replace("-", "");
             edDt = edDt.replace("-", "");
             search.put("stDt", stDt);
@@ -240,9 +229,10 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
                     dto.setUserId(diaryDto.getUserId());
                     dto.setInoutDt(diaryDto.getActDt());
                     Long cropCd = null;
-                    try{
+                    try {
                         cropCd = Long.parseLong(diaryDto.getCropCd());
-                    }catch(Exception ignore){}
+                    } catch (Exception ignore) {
+                    }
                     dto.setCropSeq(cropCd);
                     dto.setUserCropSeq(diaryDto.getUserCropSeq());
                     dto.setSupInoutCd("O");
@@ -252,7 +242,6 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
                         if (dto.getUserManureSeq() == null) {
                             delete(dto.getUserId(), dto.getUserManureStockSeq());
                         } else {
-                            //userManureStockMapper.updateBy(dto);
                             update(dto);
                         }
                     } else {
@@ -288,7 +277,6 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
                         if (dto.getUserManureSeq() == null) {
                             delete(dto.getUserId(), dto.getUserManureStockSeq());
                         } else {
-                            //userManureStockMapper.updateBy(dto);
                             update(dto);
                         }
                     } else {
@@ -319,7 +307,7 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
     public void deleteWith(String userId, Long userManureStockSeq) {
         UserManureStock userManureStock = getEntity(userId, userManureStockSeq);
         if (userManureStock.getUserInoutSeq() != null) {
-            userInoutService.deleteBy(userManureStock.getUserId(),userManureStock.getUserInoutSeq());
+            userInoutService.deleteBy(userManureStock.getUserId(), userManureStock.getUserInoutSeq());
         }
         userManureStock.setUpdateDtm(new Date());
         userManureStock.setStatusCd("D");
@@ -340,7 +328,7 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
 
     @Override
     public void deleteByUserDiarySeq(String userId, Long userDiarySeq) {
-        userManureStockRepository.deleteByUserDiarySeq(userId, new Long[] { userDiarySeq });
+        userManureStockRepository.deleteByUserDiarySeq(userId, new Long[]{userDiarySeq});
     }
 
     @Override
@@ -350,7 +338,7 @@ public class UserManureStockServiceImpl extends EgovAbstractServiceImpl implemen
 
     @Override
     public void deleteByUserInoutSeq(String userId, Long userInoutSeq) {
-        userManureStockRepository.deleteByUserInoutSeq(userId, new Long[] {userInoutSeq});
+        userManureStockRepository.deleteByUserInoutSeq(userId, new Long[]{userInoutSeq});
     }
 
     @Override

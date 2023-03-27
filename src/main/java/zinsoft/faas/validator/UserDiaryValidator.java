@@ -63,16 +63,19 @@ public class UserDiaryValidator implements Validator {
         //        }
 
         String cropCd = userDiaryDto.getCropCd();
+        // cropCd를 입력하지 않았거나 존재하지 않는 코드를 입력했을 때.
         if(cropCd == null || cropCd.length() == 0 || !mgrCropDetailService.isExistByCode(cropCd)){
             errors.rejectValue("cropCd", Result.INVALID_CROPCD);
         }
 
         String growStep = userDiaryDto.getGrowStep();
+        // growStep을 입력하지 않았거나 존재하지 않는 코드를 입력했을 때.
         if(growStep == null || growStep.length() == 0 || !mgrCropDetailService.isExistByCode(growStep)){
             errors.rejectValue("growStep", Result.INVALID_CROPCD);
         }
 
         String fmwrkCd = userDiaryDto.getFmwrkCd();
+        // fmwrkCd를 입력하지 않았거나 존재하지 않는 코드를 입력했을 때.
         if(fmwrkCd == null || fmwrkCd.length() == 0 || !wrkcdService.isExistByCode(fmwrkCd)){
             errors.rejectValue("fmwrkCd", Result.INVALID_FMWRKCD);
         }

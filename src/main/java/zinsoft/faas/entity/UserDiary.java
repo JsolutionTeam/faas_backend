@@ -93,10 +93,16 @@ public class UserDiary implements Serializable {
     private Double quan;
 
     @Column(name = "crop_cd")
+    // 작기명(품목)
     private String cropCd;
+    @Column(name = "crop_kind")
+    // 작업분류 (대분류)
+    private String cropKind;
     @Column(name = "grow_step")
+    // 작업분류 (대분류)
     private String growStep;
     @Column(name = "fmwrk_cd")
+    // 작업단계 (중분류)
     private String fmwrkCd;
     @Column(name = "recommend")
     private String recommend;

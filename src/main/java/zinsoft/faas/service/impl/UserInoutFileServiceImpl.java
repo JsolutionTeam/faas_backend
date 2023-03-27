@@ -1,21 +1,10 @@
 package zinsoft.faas.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.UserInoutFileMapper;
 import zinsoft.faas.dto.UserInoutDto;
 import zinsoft.faas.dto.UserInoutFileDto;
 import zinsoft.faas.entity.UserInoutFile;
@@ -23,11 +12,16 @@ import zinsoft.faas.repository.UserInoutFileRepository;
 import zinsoft.faas.service.UserInoutFileService;
 import zinsoft.web.common.service.FileInfoService;
 
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 public class UserInoutFileServiceImpl extends EgovAbstractServiceImpl implements UserInoutFileService {
-
-    @Resource
-    UserInoutFileMapper userInoutFileMapper;
 
     @Resource
     UserInoutFileRepository userInoutFileRepository;
@@ -96,12 +90,11 @@ public class UserInoutFileServiceImpl extends EgovAbstractServiceImpl implements
 
     @Override
     public void deleteByUserInoutSeq(String userId, Long userInoutSeq) {
-        // List<Long> fileSeqList = userInoutFileMapper.listFileSeqByUserInoutSeq(userId, userInoutSeq);
         Map<String, Object> search = new HashMap<>();
         search.put("userId", userId);
         search.put("userInoutSeq", userInoutSeq);
         List<UserInoutFileDto> userInoutFileDtoes = userInoutFileRepository.list(search);
-        List<Long> fileSeqList = userInoutFileDtoes.stream().map(map->map.getFileSeq()).collect(Collectors.toList());
+        List<Long> fileSeqList = userInoutFileDtoes.stream().map(map -> map.getFileSeq()).collect(Collectors.toList());
 
         userInoutFileRepository.deleteByUserInoutSeq(userId, userInoutSeq);
         fileInfoService.delete(fileSeqList);
@@ -116,12 +109,11 @@ public class UserInoutFileServiceImpl extends EgovAbstractServiceImpl implements
 
     @Override
     public void deleteByUserId(String userId) {
-        //List<Long> fileSeqList = userInoutFileMapper.listFileSeqByUserId(userId);
 
         Map<String, Object> search = new HashMap<>();
         search.put("userId", userId);
         List<UserInoutFileDto> userInoutFileDtoes = userInoutFileRepository.list(search);
-        List<Long> fileSeqList = userInoutFileDtoes.stream().map(map->map.getFileSeq()).collect(Collectors.toList());
+        List<Long> fileSeqList = userInoutFileDtoes.stream().map(map -> map.getFileSeq()).collect(Collectors.toList());
 
         userInoutFileRepository.deleteByUserId(userId);
         fileInfoService.delete(fileSeqList);

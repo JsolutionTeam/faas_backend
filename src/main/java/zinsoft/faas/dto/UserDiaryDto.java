@@ -51,9 +51,13 @@ public class UserDiaryDto {
     @Pattern(regexp = "^(P|D)$")
     private String diaryTCd;
 
-    // 작기명
+    // 작기명(품목)
     private String cropCd;
     private String cropCdNm;
+
+    // 품종
+    private String cropKind;
+
     // 작업 대분류
     private String growStep;
     private String growStepNm;
@@ -66,13 +70,13 @@ public class UserDiaryDto {
     private Double manSelf;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(24)
     @ApiModelProperty(notes = "자가노동시간(시간,남)")
     private Integer manSelfTm;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(60)
     @ApiModelProperty(notes = "자가노동시간(분,남)")
     private Integer manSelfTmm;
@@ -81,13 +85,13 @@ public class UserDiaryDto {
     private Double womanSelf;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(24)
     @ApiModelProperty(notes = "자가노동시간(시간,여)")
     private Integer womanSelfTm;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(60)
     @ApiModelProperty(notes = "자가노동시간(분,여)")
     private Integer womanSelfTmm;
@@ -96,13 +100,13 @@ public class UserDiaryDto {
     private Double manHire;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(24)
     @ApiModelProperty(notes = "고용노동시간(시간,남)")
     private Integer manHireTm;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(60)
     @ApiModelProperty(notes = "고용노동시간(분,남)")
     private Integer manHireTmm;
@@ -111,12 +115,12 @@ public class UserDiaryDto {
     private Double womanHire;
 
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(24)
     @ApiModelProperty(notes = "고용노동시간(시간,여)")
     private Integer womanHireTm;
     @Digits(integer = 2, fraction = 0)
-    @Min(1)
+    @Min(0)
     @Max(60)
     @ApiModelProperty(notes = "고용노동시간(분,여)")
     private Integer womanHireTmm;

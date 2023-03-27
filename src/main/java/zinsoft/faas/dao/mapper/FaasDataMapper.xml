@@ -92,7 +92,9 @@
         SELECT DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{startDt}, '%Y%m%d'), INTERVAL DT_TABLE.LEVEL DAY) , '%Y%m%d') dt,
         1 + DT_TABLE.LEVEL AS LEVEL
         FROM DT_CNT, DT_TABLE
-        WHERE DT_TABLE.LEVEL<= DT_CNT.cnt
+        <![CDATA[
+            WHERE DT_TABLE.LEVEL <= DT_CNT.cnt
+        ]]>
 
         )
         SELECT z.dt cal_dt,

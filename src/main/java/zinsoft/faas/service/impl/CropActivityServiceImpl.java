@@ -1,22 +1,16 @@
 package zinsoft.faas.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.CropActivityMapper;
+import org.springframework.stereotype.Service;
 import zinsoft.faas.dto.CropActivityDto;
 import zinsoft.faas.repository.CropActivityRepository;
 import zinsoft.faas.service.CropActivityService;
 
-@Service
-public class CropActivityServiceImpl extends EgovAbstractServiceImpl implements CropActivityService{
+import javax.annotation.Resource;
+import java.util.List;
 
-    @Resource
-    CropActivityMapper cropActivityMapper;
+@Service
+public class CropActivityServiceImpl extends EgovAbstractServiceImpl implements CropActivityService {
 
     @Resource
     CropActivityRepository cropActivityRepository;

@@ -147,6 +147,11 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
                 .join(userInfo).on(userChemicalStock.userId.eq(userInfo.userId))
                 .join(userChemical).on(userChemicalStock.userChemicalSeq.eq(userChemical.userChemicalSeq))
                 .where(queryCondition(search))
+                .groupBy(
+                        userInfo.userId,
+                        userChemicalStock.inoutDt, // orderBy 내용이 바뀌면 변경되어야 함
+                        userChemicalStock.userChemicalStockSeq // orderBy 내용이 바뀌면 변경되어야 함
+                )
                 .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         QueryResults<UserChemicalStockDto> result = jpqQuery.offset(pageable.getOffset())
@@ -164,6 +169,11 @@ public class UserChemicalStockQueryRepositoryImpl implements UserChemicalStockQu
                 .join(userInfo).on(userChemicalStock.userId.eq(userInfo.userId))
                 .join(userChemical).on(userChemicalStock.userChemicalSeq.eq(userChemical.userChemicalSeq))
                 .where(queryCondition(search))
+                .groupBy(
+                        userInfo.userId,
+                        userChemicalStock.inoutDt, // orderBy 내용이 바뀌면 변경되어야 함
+                        userChemicalStock.userChemicalStockSeq // orderBy 내용이 바뀌면 변경되어야 함
+                )
                 .orderBy(orderBy(search).stream().toArray(OrderSpecifier[]::new));
 
         List<UserChemicalStockDto> result = jpqQuery.fetch();

@@ -1,11 +1,7 @@
 package zinsoft.web.common.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -74,6 +70,8 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseBody
     public Result handleException(Throwable ex, HttpServletRequest request, HttpServletResponse response) {
         String logId = HttpLoggingUtil.error("", ex, request);
+        log.error("Exception caught Throwable.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.INTERNAL_SERVER_ERROR, (Object[]) null, logId), request, response);
     }
 
@@ -103,6 +101,8 @@ public class ExceptionHandlerControllerAdvice {
             result = new Result(false, ex.getCode(), new String[] { ex.getArg() }, logId);
         }
 
+        log.error("Exception caught CodeMessageException.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(result, request, response);
     }
 
@@ -136,6 +136,8 @@ public class ExceptionHandlerControllerAdvice {
             errors.put(ge.getObjectName(), ge.getDefaultMessage());
         }
 
+        log.error("Exception caught BindException.class or MethodArgumentNotValidException.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.BAD_REQUEST, errors), request, response);
     }
 
@@ -146,6 +148,8 @@ public class ExceptionHandlerControllerAdvice {
         Map<String, Object> errors = new HashMap<>();
         errors.put(ex.getParameterName(), ApplicationContextProvider.applicationContext().getMessage("org.hibernate.validator.constraints.NotBlank.message", null, Locale.getDefault()));
 
+        log.error("Exception caught MissingServletRequestParameterException.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.BAD_REQUEST, errors), request, response);
     }
 
@@ -158,6 +162,8 @@ public class ExceptionHandlerControllerAdvice {
         //ex.getRequiredType().getName();
         //ex.getValue().getClass().getSimpleName();
 
+        log.error("Exception caught MethodArgumentTypeMismatchExcetpion.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.BAD_REQUEST, errors), request, response);
     }
 
@@ -169,6 +175,8 @@ public class ExceptionHandlerControllerAdvice {
         List<Reference> paths = ex.getPath();
         errors.put(paths.get(paths.size() - 1).getFieldName(), ApplicationContextProvider.applicationContext().getMessage("z.validation.constraints.TypeMismatch.message", null, Locale.getDefault()));
 
+        log.error("Exception caught InvalidFormatException.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.BAD_REQUEST, errors), request, response);
     }
 
@@ -186,6 +194,8 @@ public class ExceptionHandlerControllerAdvice {
             }
         }
 
+        log.error("Exception caught ConstraintViolationException.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.BAD_REQUEST, errors), request, response);
     }
 
@@ -203,7 +213,7 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public Result handleException(AccessDeniedException ex, HttpServletRequest request, HttpServletResponse response) {
-        log.error("AccessDeniedException ex.message : {}", ex.getMessage());
+        log.error("Exception caught AccessDeniedException.class occurred, message: {}", ex.getMessage());
         ex.printStackTrace();
         return handleResult(new Result(false, Result.FORBIDDEN), request, response);
     }
@@ -212,6 +222,8 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public Result handleException(NoHandlerFoundException ex, HttpServletRequest request, HttpServletResponse response) {
+        log.error("Exception caught NoHandlerFoundException.class occurred, message: {}", ex.getMessage());
+        ex.printStackTrace();
         return handleResult(new Result(false, Result.NOT_FOUND), request, response);
     }
 

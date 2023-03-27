@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import zinsoft.faas.dao.mapper.UserInoutMapper;
 import zinsoft.faas.dto.UserChemicalStockDto;
 import zinsoft.faas.dto.UserInoutDto;
 import zinsoft.faas.dto.UserInoutFileDto;
@@ -45,9 +44,6 @@ import zinsoft.web.exception.CodeMessageException;
 @Service
 @Transactional
 public class UserInoutServiceImpl extends EgovAbstractServiceImpl implements UserInoutService {
-
-    @Resource
-    UserInoutMapper userInoutMapper;
 
     @Resource
     UserInoutRepository userInoutRepository;
